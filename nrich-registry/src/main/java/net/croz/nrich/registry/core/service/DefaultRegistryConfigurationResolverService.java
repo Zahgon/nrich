@@ -14,7 +14,6 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.registry.core.service;
 
 import lombok.RequiredArgsConstructor;
@@ -35,7 +34,6 @@ import net.croz.nrich.registry.core.util.AnnotationUtil;
 import net.croz.nrich.search.api.model.SearchConfiguration;
 import net.croz.nrich.search.api.model.SearchJoin;
 import org.springframework.util.CollectionUtils;
-
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.metamodel.Attribute;
 import jakarta.persistence.metamodel.IdentifiableType;
@@ -62,146 +60,49 @@ public class DefaultRegistryConfigurationResolverService implements RegistryConf
 
     @Override
     public RegistryGroupDefinitionHolder resolveRegistryGroupDefinition() {
-        Set<ManagedType<?>> managedTypeList = entityManager.getMetamodel().getManagedTypes();
-
-        List<RegistryGroupDefinition> registryGroupDefinitionList = new ArrayList<>();
-
-        registryConfiguration.getGroupDefinitionConfigurationList().forEach(registryGroupDefinition -> {
-            List<ManagedTypeWrapper> includedManagedTypeList = managedTypeList.stream()
-                .filter(managedType -> includeManagedType(managedType, registryGroupDefinition.getIncludeEntityPatternList(), registryGroupDefinition.getExcludeEntityPatternList()))
-                .map(ManagedTypeWrapper::new)
-                .toList();
-
-            if (CollectionUtils.isEmpty(includedManagedTypeList)) {
-                return;
-            }
-
-            registryGroupDefinitionList.add(new RegistryGroupDefinition(registryGroupDefinition.getGroupId(), includedManagedTypeList));
-        });
-
-        return new RegistryGroupDefinitionHolder(registryGroupDefinitionList, registryConfiguration.getGroupDisplayOrderList());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Map<Class<?>, RegistryOverrideConfiguration> resolveRegistryOverrideConfigurationMap() {
-        return Optional.ofNullable(registryConfiguration.getOverrideConfigurationHolderList()).orElse(Collections.emptyList())
-            .stream()
-            .filter(registryOverrideConfigurationHolder -> registryOverrideConfigurationHolder.getOverrideConfiguration() != null)
-            .collect(Collectors.toMap(RegistryOverrideConfigurationHolder::getType, RegistryOverrideConfigurationHolder::getOverrideConfiguration));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public RegistryDataConfigurationHolder resolveRegistryDataConfiguration() {
-        RegistryGroupDefinitionHolder groupDefinitionHolder = resolveRegistryGroupDefinition();
-
-        List<ManagedTypeWrapper> managedTypeWrapperList = groupDefinitionHolder.groupDefinitionList().stream()
-            .map(RegistryGroupDefinition::registryEntityList)
-            .flatMap(List::stream)
-            .toList();
-
-        List<RegistryDataConfiguration<Object, Object>> registryDataConfigurationList = new ArrayList<>();
-
-        managedTypeWrapperList.forEach(managedTypeWrapper -> {
-            @SuppressWarnings("unchecked")
-            Class<Object> type = (Class<Object>) managedTypeWrapper.getJavaType();
-
-            registryDataConfigurationList.add(new RegistryDataConfiguration<>(type, resolveSearchConfiguration(managedTypeWrapper)));
-        });
-
-        Map<String, ManagedTypeWrapper> classNameManagedTypeWrapperMap = managedTypeWrapperList.stream().collect(Collectors.toMap(value -> value.getJavaType().getName(), Function.identity()));
-
-        return new RegistryDataConfigurationHolder(classNameManagedTypeWrapperMap, registryDataConfigurationList);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public RegistryHistoryConfigurationHolder resolveRegistryHistoryConfiguration() {
-        ManagedType<?> revisionEntityManagedType = entityManager.getMetamodel().getManagedTypes()
-            .stream()
-            .filter(managedType -> AnnotationUtil.isAnnotationPresent(managedType.getJavaType(), RegistryEnversConstants.ENVERS_REVISION_ENTITY_ANNOTATION))
-            .findFirst()
-            .orElse(null);
-
-        String revisionNumberPropertyName = RegistryEnversConstants.REVISION_NUMBER_PROPERTY_DEFAULT_ORIGINAL_NAME;
-        Class<?> revisionNumberPropertyType = Integer.class;
-
-        String revisionTimestampPropertyName = RegistryEnversConstants.REVISION_TIMESTAMP_PROPERTY_DEFAULT_ORIGINAL_NAME;
-        // actually a long but for easier client handling it can be treated as a date
-        Class<?> revisionTimestampPropertyType = Date.class;
-        @SuppressWarnings("unchecked")
-        Set<Attribute<?, ?>> attributes = (Set<Attribute<?, ?>>) Optional.ofNullable(revisionEntityManagedType).map(ManagedType::getAttributes).orElse(Collections.emptySet());
-
-        List<PropertyWithType> additionalPropertyList = new ArrayList<>();
-        for (Attribute<?, ?> attribute : attributes) {
-            String attributeName = attribute.getName();
-            Class<?> attributeType = attribute.getJavaType();
-
-            if (!(attribute.getJavaMember() instanceof Field attributeField)) {
-                continue;
-            }
-
-            if (AnnotationUtil.isAnnotationPresent(attributeField, RegistryEnversConstants.ENVERS_REVISION_NUMBER_ANNOTATION)) {
-                revisionNumberPropertyName = attributeName;
-                revisionNumberPropertyType = attributeType;
-            }
-            else if (AnnotationUtil.isAnnotationPresent(attributeField, RegistryEnversConstants.ENVERS_REVISION_TIMESTAMP_ANNOTATION)) {
-                revisionTimestampPropertyName = attributeName;
-                revisionTimestampPropertyType = attributeType;
-            }
-            else {
-                additionalPropertyList.add(new PropertyWithType(attributeName, attributeName, attributeType));
-            }
-        }
-
-        PropertyWithType revisionNumberProperty = new PropertyWithType(RegistryEnversConstants.REVISION_NUMBER_PROPERTY_NAME, revisionNumberPropertyName, revisionNumberPropertyType);
-        PropertyWithType revisionTimestampProperty = new PropertyWithType(RegistryEnversConstants.REVISION_TIMESTAMP_PROPERTY_NAME, revisionTimestampPropertyName, revisionTimestampPropertyType);
-        PropertyWithType revisionTypeProperty = new PropertyWithType(RegistryEnversConstants.REVISION_TYPE_PROPERTY_NAME, RegistryEnversConstants.REVISION_TYPE_PROPERTY_NAME, String.class);
-        List<String> displayOrderList = registryConfiguration.getHistoryDisplayOrderList();
-
-        return new RegistryHistoryConfigurationHolder(revisionNumberProperty, revisionTimestampProperty, revisionTypeProperty, additionalPropertyList, displayOrderList);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private boolean includeManagedType(ManagedType<?> managedType, List<String> includeDomainPatternList, List<String> excludeDomainPatternList) {
-        if (CollectionUtils.isEmpty(includeDomainPatternList) || !(managedType instanceof IdentifiableType)
-            || AnnotationUtil.isAnnotationPresent(managedType.getJavaType(), RegistryEnversConstants.ENVERS_REVISION_ENTITY_ANNOTATION)) {
+        if (CollectionUtils.isEmpty(includeDomainPatternList) || !(managedType instanceof IdentifiableType) || AnnotationUtil.isAnnotationPresent(managedType.getJavaType(), RegistryEnversConstants.ENVERS_REVISION_ENTITY_ANNOTATION)) {
             return false;
         }
-
         String classFullName = managedType.getJavaType().getName();
-
         boolean includeType = includeDomainPatternList.stream().anyMatch(classFullName::matches);
-
         if (!includeType || CollectionUtils.isEmpty(excludeDomainPatternList)) {
             return includeType;
         }
-
         return excludeDomainPatternList.stream().filter(Objects::nonNull).noneMatch(classFullName::matches);
     }
 
     private SearchConfiguration<Object, Object, Map<String, Object>> resolveSearchConfiguration(ManagedTypeWrapper managedTypeWrapper) {
         Class<?> type = managedTypeWrapper.getJavaType();
-
-        return Optional.ofNullable(registryConfiguration.getOverrideConfigurationHolderList()).orElse(Collections.emptyList()).stream()
-            .filter(registryOverrideConfigurationHolder -> type.equals(registryOverrideConfigurationHolder.getType()) && registryOverrideConfigurationHolder.getOverrideSearchConfiguration() != null)
-            .map(RegistryOverrideConfigurationHolder::getOverrideSearchConfiguration)
-            .findFirst()
-            .orElse(emptySearchConfigurationWithRequiredJoinFetchList(managedTypeWrapper));
+        return Optional.ofNullable(registryConfiguration.getOverrideConfigurationHolderList()).orElse(Collections.emptyList()).stream().filter(registryOverrideConfigurationHolder -> type.equals(registryOverrideConfigurationHolder.getType()) && registryOverrideConfigurationHolder.getOverrideSearchConfiguration() != null).map(RegistryOverrideConfigurationHolder::getOverrideSearchConfiguration).findFirst().orElse(emptySearchConfigurationWithRequiredJoinFetchList(managedTypeWrapper));
     }
 
     private SearchConfiguration<Object, Object, Map<String, Object>> emptySearchConfigurationWithRequiredJoinFetchList(ManagedTypeWrapper managedTypeWrapper) {
         SearchConfiguration<Object, Object, Map<String, Object>> searchConfiguration = SearchConfiguration.emptyConfigurationMatchingAny();
-
-        List<SearchJoin<Map<String, Object>>> searchJoinList = Stream.concat(
-                createSearchJoinStreamFromAssociationList(managedTypeWrapper.getSingularAssociationList(), RegistryCoreConstants.BLANK),
-                createSearchJoinStreamFromAssociationList(managedTypeWrapper.getSingularEmbeddedTypeAssociationList(), managedTypeWrapper.getIdAttributeName() + RegistryCoreConstants.DOT))
-            .toList();
-
+        List<SearchJoin<Map<String, Object>>> searchJoinList = Stream.concat(createSearchJoinStreamFromAssociationList(managedTypeWrapper.getSingularAssociationList(), RegistryCoreConstants.BLANK), createSearchJoinStreamFromAssociationList(managedTypeWrapper.getSingularEmbeddedTypeAssociationList(), managedTypeWrapper.getIdAttributeName() + RegistryCoreConstants.DOT)).toList();
         searchConfiguration.setJoinList(searchJoinList);
-
         return searchConfiguration;
     }
 
     private Stream<SearchJoin<Map<String, Object>>> createSearchJoinStreamFromAssociationList(List<SingularAssociation> associationList, String prefix) {
-        return associationList.stream()
-            .map(attribute -> attribute.optional() ? SearchJoin.leftJoinFetch(prefix + attribute.path()) : SearchJoin.innerJoinFetch(prefix + attribute.path()));
+        return associationList.stream().map(attribute -> attribute.optional() ? SearchJoin.leftJoinFetch(prefix + attribute.path()) : SearchJoin.innerJoinFetch(prefix + attribute.path()));
     }
 }

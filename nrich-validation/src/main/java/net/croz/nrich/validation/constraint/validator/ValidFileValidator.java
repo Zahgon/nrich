@@ -14,11 +14,9 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.validation.constraint.validator;
 
 import net.croz.nrich.validation.api.constraint.ValidFile;
-
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
@@ -26,13 +24,11 @@ public class ValidFileValidator extends BaseValidFileValidator implements Constr
 
     @Override
     public void initialize(ValidFile constraintAnnotation) {
-        this.allowedContentTypeList = constraintAnnotation.allowedContentTypeList();
-        this.allowedExtensionList = constraintAnnotation.allowedExtensionList();
-        this.allowedFileNameRegex = constraintAnnotation.allowedFileNameRegex();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public boolean isValid(Object value, ConstraintValidatorContext context) {
-        return isValid(value);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

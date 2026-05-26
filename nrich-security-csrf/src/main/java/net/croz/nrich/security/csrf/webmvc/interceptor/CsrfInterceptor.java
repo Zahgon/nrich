@@ -14,7 +14,6 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.security.csrf.webmvc.interceptor;
 
 import lombok.RequiredArgsConstructor;
@@ -29,7 +28,6 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.resource.ResourceHttpRequestHandler;
 import org.springframework.web.util.UrlPathHelper;
-
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -52,89 +50,42 @@ public class CsrfInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-        preHandleInternal(request, response, handler);
-
-        return true;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected void preHandleInternal(HttpServletRequest request, HttpServletResponse response, Object handler) {
-        log.debug("csrfInterceptor.preHandle()");
-
-        if (handler instanceof ResourceHttpRequestHandler) {
-            return;
-        }
-
-        String pathWithinApplication = new UrlPathHelper().getPathWithinApplication(request);
-
-        if (CsrfConstants.EMPTY_PATH.equals(pathWithinApplication)) {
-            return;
-        }
-
-        HttpSession httpSession = request.getSession(false);
-        String requestUri = request.getRequestURI();
-
-        if (CsrfUriUtil.excludeUri(csrfExcludeConfigList, requestUri)) {
-            updateLastApiCallAttribute(httpSession);
-        }
-        else if (requestUri.endsWith(csrfPingUrl)) {
-            handleCsrfPingUrl(request, response, httpSession);
-        }
-        else if (httpSession != null) {
-            csrfTokenManagerService.validateAndRefreshToken(new WebMvcCsrfTokenKeyHolder(request, response, tokenKeyName, CsrfConstants.CSRF_CRYPTO_KEY_NAME));
-
-            updateLastApiCallAttribute(httpSession);
-        }
-        else {
-            // Session doesn't exist, but we should not pass through request.
-            throw new CsrfTokenException("Can't validate token. There is no session.");
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) {
-        if (request.getRequestURI().endsWith(initialTokenUrl)) {
-            String token = csrfTokenManagerService.generateToken(new WebMvcCsrfTokenKeyHolder(request, response, tokenKeyName, CsrfConstants.CSRF_CRYPTO_KEY_NAME));
-
-            modelAndView.addObject(CsrfConstants.CSRF_INITIAL_TOKEN_ATTRIBUTE_NAME, token);
-
-            updateLastApiCallAttribute(request.getSession());
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private void handleCsrfPingUrl(HttpServletRequest request, HttpServletResponse response, HttpSession httpSession) {
         boolean sessionJustInvalidated = false;
-
         long deltaMillis = 0L;
         if (httpSession != null) {
             Long lastRealApiRequestMillis = (Long) httpSession.getAttribute(CsrfConstants.NRICH_LAST_REAL_API_REQUEST_MILLIS);
             log.debug("    lastRealApiRequestMillis: {}", lastRealApiRequestMillis);
-
             if (lastRealApiRequestMillis != null) {
                 deltaMillis = System.currentTimeMillis() - lastRealApiRequestMillis;
                 log.debug("    deltaMillis: {}", deltaMillis);
-
                 long maxInactiveIntervalMillis = httpSession.getMaxInactiveInterval() * 1000L;
                 log.debug("    maxInactiveIntervalMillis: {}", maxInactiveIntervalMillis);
-
                 if ((maxInactiveIntervalMillis > 0) && (deltaMillis > maxInactiveIntervalMillis)) {
-
                     httpSession.invalidate();
-
                     sessionJustInvalidated = true;
-
                     log.debug("    sessionJustInvalidated: {}", true);
                 }
             }
         }
-
         if (!sessionJustInvalidated) {
             csrfTokenManagerService.validateAndRefreshToken(new WebMvcCsrfTokenKeyHolder(request, response, tokenKeyName, CsrfConstants.CSRF_CRYPTO_KEY_NAME));
-        }
-        else {
+        } else {
             log.debug("    sending csrf stop ping header in response");
             response.setHeader(CsrfConstants.CSRF_PING_STOP_HEADER_NAME, "stopPing");
         }
-
         response.setHeader(CsrfConstants.CSRF_AFTER_LAST_ACTIVE_REQUEST_MILLIS_HEADER_NAME, Long.toString(deltaMillis));
     }
 

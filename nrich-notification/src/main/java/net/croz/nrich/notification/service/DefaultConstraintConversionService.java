@@ -14,14 +14,12 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.notification.service;
 
 import net.croz.nrich.notification.api.service.ConstraintConversionService;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.validation.beanvalidation.CustomValidatorBean;
-
 import jakarta.validation.ConstraintViolation;
 import java.util.Objects;
 import java.util.Set;
@@ -33,22 +31,12 @@ public class DefaultConstraintConversionService implements ConstraintConversionS
 
     @Override
     public Object resolveTarget(Set<ConstraintViolation<?>> constraintViolationList) {
-        return constraintViolationList.stream()
-            .map(ConstraintViolation::getLeafBean)
-            .filter(Objects::nonNull)
-            .findFirst()
-            .orElse(null);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Errors convertConstraintViolationsToErrors(Set<ConstraintViolation<?>> constraintViolationList, Object target, String targetName) {
-        BeanPropertyBindingResult errors = new BeanPropertyBindingResult(target, targetName);
-
-        Set<ConstraintViolation<Object>> convertedConstraintViolationList = constraintViolationList.stream().map(this::asObjectConstraintViolation).collect(Collectors.toSet());
-
-        validatorConverter.processConstraintViolations(convertedConstraintViolationList, errors);
-
-        return errors;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @SuppressWarnings("unchecked")
@@ -60,7 +48,7 @@ public class DefaultConstraintConversionService implements ConstraintConversionS
 
         @Override
         public void processConstraintViolations(Set<ConstraintViolation<Object>> violations, Errors errors) {
-            super.processConstraintViolations(violations, errors);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 }

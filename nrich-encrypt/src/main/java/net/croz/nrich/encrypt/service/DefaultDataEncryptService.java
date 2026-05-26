@@ -14,7 +14,6 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.encrypt.service;
 
 import lombok.RequiredArgsConstructor;
@@ -26,7 +25,6 @@ import net.croz.nrich.encrypt.api.service.TextEncryptionService;
 import net.croz.nrich.encrypt.constants.EncryptConstants;
 import org.springframework.beans.PropertyAccessorFactory;
 import org.springframework.util.CollectionUtils;
-
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -43,124 +41,45 @@ public class DefaultDataEncryptService implements DataEncryptionService {
 
     @Override
     public <T> T encryptData(T data, List<String> pathToEncryptDecryptList, EncryptionContext encryptionContext) {
-        return encryptDecryptData(data, pathToEncryptDecryptList, encryptionContext, EncryptionOperation.ENCRYPT);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public <T> T decryptData(T data, List<String> pathToEncryptDecryptList, EncryptionContext encryptionContext) {
-        return encryptDecryptData(data, pathToEncryptDecryptList, encryptionContext, EncryptionOperation.DECRYPT);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected <T> T encryptDecryptData(T data, List<String> pathToEncryptDecryptList, EncryptionContext encryptionContext, EncryptionOperation encryptionOperation) {
-        if (data == null) {
-            return null;
-        }
-
-        if (CollectionUtils.isEmpty(pathToEncryptDecryptList)) {
-            @SuppressWarnings("unchecked")
-            T encryptedDecryptedValue = (T) encryptDecryptValue(encryptionContext, data, encryptionOperation);
-
-            return encryptedDecryptedValue == null ? data : encryptedDecryptedValue;
-        }
-
-        pathToEncryptDecryptList.forEach(path -> executeEncryptionOperation(encryptionContext, data, path, encryptionOperation));
-
-        return data;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected void executeEncryptionOperation(EncryptionContext encryptionContext, Object object, String targetPath, EncryptionOperation operation) {
-        String[] pathList = targetPath.split(EncryptConstants.PATH_SEPARATOR_REGEX);
-
-        if (pathList.length > 1) {
-            String[] remainingPath = Arrays.copyOfRange(pathList, 0, pathList.length - 1);
-
-            encryptDecryptNestedValue(encryptionContext, getPropertyValueByPath(object, String.join(EncryptConstants.PATH_SEPARATOR, remainingPath)), pathList[pathList.length - 1], operation);
-        }
-        else {
-            encryptDecryptNestedValue(encryptionContext, object, targetPath, operation);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected void encryptDecryptNestedValue(EncryptionContext encryptionContext, Object objectContainingFieldsToEncryptOrDecrypt, String propertyName, EncryptionOperation operation) {
-        if (objectContainingFieldsToEncryptOrDecrypt != null && propertyName != null) {
-            if (objectContainingFieldsToEncryptOrDecrypt instanceof Collection<?> collection) {
-                collection.forEach(value -> encryptDecryptValue(encryptionContext, value, propertyName, operation));
-            }
-            else if (objectContainingFieldsToEncryptOrDecrypt instanceof Object[] objectArray) {
-                Arrays.stream(objectArray).forEach(value -> encryptDecryptValue(encryptionContext, value, propertyName, operation));
-            }
-            else {
-                encryptDecryptValue(encryptionContext, objectContainingFieldsToEncryptOrDecrypt, propertyName, operation);
-            }
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected void encryptDecryptValue(EncryptionContext encryptionContext, Object objectContainingFieldsToEncryptOrDecrypt, String propertyName, EncryptionOperation operation) {
-        Object value = getPropertyValueByPath(objectContainingFieldsToEncryptOrDecrypt, propertyName);
-        Object result = encryptDecryptValue(encryptionContext, value, operation);
-
-        if (result == null) {
-            return;
-        }
-
-        setPropertyValueByPath(objectContainingFieldsToEncryptOrDecrypt, propertyName, result);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected Object encryptDecryptValue(EncryptionContext encryptionContext, Object value, EncryptionOperation operation) {
-        if (value == null) {
-            return null;
-        }
-
-        if (value instanceof String textToEncryptOrDecrypt) {
-            return encryptDecryptText(encryptionContext, textToEncryptOrDecrypt, operation);
-        }
-        else if (isSupportedCollection(value) && ((Collection<?>) value).stream().allMatch(String.class::isInstance)) {
-            @SuppressWarnings("unchecked")
-            Collection<String> textToEncryptOrDecryptList = (Collection<String>) value;
-            Collector<? super String, ?, ?> collector = value instanceof Set ? Collectors.toSet() : Collectors.toList();
-
-            return textToEncryptOrDecryptList.stream()
-                .map(textToEncryptOrDecrypt -> encryptDecryptText(encryptionContext, textToEncryptOrDecrypt, operation))
-                .collect(collector);
-        }
-        else if (value instanceof String[] textToEncryptOrDecryptList) {
-            return Arrays.stream(textToEncryptOrDecryptList)
-                .map(textToEncryptOrDecrypt -> encryptDecryptText(encryptionContext, textToEncryptOrDecrypt, operation))
-                .toArray(String[]::new);
-        }
-
-        log.warn("Unable to {} property, check if the specified path is correct and if the specified property is a string", operation.name().toLowerCase());
-
-        return null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected Object getPropertyValueByPath(Object holder, String path) {
-        if (holder instanceof Map<?, ?> map) {
-            return map.get(path);
-        }
-
-        try {
-            return PropertyAccessorFactory.forDirectFieldAccess(holder).getPropertyValue(path);
-        }
-        catch (Exception ignored) {
-            return null;
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @SuppressWarnings("unchecked")
     protected void setPropertyValueByPath(Object holder, String path, Object value) {
-        if (holder instanceof Map) {
-            ((Map<String, Object>) holder).put(path, value);
-        }
-        else {
-            PropertyAccessorFactory.forDirectFieldAccess(holder).setPropertyValue(path, value);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected String encryptDecryptText(EncryptionContext encryptionContext, String text, EncryptionOperation operation) {
-        log.debug("Starting encryption operation: {} for method: {}", operation.name(), encryptionContext.getFullyQualifiedMethodName());
-
-        return operation == EncryptionOperation.ENCRYPT ? textEncryptionService.encryptText(text) : textEncryptionService.decryptText(text);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private boolean isSupportedCollection(Object value) {

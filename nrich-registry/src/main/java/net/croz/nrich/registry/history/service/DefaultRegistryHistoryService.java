@@ -14,7 +14,6 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.registry.history.service;
 
 import net.croz.nrich.registry.api.core.service.RegistryEntityFinderService;
@@ -44,7 +43,6 @@ import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
-
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.metamodel.Attribute;
 import jakarta.persistence.metamodel.ManagedType;
@@ -70,8 +68,7 @@ public class DefaultRegistryHistoryService implements RegistryHistoryService {
 
     private final RegistryEntityFinderService registryEntityFinderService;
 
-    public DefaultRegistryHistoryService(EntityManager entityManager, RegistryDataConfigurationHolder registryDataConfigurationHolder,
-                                         RegistryHistoryConfigurationHolder registryHistoryConfigurationHolder, ModelMapper modelMapper, RegistryEntityFinderService registryEntityFinderService) {
+    public DefaultRegistryHistoryService(EntityManager entityManager, RegistryDataConfigurationHolder registryDataConfigurationHolder, RegistryHistoryConfigurationHolder registryHistoryConfigurationHolder, ModelMapper modelMapper, RegistryEntityFinderService registryEntityFinderService) {
         this.entityManager = entityManager;
         this.registryDataConfigurationHolder = registryDataConfigurationHolder;
         this.registryHistoryConfigurationHolder = registryHistoryConfigurationHolder;
@@ -82,65 +79,42 @@ public class DefaultRegistryHistoryService implements RegistryHistoryService {
 
     @Transactional(readOnly = true)
     public <T> Page<EntityWithRevision<T>> historyList(ListRegistryHistoryRequest request) {
-        AuditQuery auditQuery = createAuditQuery(request);
-
-        addOrder(auditQuery, request.sortPropertyList());
-
-        List<?> resultList = auditQuery
-            .setFirstResult(request.pageNumber())
-            .setMaxResults(request.pageSize()).getResultList();
-
-        List<EntityWithRevision<T>> entityWithRevisionList = convertToEntityRevisionList(resultList);
-
-        Pageable pageable = PageableUtil.convertToPageable(request.pageNumber(), request.pageSize());
-
-        return PageableExecutionUtils.getPage(entityWithRevisionList, pageable, () -> executeCountQuery(createAuditQuery(request)));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private Map<Class<?>, ManagedType<?>> initializeManagedTypeMap(RegistryDataConfigurationHolder registryDataConfigurationHolder) {
         if (registryDataConfigurationHolder.registryDataConfigurationList() == null) {
             return Collections.emptyMap();
         }
-
-        return registryDataConfigurationHolder.registryDataConfigurationList().stream()
-            .collect(Collectors.toMap(RegistryDataConfiguration::registryType, registryDataConfiguration -> entityManager.getMetamodel().managedType(registryDataConfiguration.registryType())));
+        return registryDataConfigurationHolder.registryDataConfigurationList().stream().collect(Collectors.toMap(RegistryDataConfiguration::registryType, registryDataConfiguration -> entityManager.getMetamodel().managedType(registryDataConfiguration.registryType())));
     }
 
     private <T> AuditQuery createAuditQuery(ListRegistryHistoryRequest request) {
         @SuppressWarnings("unchecked")
         Class<T> type = (Class<T>) registryDataConfigurationHolder.findRegistryConfigurationForClass(request.classFullName()).registryType();
-
         AuditQuery auditQuery = AuditReaderFactory.get(entityManager).createQuery().forRevisionsOfEntity(type, false, true);
-
         if (request.registryRecordId() != null) {
             addIdCondition(type, auditQuery, request.registryRecordId());
         }
-
         return auditQuery;
     }
 
     private long executeCountQuery(AuditQuery auditQuery) {
         auditQuery.addProjection(AuditEntity.revisionNumber().count());
-
         return (Long) auditQuery.getSingleResult();
     }
 
     @SuppressWarnings("unchecked")
     private <T> List<EntityWithRevision<T>> convertToEntityRevisionList(List<?> resultList) {
         List<Object[]> objectResultList = (List<Object[]>) resultList;
-
-        return Optional.ofNullable(objectResultList).orElse(Collections.emptyList()).stream()
-            .map(value -> new EntityWithRevision<>(initializeEntitySingularAssociations((T) value[0]), convertToRevisionInfo(value[1], (RevisionType) value[2])))
-            .toList();
+        return Optional.ofNullable(objectResultList).orElse(Collections.emptyList()).stream().map(value -> new EntityWithRevision<>(initializeEntitySingularAssociations((T) value[0]), convertToRevisionInfo(value[1], (RevisionType) value[2]))).toList();
     }
 
     private void addIdCondition(Class<?> type, AuditQuery auditQuery, Object id) {
         Map<String, Object> idParameterMap = registryEntityFinderService.resolveIdParameterMap(type, id);
-
         if (idParameterMap.size() == 1) {
             idParameterMap.forEach((key, value) -> auditQuery.add(AuditEntity.id().eq(value)));
-        }
-        else {
+        } else {
             idParameterMap.forEach((key, value) -> auditQuery.add(AuditEntity.property(key).eq(value)));
         }
     }
@@ -149,14 +123,11 @@ public class DefaultRegistryHistoryService implements RegistryHistoryService {
         if (CollectionUtils.isEmpty(sortPropertyList)) {
             return;
         }
-
         sortPropertyList.forEach(sortProperty -> {
             AuditProperty<?> auditProperty = resolveAuditProperty(sortProperty.getProperty());
-
             if (sortProperty.getDirection() == SortDirection.ASC) {
                 auditQuery.addOrder(auditProperty.asc());
-            }
-            else {
+            } else {
                 auditQuery.addOrder(auditProperty.desc());
             }
         });
@@ -164,71 +135,49 @@ public class DefaultRegistryHistoryService implements RegistryHistoryService {
 
     private AuditProperty<?> resolveAuditProperty(String sortProperty) {
         PropertyWithType revisionProperty = findByName(sortProperty);
-
         AuditProperty<?> auditProperty;
         if (RegistryEnversConstants.REVISION_NUMBER_PROPERTY_NAME.equals(sortProperty)) {
             auditProperty = AuditEntity.revisionNumber();
-        }
-        else if (RegistryEnversConstants.REVISION_TYPE_PROPERTY_NAME.equals(sortProperty)) {
+        } else if (RegistryEnversConstants.REVISION_TYPE_PROPERTY_NAME.equals(sortProperty)) {
             auditProperty = AuditEntity.revisionType();
-        }
-        else if (RegistryEnversConstants.REVISION_TIMESTAMP_PROPERTY_NAME.equals(sortProperty)) {
+        } else if (RegistryEnversConstants.REVISION_TIMESTAMP_PROPERTY_NAME.equals(sortProperty)) {
             auditProperty = AuditEntity.revisionProperty(registryHistoryConfigurationHolder.revisionTimestampProperty().originalName());
-        }
-        else if (revisionProperty != null) {
+        } else if (revisionProperty != null) {
             auditProperty = AuditEntity.revisionProperty(revisionProperty.originalName());
-        }
-        else {
+        } else {
             auditProperty = AuditEntity.property(sortProperty);
         }
-
         return auditProperty;
     }
 
     private RevisionInfo convertToRevisionInfo(Object revisionEntity, RevisionType revisionType) {
         MapSupportingDirectFieldAccessFallbackBeanWrapper directFieldAccessFallbackBeanWrapper = new MapSupportingDirectFieldAccessFallbackBeanWrapper(revisionEntity);
-
         Object revisionNumber = directFieldAccessFallbackBeanWrapper.getPropertyValue(registryHistoryConfigurationHolder.revisionNumberProperty().originalName());
         Object revisionDate = directFieldAccessFallbackBeanWrapper.getPropertyValue(registryHistoryConfigurationHolder.revisionTimestampProperty().originalName());
-
         Assert.isTrue(revisionNumber != null && revisionDate != null, "Revision number or revision date are empty!");
-
         Instant revisionDateAsInstant = revisionDate instanceof Long revisionDateMillis ? Instant.ofEpochMilli(revisionDateMillis) : ((Date) revisionDate).toInstant();
-
-        Map<String, Object> additionalRevisionPropertyMap = registryHistoryConfigurationHolder.revisionAdditionalPropertyList().stream()
-            .collect(Collectors.toMap(PropertyWithType::name, propertyWithType -> directFieldAccessFallbackBeanWrapper.getPropertyValue(propertyWithType.originalName())));
-
+        Map<String, Object> additionalRevisionPropertyMap = registryHistoryConfigurationHolder.revisionAdditionalPropertyList().stream().collect(Collectors.toMap(PropertyWithType::name, propertyWithType -> directFieldAccessFallbackBeanWrapper.getPropertyValue(propertyWithType.originalName())));
         return new RevisionInfo(Long.valueOf(revisionNumber.toString()), revisionDateAsInstant, revisionType.name(), additionalRevisionPropertyMap);
     }
 
     // TODO not happy about this solution, think of a better one
     private <T> T initializeEntitySingularAssociations(T entity) {
         ManagedType<?> managedType = classManagedTypeMap.get(entity.getClass());
-
         MapSupportingDirectFieldAccessFallbackBeanWrapper mapSupportingDirectFieldAccessFallbackBeanWrapper = new MapSupportingDirectFieldAccessFallbackBeanWrapper(entity);
-
         managedType.getSingularAttributes().stream().filter(Attribute::isAssociation).forEach(attribute -> {
             String attributeName = attribute.getName();
             Object attributeValue = mapSupportingDirectFieldAccessFallbackBeanWrapper.getPropertyValue(attributeName);
-
             if (attributeValue == null) {
                 return;
             }
-
             Object deProxiedValue = BeanUtils.instantiateClass(attribute.getJavaType());
-
             modelMapper.map(attributeValue, deProxiedValue);
-
             mapSupportingDirectFieldAccessFallbackBeanWrapper.setPropertyValue(attributeName, deProxiedValue);
         });
-
         return entity;
     }
 
     private PropertyWithType findByName(String name) {
-        return registryHistoryConfigurationHolder.revisionAdditionalPropertyList().stream()
-            .filter(value -> name.equals(value.name()))
-            .findFirst()
-            .orElse(null);
+        return registryHistoryConfigurationHolder.revisionAdditionalPropertyList().stream().filter(value -> name.equals(value.name())).findFirst().orElse(null);
     }
 }

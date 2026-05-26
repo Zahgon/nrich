@@ -14,7 +14,6 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.notification.starter.configuration;
 
 import lombok.RequiredArgsConstructor;
@@ -44,32 +43,32 @@ public class NrichNotificationAutoConfiguration {
     @ConditionalOnMissingBean
     @Bean
     public ConstraintConversionService constraintConversionService() {
-        return new DefaultConstraintConversionService();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @ConditionalOnMissingBean
     @Bean
     public NotificationMessageResolverService notificationMessageResolverService(MessageSource messageSource) {
-        return new MessageSourceNotificationMessageResolverService(messageSource);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @ConditionalOnMissingBean
     @Bean
     public NotificationResolverService notificationResolverService(NotificationMessageResolverService notificationMessageResolverService, ConstraintConversionService constraintConversionService) {
-        return new DefaultNotificationResolverService(notificationMessageResolverService, constraintConversionService);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
     @ConditionalOnMissingBean(BaseNotificationResponseService.class)
     @Bean
     public NotificationResponseService notificationResponseService(NotificationResolverService notificationResolverService) {
-        return new WebMvcNotificationResponseService(notificationResolverService);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @ConditionalOnProperty(name = "nrich.notification.register-messages", havingValue = "true", matchIfMissing = true)
     @Bean
     public NotificationMessageSourceRegistrar notificationMessageSourceRegistrar(MessageSource messageSource) {
-        return new NotificationMessageSourceRegistrar(messageSource);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @RequiredArgsConstructor
@@ -79,9 +78,7 @@ public class NrichNotificationAutoConfiguration {
 
         @Override
         public void afterPropertiesSet() {
-            if (messageSource instanceof AbstractResourceBasedMessageSource resourceBasedMessageSource) {
-                resourceBasedMessageSource.addBasenames(NOTIFICATION_MESSAGES_NAME);
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 }

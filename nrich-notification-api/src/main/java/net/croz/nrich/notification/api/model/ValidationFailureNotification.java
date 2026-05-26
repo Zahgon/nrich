@@ -14,13 +14,11 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.notification.api.model;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
 import java.util.List;
 import java.util.Map;
 
@@ -34,14 +32,13 @@ public class ValidationFailureNotification extends Notification {
 
     private final List<ValidationError> validationErrorList;
 
-    public ValidationFailureNotification(String title, String content, String code, List<String> messageList, NotificationSeverity severity, Map<String, ?> uxNotificationOptions,
-                                         List<ValidationError> validationErrorList) {
+    public ValidationFailureNotification(String title, String content, String code, List<String> messageList, NotificationSeverity severity, Map<String, ?> uxNotificationOptions, List<ValidationError> validationErrorList) {
         super(title, content, code, messageList, severity, uxNotificationOptions);
         this.validationErrorList = validationErrorList;
     }
 
     @Override
     public boolean isValidationFailure() {
-        return true;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

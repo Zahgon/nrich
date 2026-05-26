@@ -14,14 +14,12 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.search.repository;
 
 import net.croz.nrich.search.api.repository.NaturalIdSearchExecutor;
 import org.hibernate.NaturalIdLoadAccess;
 import org.hibernate.Session;
 import org.springframework.transaction.annotation.Transactional;
-
 import jakarta.persistence.EntityManager;
 import java.io.Serializable;
 import java.util.Map;
@@ -41,16 +39,12 @@ public class HibernateNaturalIdSearchExecutor<T> implements NaturalIdSearchExecu
 
     @Override
     public <I extends Serializable> Optional<T> findBySimpleNaturalId(I naturalId) {
-        return resolveSession().bySimpleNaturalId(javaType).loadOptional(naturalId);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Optional<T> findByNaturalId(Map<String, Object> naturalId) {
-        NaturalIdLoadAccess<T> naturalIdLoadAccess = resolveSession().byNaturalId(javaType);
-
-        naturalId.forEach(naturalIdLoadAccess::using);
-
-        return naturalIdLoadAccess.loadOptional();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private Session resolveSession() {

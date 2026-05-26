@@ -14,7 +14,6 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.webmvc.advice;
 
 import lombok.RequiredArgsConstructor;
@@ -29,7 +28,6 @@ import org.springframework.validation.BindException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
 import java.util.Collections;
@@ -56,83 +54,37 @@ public class NotificationErrorHandlingRestControllerAdvice {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Object> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception, HttpServletRequest request) {
-        logExceptionWithResolvedAuxiliaryData(exception, request);
-
-        HttpStatus status = resolveHttpStatusForException(exception, HttpStatus.BAD_REQUEST);
-
-        return ResponseEntity.status(status).body(notificationResponseService.responseWithValidationFailureNotification(exception.getBindingResult(), exception.getParameter().getParameterType()));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<Object> handleConstraintViolationException(ConstraintViolationException exception, HttpServletRequest request) {
-        logExceptionWithResolvedAuxiliaryData(exception, request);
-
-        HttpStatus status = resolveHttpStatusForException(exception, HttpStatus.BAD_REQUEST);
-
-        return ResponseEntity.status(status).body(notificationResponseService.responseWithValidationFailureNotification(exception));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @ExceptionHandler(BindException.class)
     public ResponseEntity<Object> handleBindException(BindException exception, HttpServletRequest request) {
-        logExceptionWithResolvedAuxiliaryData(exception, request);
-
-        Class<?> targetClass = Optional.ofNullable(exception.getTarget()).map(Object::getClass).orElse(null);
-
-        HttpStatus status = resolveHttpStatusForException(exception, HttpStatus.BAD_REQUEST);
-
-        return ResponseEntity.status(status).body(notificationResponseService.responseWithValidationFailureNotification(exception.getBindingResult(), targetClass));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleException(Exception exception, HttpServletRequest request) {
-        Exception unwrappedException = unwrapException(exception);
-
-        if (unwrappedException instanceof MethodArgumentNotValidException methodArgumentNotValidException) {
-            return handleMethodArgumentNotValidException(methodArgumentNotValidException, request);
-        }
-        else if (unwrappedException instanceof BindException bindException) {
-            return handleBindException(bindException, request);
-        }
-        else if (unwrappedException instanceof ConstraintViolationException constraintViolationException) {
-            return handleConstraintViolationException(constraintViolationException, request);
-        }
-
-        Map<String, Object> exceptionAuxiliaryData = resolveExceptionAuxiliaryData(exception, request);
-
-        loggingService.logInternalException(unwrappedException, exceptionAuxiliaryData);
-
-        Map<String, ?> notificationAuxiliaryData = null;
-        if (exceptionAuxiliaryData != null && exceptionAuxiliaryDataToIncludeInNotification != null) {
-            notificationAuxiliaryData = exceptionAuxiliaryData.entrySet().stream()
-                .filter(value -> exceptionAuxiliaryDataToIncludeInNotification.contains(value.getKey()))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-        }
-
-        HttpStatus status = resolveHttpStatusForException(unwrappedException, HttpStatus.INTERNAL_SERVER_ERROR);
-        AdditionalNotificationData additionalNotificationData = AdditionalNotificationData.builder().messageListDataMap(notificationAuxiliaryData).build();
-
-        return ResponseEntity.status(status).body(notificationResponseService.responseWithExceptionNotification(unwrappedException, additionalNotificationData));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected Exception unwrapException(Exception exception) {
-        if (exceptionToUnwrapList != null && exceptionToUnwrapList.contains(exception.getClass().getName()) && exception.getCause() != null) {
-            return (Exception) exception.getCause();
-        }
-
-        return exception;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected void logExceptionWithResolvedAuxiliaryData(Exception exception, HttpServletRequest request) {
-        Map<String, Object> exceptionAuxiliaryData = resolveExceptionAuxiliaryData(exception, request);
-
-        loggingService.logInternalException(exception, exceptionAuxiliaryData);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected Map<String, Object> resolveExceptionAuxiliaryData(Exception exception, HttpServletRequest request) {
-        return Optional.ofNullable(exceptionAuxiliaryDataResolverService).map(service -> service.resolveRequestExceptionAuxiliaryData(exception, request)).orElse(Collections.emptyMap());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected HttpStatus resolveHttpStatusForException(Exception exception, HttpStatus defaultStatus) {
-        return Optional.ofNullable(httpStatusResolverService.resolveHttpStatusForException(exception)).map(HttpStatus::resolve).orElse(defaultStatus);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

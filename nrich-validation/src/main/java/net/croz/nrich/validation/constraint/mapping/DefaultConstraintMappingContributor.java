@@ -14,7 +14,6 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.validation.constraint.mapping;
 
 import net.croz.nrich.validation.api.constraint.InList;
@@ -47,17 +46,6 @@ public class DefaultConstraintMappingContributor implements ConstraintMappingCon
 
     @Override
     public void createConstraintMappings(ConstraintMappingBuilder builder) {
-        builder.addConstraintMapping().constraintDefinition(ValidOib.class).validatedBy(ValidOibValidator.class);
-        builder.addConstraintMapping().constraintDefinition(ValidSearchProperties.class).validatedBy(ValidSearchPropertiesValidator.class);
-        builder.addConstraintMapping().constraintDefinition(ValidRange.class).validatedBy(ValidRangeValidator.class);
-        builder.addConstraintMapping().constraintDefinition(MaxSizeInBytes.class).validatedBy(MaxSizeInBytesValidator.class);
-        builder.addConstraintMapping().constraintDefinition(NotNullWhen.class).validatedBy(NotNullWhenValidator.class);
-        builder.addConstraintMapping().constraintDefinition(NullWhen.class).validatedBy(NullWhenValidator.class);
-        builder.addConstraintMapping().constraintDefinition(ValidFile.class).validatedBy(ValidFileValidator.class);
-        builder.addConstraintMapping().constraintDefinition(ValidFileResolvable.class).validatedBy(ValidFileResolvableValidator.class);
-        builder.addConstraintMapping().constraintDefinition(InList.class).validatedBy(InListValidator.class);
-        builder.addConstraintMapping().constraintDefinition(SpelExpression.class).validatedBy(SpelExpressionValidator.class);
-        builder.addConstraintMapping().constraintDefinition(MinDate.class).validatedBy(MinDateValidator.class);
-        builder.addConstraintMapping().constraintDefinition(LastTimestampInDay.class).validatedBy(LastTimestampInDayValidator.class);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

@@ -14,7 +14,6 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.spring.util;
 
 import org.springframework.context.ApplicationContext;
@@ -27,11 +26,11 @@ public final class ApplicationContextHolder implements ApplicationContextAware {
     private static ApplicationContext applicationContext;
 
     public static ApplicationContext getApplicationContext() {
-        return applicationContext;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) {
-        ApplicationContextHolder.applicationContext = applicationContext;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

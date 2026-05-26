@@ -14,7 +14,6 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.javascript.service;
 
 import lombok.RequiredArgsConstructor;
@@ -23,7 +22,6 @@ import net.croz.nrich.javascript.api.converter.JavaToJavascriptTypeConverter;
 import net.croz.nrich.javascript.api.model.JavascriptType;
 import net.croz.nrich.javascript.api.service.JavaToJavascriptTypeConversionService;
 import org.springframework.util.CollectionUtils;
-
 import java.util.List;
 import java.util.Locale;
 
@@ -37,16 +35,6 @@ public class DefaultJavaToJavascriptTypeConversionService implements JavaToJavas
 
     @Override
     public String convert(Class<?> type) {
-        if (CollectionUtils.isEmpty(javaToJavascriptTypeConverterList)) {
-            log.warn("No converts registered for converting between Java to Javascript type, consider defining a bean of {} type", JavaToJavascriptTypeConverter.class.getName());
-
-            return DEFAULT_TYPE;
-        }
-
-        return javaToJavascriptTypeConverterList.stream()
-            .filter(converter -> converter.supports(type))
-            .findFirst()
-            .map(converter -> converter.convert(type))
-            .orElse(DEFAULT_TYPE);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

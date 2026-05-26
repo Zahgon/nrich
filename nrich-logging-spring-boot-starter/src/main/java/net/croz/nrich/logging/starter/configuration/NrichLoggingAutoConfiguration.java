@@ -14,7 +14,6 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.logging.starter.configuration;
 
 import net.croz.nrich.logging.api.service.LoggingService;
@@ -32,6 +31,6 @@ public class NrichLoggingAutoConfiguration {
     @ConditionalOnMissingBean
     @Bean
     public LoggingService loggingService(MessageSource messageSource) {
-        return new Slf4jLoggingService(messageSource);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

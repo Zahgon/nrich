@@ -14,7 +14,6 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.registry.configuration.controller;
 
 import lombok.RequiredArgsConstructor;
@@ -23,7 +22,6 @@ import net.croz.nrich.registry.api.configuration.service.RegistryConfigurationSe
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -35,6 +33,6 @@ public class RegistryConfigurationController {
 
     @PostMapping("fetch")
     public List<RegistryGroupConfiguration> fetch() {
-        return registryConfigurationService.fetchRegistryGroupConfigurationList();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

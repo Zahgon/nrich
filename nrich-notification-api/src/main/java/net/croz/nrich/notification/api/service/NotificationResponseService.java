@@ -14,7 +14,6 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.notification.api.service;
 
 import net.croz.nrich.notification.api.model.AdditionalNotificationData;
@@ -45,10 +44,10 @@ public interface NotificationResponseService extends BaseNotificationResponseSer
     <D> NotificationDataResponse<D> responseWithNotification(D data, String actionName, AdditionalNotificationData additionalNotificationData);
 
     default <D> NotificationDataResponse<D> responseWithNotificationActionResolvedFromRequest(D data) {
-        return responseWithNotificationActionResolvedFromRequest(data, AdditionalNotificationData.empty());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     default <D> NotificationDataResponse<D> responseWithNotification(D data, String actionName) {
-        return responseWithNotification(data, actionName, AdditionalNotificationData.empty());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

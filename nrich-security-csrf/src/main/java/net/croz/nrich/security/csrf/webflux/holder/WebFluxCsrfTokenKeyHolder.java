@@ -14,14 +14,12 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.security.csrf.webflux.holder;
 
 import lombok.RequiredArgsConstructor;
 import net.croz.nrich.security.csrf.api.holder.CsrfTokenKeyHolder;
 import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebSession;
-
 import java.security.Key;
 
 @RequiredArgsConstructor
@@ -37,27 +35,21 @@ public class WebFluxCsrfTokenKeyHolder implements CsrfTokenKeyHolder {
 
     @Override
     public String getToken() {
-        String token = exchange.getRequest().getHeaders().getFirst(tokenKeyName);
-
-        if (token == null) {
-            token = exchange.getRequest().getQueryParams().getFirst(tokenKeyName);
-        }
-
-        return token;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void storeToken(String csrfToken) {
-        exchange.getResponse().getHeaders().add(tokenKeyName, csrfToken);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Key getCryptoKey() {
-        return (Key) webSession.getAttributes().get(cryptoKeyName);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void storeCryptoKey(Key cryptoKey) {
-        webSession.getAttributes().put(cryptoKeyName, cryptoKey);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

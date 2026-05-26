@@ -14,7 +14,6 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.core.api.exception;
 
 /**
@@ -31,6 +30,6 @@ public class DefaultExceptionWithArguments extends RuntimeException implements E
 
     @Override
     public Object[] getArgumentList() {
-        return argumentList;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

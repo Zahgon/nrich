@@ -14,7 +14,6 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.search.api.model.operator;
 
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -26,7 +25,6 @@ import java.util.Locale;
 import java.util.Objects;
 
 // TODO check if other operators are required
-
 /**
  * Contains default operators that will be used when building queries.
  */
@@ -34,80 +32,83 @@ import java.util.Objects;
 public enum DefaultSearchOperator implements SearchOperator {
 
     CONTAINS {
+
         @Override
         public Predicate asPredicate(CriteriaBuilder criteriaBuilder, Path<?> path, Object value) {
-            return criteriaBuilder.like(criteriaBuilder.lower((Expression<String>) path), "%" + Objects.requireNonNull(value).toString().toLowerCase() + "%");
-        }
-    },
-
-    ILIKE {
-        @Override
-        public Predicate asPredicate(CriteriaBuilder criteriaBuilder, Path<?> path, Object value) {
-            return criteriaBuilder.like(criteriaBuilder.lower((Expression<String>) path), Objects.requireNonNull(value).toString().toLowerCase() + "%");
-        }
-    },
-
-    LIKE {
-        @Override
-        public Predicate asPredicate(CriteriaBuilder criteriaBuilder, Path<?> path, Object value) {
-            return criteriaBuilder.like((Expression<String>) path, Objects.requireNonNull(value) + "%");
-        }
-    },
-
-    EQ {
-        @Override
-        public Predicate asPredicate(CriteriaBuilder criteriaBuilder, Path<?> path, Object value) {
-            return criteriaBuilder.equal(path, value);
-        }
-    },
-
-    GE {
-        @Override
-        public Predicate asPredicate(CriteriaBuilder criteriaBuilder, Path<?> path, Object value) {
-            return criteriaBuilder.greaterThanOrEqualTo((Expression<Comparable<Object>>) path, (Comparable<Object>) value);
-        }
-    },
-
-    LE {
-        @Override
-        public Predicate asPredicate(CriteriaBuilder criteriaBuilder, Path<?> path, Object value) {
-            return criteriaBuilder.lessThanOrEqualTo((Expression<Comparable<Object>>) path, (Comparable<Object>) value);
-        }
-    },
-
-    GT {
-        @Override
-        public Predicate asPredicate(CriteriaBuilder criteriaBuilder, Path<?> path, Object value) {
-            return criteriaBuilder.greaterThan((Expression<Comparable<Object>>) path, (Comparable<Object>) value);
-        }
-    },
-
-    LT {
-        @Override
-        public Predicate asPredicate(CriteriaBuilder criteriaBuilder, Path<?> path, Object value) {
-            return criteriaBuilder.lessThan((Expression<Comparable<Object>>) path, (Comparable<Object>) value);
-        }
-    },
-
-    IN {
-        @Override
-        public Predicate asPredicate(CriteriaBuilder criteriaBuilder, Path<?> path, Object value) {
-            CriteriaBuilder.In<Object> inClause = criteriaBuilder.in(path);
-
-            ((Collection<?>) value).forEach(inClause::value);
-
-            return inClause;
-        }
-    },
-
-    LOWER_IN {
-        @Override
-        public Predicate asPredicate(CriteriaBuilder criteriaBuilder, Path<?> path, Object value) {
-            CriteriaBuilder.In<String> inClause = criteriaBuilder.in(criteriaBuilder.lower((Expression<String>) path));
-
-            ((Collection<?>) value).forEach(item -> inClause.value(((String) item).toLowerCase(Locale.ROOT)));
-
-            return inClause;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
+    ,
+    ILIKE {
+
+        @Override
+        public Predicate asPredicate(CriteriaBuilder criteriaBuilder, Path<?> path, Object value) {
+            throw new UnsupportedOperationException("STUB: not implemented");
+        }
+    }
+    ,
+    LIKE {
+
+        @Override
+        public Predicate asPredicate(CriteriaBuilder criteriaBuilder, Path<?> path, Object value) {
+            throw new UnsupportedOperationException("STUB: not implemented");
+        }
+    }
+    ,
+    EQ {
+
+        @Override
+        public Predicate asPredicate(CriteriaBuilder criteriaBuilder, Path<?> path, Object value) {
+            throw new UnsupportedOperationException("STUB: not implemented");
+        }
+    }
+    ,
+    GE {
+
+        @Override
+        public Predicate asPredicate(CriteriaBuilder criteriaBuilder, Path<?> path, Object value) {
+            throw new UnsupportedOperationException("STUB: not implemented");
+        }
+    }
+    ,
+    LE {
+
+        @Override
+        public Predicate asPredicate(CriteriaBuilder criteriaBuilder, Path<?> path, Object value) {
+            throw new UnsupportedOperationException("STUB: not implemented");
+        }
+    }
+    ,
+    GT {
+
+        @Override
+        public Predicate asPredicate(CriteriaBuilder criteriaBuilder, Path<?> path, Object value) {
+            throw new UnsupportedOperationException("STUB: not implemented");
+        }
+    }
+    ,
+    LT {
+
+        @Override
+        public Predicate asPredicate(CriteriaBuilder criteriaBuilder, Path<?> path, Object value) {
+            throw new UnsupportedOperationException("STUB: not implemented");
+        }
+    }
+    ,
+    IN {
+
+        @Override
+        public Predicate asPredicate(CriteriaBuilder criteriaBuilder, Path<?> path, Object value) {
+            throw new UnsupportedOperationException("STUB: not implemented");
+        }
+    }
+    ,
+    LOWER_IN {
+
+        @Override
+        public Predicate asPredicate(CriteriaBuilder criteriaBuilder, Path<?> path, Object value) {
+            throw new UnsupportedOperationException("STUB: not implemented");
+        }
+    }
+
 }

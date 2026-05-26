@@ -14,7 +14,6 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.security.csrf.configuration;
 
 import net.croz.nrich.security.csrf.api.service.CsrfTokenManagerService;
@@ -41,43 +40,32 @@ public class NrichCsrfAutoConfiguration {
     @ConditionalOnMissingBean
     @Bean
     public CsrfTokenManagerService tokenManagerService(NrichCsrfProperties csrfProperties) {
-        return new AesCsrfTokenManagerService(csrfProperties.tokenExpirationInterval(), csrfProperties.tokenFutureThreshold(), csrfProperties.cryptoKeyLength());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @ConditionalOnMissingBean
     @Bean
     public CsrfPingController csrfPingController() {
-        return new CsrfPingController();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
     @ConditionalOnMissingBean
     @Bean
     public CsrfInterceptor csrfInterceptor(CsrfTokenManagerService csrfTokenManagerService, NrichCsrfProperties csrfProperties) {
-        return new CsrfInterceptor(
-            csrfTokenManagerService, csrfProperties.tokenKeyName(), csrfProperties.initialTokenUrl(), csrfProperties.csrfPingUri(), csrfProperties.csrfExcludeConfigList()
-        );
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.REACTIVE)
     @ConditionalOnMissingBean
     @Bean
     public CsrfWebFilter webFilter(CsrfTokenManagerService csrfTokenManagerService, NrichCsrfProperties csrfProperties) {
-        return new CsrfWebFilter(
-            csrfTokenManagerService, csrfProperties.tokenKeyName(), csrfProperties.initialTokenUrl(), csrfProperties.csrfPingUri(), csrfProperties.csrfExcludeConfigList()
-        );
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @ConditionalOnBean(CsrfInterceptor.class)
     @Bean
     public WebMvcConfigurer csrfInterceptorWebMvcConfigurer(CsrfInterceptor csrfInterceptor) {
-        return new WebMvcConfigurer() {
-
-            @Override
-            public void addInterceptors(InterceptorRegistry registry) {
-                registry.addInterceptor(csrfInterceptor);
-            }
-
-        };
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

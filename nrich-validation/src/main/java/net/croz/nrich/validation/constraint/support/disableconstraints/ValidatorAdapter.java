@@ -14,11 +14,9 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.validation.constraint.support.disableconstraints;
 
 import lombok.RequiredArgsConstructor;
-
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import jakarta.validation.executable.ExecutableValidator;
@@ -42,62 +40,48 @@ public class ValidatorAdapter implements Validator {
 
     @Override
     public <T> Set<ConstraintViolation<T>> validate(T object, Class<?>... groups) {
-        Set<ConstraintViolation<T>> constraintViolations = targetValidator.validate(object, groups);
-
-        return filterConstraints(constraintViolations, object.getClass());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public <T> Set<ConstraintViolation<T>> validateProperty(T object, String propertyName, Class<?>... groups) {
-        Set<ConstraintViolation<T>> constraintViolations = targetValidator.validateProperty(object, propertyName, groups);
-
-        return filterConstraints(constraintViolations, object.getClass());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public <T> Set<ConstraintViolation<T>> validateValue(Class<T> beanType, String propertyName, Object value, Class<?>... groups) {
-        Set<ConstraintViolation<T>> constraintViolations = targetValidator.validateValue(beanType, propertyName, value, groups);
-
-        return filterConstraints(constraintViolations, beanType);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public BeanDescriptor getConstraintsForClass(Class<?> type) {
-        BeanDescriptor beanDescriptor = targetValidator.getConstraintsForClass(type);
-
-        return new BeanDescriptorAdapter(beanDescriptor, constraintAnnotationProcessor.getDisabledConstraintForType(type));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public <T> T unwrap(Class<T> type) {
-        return targetValidator.unwrap(type);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public ExecutableValidator forExecutables() {
-        return targetValidator.forExecutables();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private <T> Set<ConstraintViolation<T>> filterConstraints(Set<ConstraintViolation<T>> originalViolations, Class<?> type) {
         if (originalViolations.isEmpty()) {
             return originalViolations;
         }
-
         Map<String, List<Class<? extends Annotation>>> pathHolderMap = constraintAnnotationProcessor.getDisabledConstraintForType(type);
-
         if (pathHolderMap.isEmpty()) {
             return originalViolations;
         }
-
         return originalViolations.stream().filter(constraintViolation -> {
             Class<?> annotationType = constraintViolation.getConstraintDescriptor().getAnnotation().annotationType();
             Class<?> beanType = constraintViolation.getRootBeanClass();
             String propertyName = constraintViolation.getPropertyPath().toString();
-
             String path = PathUtil.getPath(beanType, propertyName);
-
             return !(pathHolderMap.getOrDefault(path, Collections.emptyList()).contains(annotationType));
-
         }).collect(Collectors.toSet());
     }
 }

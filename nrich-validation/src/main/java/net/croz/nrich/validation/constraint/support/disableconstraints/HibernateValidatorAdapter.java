@@ -14,12 +14,10 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.validation.constraint.support.disableconstraints;
 
 import org.hibernate.validator.HibernateValidator;
 import org.hibernate.validator.internal.engine.ValidatorFactoryImpl;
-
 import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
 import jakarta.validation.spi.ConfigurationState;
@@ -28,11 +26,6 @@ public class HibernateValidatorAdapter extends HibernateValidator {
 
     @Override
     public ValidatorFactory buildValidatorFactory(ConfigurationState configurationState) {
-        return new ValidatorFactoryImpl(configurationState) {
-            @Override
-            public Validator getValidator() {
-                return new ValidatorAdapter(super.getValidator());
-            }
-        };
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

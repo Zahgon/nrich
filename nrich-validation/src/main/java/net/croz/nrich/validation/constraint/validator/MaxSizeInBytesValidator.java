@@ -14,11 +14,9 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.validation.constraint.validator;
 
 import net.croz.nrich.validation.api.constraint.MaxSizeInBytes;
-
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import java.nio.charset.Charset;
@@ -31,16 +29,11 @@ public class MaxSizeInBytesValidator implements ConstraintValidator<MaxSizeInByt
 
     @Override
     public void initialize(MaxSizeInBytes constraintAnnotation) {
-        maxSizeInBytes = constraintAnnotation.value();
-        charset = Charset.forName(constraintAnnotation.encoding());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-        if (value == null) {
-            return true;
-        }
-
-        return value.getBytes(charset).length <= maxSizeInBytes;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

@@ -14,7 +14,6 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.search.api.model;
 
 import lombok.Builder;
@@ -24,13 +23,11 @@ import net.croz.nrich.search.api.model.operator.SearchOperatorOverride;
 import net.croz.nrich.search.api.model.property.SearchPropertyConfiguration;
 import net.croz.nrich.search.api.model.property.SearchPropertyMapping;
 import net.croz.nrich.search.api.model.subquery.SubqueryConfiguration;
-
 import jakarta.persistence.criteria.JoinType;
 import java.util.List;
 import java.util.function.Function;
 
 // TODO allow for easier initialization of search configuration and sync all classes (static vs builder etc)
-
 /**
  * Holds search configuration that decides how query should be build from conditions defined in search request.
  *
@@ -113,14 +110,14 @@ public class SearchConfiguration<T, P, R> {
     private SearchPropertyConfiguration searchPropertyConfiguration = SearchPropertyConfiguration.defaultSearchPropertyConfiguration();
 
     public static <T, P, R> SearchConfiguration<T, P, R> emptyConfiguration() {
-        return SearchConfiguration.<T, P, R>builder().searchPropertyConfiguration(SearchPropertyConfiguration.defaultSearchPropertyConfiguration()).build();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public static <T, P, R> SearchConfiguration<T, P, R> emptyConfigurationMatchingAny() {
-        return SearchConfiguration.<T, P, R>builder().searchPropertyConfiguration(SearchPropertyConfiguration.defaultSearchPropertyConfiguration()).anyMatch(true).build();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public static <T, P, R> SearchConfiguration<T, P, R> emptyConfigurationWithDefaultMappingResolve() {
-        return SearchConfiguration.<T, P, R>builder().searchPropertyConfiguration(SearchPropertyConfiguration.defaultSearchPropertyConfiguration()).resolvePropertyMappingUsingPrefix(true).build();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

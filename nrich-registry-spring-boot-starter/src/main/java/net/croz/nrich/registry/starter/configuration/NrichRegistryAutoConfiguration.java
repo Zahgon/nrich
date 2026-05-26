@@ -14,7 +14,6 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.registry.starter.configuration;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -81,7 +80,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
-
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.PersistenceContext;
@@ -110,174 +108,114 @@ public class NrichRegistryAutoConfiguration {
     @ConditionalOnMissingBean
     @Bean
     public Validator validator() {
-        return new LocalValidatorFactoryBean();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @ConditionalOnMissingBean(name = "registryDataModelMapper")
     @Bean
     public ModelMapper registryDataModelMapper() {
-        return strictModelMapper();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @ConditionalOnMissingBean(name = "registryBaseModelMapper")
     @Bean
     public ModelMapper registryBaseModelMapper() {
-        return strictModelMapper();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @ConditionalOnMissingBean
     @Bean
     public ObjectMapper registryObjectMapper(List<Module> moduleList) {
-        ObjectMapper objectMapper = new ObjectMapper();
-
-        objectMapper.findAndRegisterModules();
-
-        objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-        objectMapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
-        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-        objectMapper.disable(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS);
-
-        objectMapper.setDateFormat(new StdDateFormat());
-
-        objectMapper.registerModules(moduleList);
-
-        return objectMapper;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @ConditionalOnProperty(name = "nrich.registry.default-converter-enabled", havingValue = "true", matchIfMissing = true)
     @ConditionalOnMissingBean(name = "registryDefaultStringToTypeConverter")
     @Bean
     public StringToTypeConverter<Object> registryDefaultStringToTypeConverter(NrichRegistryProperties registryProperties) {
-        return new DefaultStringToTypeConverter(
-            registryProperties.registrySearch().dateFormatList(), registryProperties.registrySearch().decimalNumberFormatList(),
-            registryProperties.registrySearch().booleanTrueRegexPattern(), registryProperties.registrySearch().booleanFalseRegexPattern()
-        );
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @ConditionalOnMissingBean(name = "registryStringToEntityPropertyMapConverter")
     @Bean
     public StringToEntityPropertyMapConverter registryStringToEntityPropertyMapConverter(@Lazy @Autowired(required = false) Map<String, StringToTypeConverter<?>> stringToTypeConverterList) {
-        @SuppressWarnings("java:S6204")
-        List<StringToTypeConverter<?>> registryConverters = stringToTypeConverterList.entrySet().stream()
-            .filter(entry -> entry.getKey().toLowerCase(Locale.ROOT).contains(REGISTRY_CONVERTER))
-            .map(Map.Entry::getValue)
-            .collect(Collectors.toList());
-
-        return new DefaultStringToEntityPropertyMapConverter(registryConverters);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @ConditionalOnMissingBean
     @Bean
-    public RegistryConfigurationResolverService registryConfigurationResolverService(NrichRegistryProperties registryProperties,
-                                                                                     @Autowired(required = false) List<RegistryOverrideConfigurationHolder> registryOverrideConfigurationHolderList) {
-
-        List<RegistryOverrideConfigurationHolder> overrideConfigurationHolderList = registryProperties.registryConfiguration().getOverrideConfigurationHolderList();
-
-        if (overrideConfigurationHolderList == null) {
-            overrideConfigurationHolderList = new ArrayList<>();
-        }
-        if (registryOverrideConfigurationHolderList != null) {
-            overrideConfigurationHolderList.addAll(registryOverrideConfigurationHolderList);
-        }
-
-        registryProperties.registryConfiguration().setOverrideConfigurationHolderList(overrideConfigurationHolderList);
-
-        return new DefaultRegistryConfigurationResolverService(entityManager, registryProperties.registryConfiguration());
+    public RegistryConfigurationResolverService registryConfigurationResolverService(NrichRegistryProperties registryProperties, @Autowired(required = false) List<RegistryOverrideConfigurationHolder> registryOverrideConfigurationHolderList) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @ConditionalOnMissingBean
     @Bean
     public RegistryConfigurationUpdateInterceptor registryConfigurationUpdateInterceptor(RegistryConfigurationResolverService registryConfigurationResolverService) {
-        return new RegistryConfigurationUpdateInterceptor(registryConfigurationResolverService.resolveRegistryOverrideConfigurationMap());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @ConditionalOnProperty(name = "nrich.registry.default-java-to-javascript-converter-enabled", havingValue = "true", matchIfMissing = true)
     @ConditionalOnMissingBean(name = "registryJavaToJavascriptTypeConverter")
     @Bean
     public JavaToJavascriptTypeConverter registryJavaToJavascriptTypeConverter() {
-        return new DefaultJavaToJavascriptTypeConverter();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @ConditionalOnMissingBean(name = "registryJavaToJavascriptTypeConversionService")
     @Bean
     public JavaToJavascriptTypeConversionService registryJavaToJavascriptTypeConversionService(@Autowired(required = false) List<JavaToJavascriptTypeConverter> converters) {
-        return new DefaultJavaToJavascriptTypeConversionService(converters);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @ConditionalOnMissingBean
     @Bean
-    public RegistryConfigurationService registryConfigurationService(MessageSource messageSource, RegistryConfigurationResolverService registryConfigurationResolverService,
-                                                                     NrichRegistryProperties registryProperties, JavaToJavascriptTypeConversionService registryJavaToJavascriptTypeConversionService) {
-        List<String> readOnlyPropertyList = Optional.ofNullable(registryProperties.defaultReadOnlyPropertyList()).orElse(Collections.emptyList());
-        RegistryGroupDefinitionHolder registryGroupDefinitionHolder = registryConfigurationResolverService.resolveRegistryGroupDefinition();
-        RegistryHistoryConfigurationHolder registryHistoryConfigurationHolder = registryConfigurationResolverService.resolveRegistryHistoryConfiguration();
-        Map<Class<?>, RegistryOverrideConfiguration> registryOverrideConfigurationMap = registryConfigurationResolverService.resolveRegistryOverrideConfigurationMap();
-
-        return new DefaultRegistryConfigurationService(
-            messageSource, readOnlyPropertyList, registryGroupDefinitionHolder, registryHistoryConfigurationHolder, registryOverrideConfigurationMap, registryJavaToJavascriptTypeConversionService
-        );
+    public RegistryConfigurationService registryConfigurationService(MessageSource messageSource, RegistryConfigurationResolverService registryConfigurationResolverService, NrichRegistryProperties registryProperties, JavaToJavascriptTypeConversionService registryJavaToJavascriptTypeConversionService) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
     @ConditionalOnMissingBean
     @Bean
     public RegistryConfigurationController registryConfigurationController(RegistryConfigurationService registryConfigurationService) {
-        return new RegistryConfigurationController(registryConfigurationService);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @ConditionalOnMissingBean
     @Bean
     public RegistryEntityFinderService registryEntityFinderService(ModelMapper registryBaseModelMapper, RegistryConfigurationResolverService registryConfigurationResolverService) {
-        Map<String, ManagedTypeWrapper> managedTypeWrapperMap = registryConfigurationResolverService.resolveRegistryDataConfiguration().classNameManagedTypeWrapperMap();
-
-        return new EntityManagerRegistryEntityFinderService(entityManager, registryBaseModelMapper, managedTypeWrapperMap);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @ConditionalOnMissingBean(RegistryDataService.class)
     @Bean
-    public DefaultRegistryDataService registryDataService(ModelMapper registryDataModelMapper, StringToEntityPropertyMapConverter registryStringToEntityPropertyMapConverter,
-                                                          RegistryConfigurationResolverService registryConfigurationResolverService,
-                                                          @Autowired(required = false) List<RegistryDataInterceptor> interceptorList, RegistryEntityFinderService registryEntityFinderService) {
-        RegistryDataConfigurationHolder registryDataConfigurationHolder = registryConfigurationResolverService.resolveRegistryDataConfiguration();
-        List<RegistryDataInterceptor> resolvedInterceptorList = Optional.ofNullable(interceptorList).orElse(Collections.emptyList());
-
-        return new DefaultRegistryDataService(
-            entityManager, registryDataModelMapper, registryStringToEntityPropertyMapConverter,
-            registryDataConfigurationHolder, resolvedInterceptorList, registryEntityFinderService
-        );
+    public DefaultRegistryDataService registryDataService(ModelMapper registryDataModelMapper, StringToEntityPropertyMapConverter registryStringToEntityPropertyMapConverter, RegistryConfigurationResolverService registryConfigurationResolverService, @Autowired(required = false) List<RegistryDataInterceptor> interceptorList, RegistryEntityFinderService registryEntityFinderService) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @ConditionalOnMissingBean
     @Bean
     public RegistryClassResolvingService registryClassResolvingService(RegistryConfigurationResolverService registryConfigurationResolverService, NrichRegistryProperties registryProperties) {
-        Map<String, Class<?>> createRegistryClassMapping = registryProperties.registryConfiguration().getCreateRegistryClassMapping();
-        Map<String, Class<?>> updateRegistryClassMapping = registryProperties.registryConfiguration().getUpdateRegistryClassMapping();
-
-        return new DefaultRegistryClassResolvingService(registryConfigurationResolverService.resolveRegistryDataConfiguration(), createRegistryClassMapping, updateRegistryClassMapping);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @ConditionalOnMissingBean
     @Bean
     public RegistryDataRequestConversionService registryDataRequestConversionService(ObjectMapper objectMapper, RegistryClassResolvingService registryClassResolvingService) {
-        return new DefaultRegistryDataRequestConversionService(objectMapper, registryClassResolvingService);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
     @ConditionalOnMissingBean
     @Bean
     public RegistryDataController registryDataController(RegistryDataService registryDataService, RegistryDataRequestConversionService registryDataRequestConversionService, Validator validator) {
-        return new RegistryDataController(registryDataService, registryDataRequestConversionService, validator);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @ConditionalOnClass(name = ENVERS_AUDIT_READER_FACTORY)
     @ConditionalOnMissingBean(RegistryHistoryService.class)
     @Bean
-    public DefaultRegistryHistoryService registryHistoryService(RegistryConfigurationResolverService registryConfigurationResolverService, ModelMapper registryBaseModelMapper,
-                                                                RegistryEntityFinderService registryEntityFinderService) {
-        RegistryDataConfigurationHolder registryDataConfigurationHolder = registryConfigurationResolverService.resolveRegistryDataConfiguration();
-        RegistryHistoryConfigurationHolder registryHistoryConfigurationHolder = registryConfigurationResolverService.resolveRegistryHistoryConfiguration();
-
-        return new DefaultRegistryHistoryService(entityManager, registryDataConfigurationHolder, registryHistoryConfigurationHolder, registryBaseModelMapper, registryEntityFinderService);
+    public DefaultRegistryHistoryService registryHistoryService(RegistryConfigurationResolverService registryConfigurationResolverService, ModelMapper registryBaseModelMapper, RegistryEntityFinderService registryEntityFinderService) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @ConditionalOnClass(name = ENVERS_AUDIT_READER_FACTORY)
@@ -285,39 +223,31 @@ public class NrichRegistryAutoConfiguration {
     @ConditionalOnMissingBean
     @Bean
     public RegistryHistoryController registryHistoryController(RegistryHistoryService registryHistoryService) {
-        return new RegistryHistoryController(registryHistoryService);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @ConditionalOnMissingBean(name = "registryDataFormConfigurationMappingCustomizer")
     @Bean
-    public FormConfigurationMappingCustomizer registryDataFormConfigurationMappingCustomizer(RegistryConfigurationResolverService registryConfigurationResolverService,
-                                                                                             RegistryClassResolvingService registryClassResolvingService) {
-        @SuppressWarnings("java:S6204")
-        List<Class<?>> registryClassList = registryConfigurationResolverService.resolveRegistryDataConfiguration().registryDataConfigurationList().stream()
-            .map(RegistryDataConfiguration::registryType)
-            .collect(Collectors.toList());
-
-        return new RegistryDataFormConfigurationMappingCustomizer(registryClassResolvingService, registryClassList);
+    public FormConfigurationMappingCustomizer registryDataFormConfigurationMappingCustomizer(RegistryConfigurationResolverService registryConfigurationResolverService, RegistryClassResolvingService registryClassResolvingService) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @ConditionalOnMissingBean(RegistryEnumService.class)
     @Bean
     public DefaultRegistryEnumService registryEnumService(MessageSource messageSource) {
-        return new DefaultRegistryEnumService(messageSource);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
     @ConditionalOnMissingBean
     @Bean
     public RegistryEnumController registryEnumController(RegistryEnumService registryEnumService) {
-        return new RegistryEnumController(registryEnumService);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private ModelMapper strictModelMapper() {
         ModelMapper modelMapper = new ModelMapper();
-
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-
         return modelMapper;
     }
 }

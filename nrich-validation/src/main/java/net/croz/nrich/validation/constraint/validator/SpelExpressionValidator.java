@@ -28,7 +28,6 @@ import org.springframework.expression.spel.SpelCompilerMode;
 import org.springframework.expression.spel.SpelParserConfiguration;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
-
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
@@ -51,32 +50,22 @@ public class SpelExpressionValidator implements ConstraintValidator<SpelExpressi
 
     @Override
     public void initialize(SpelExpression constraintAnnotation) {
-        spelExpression = constraintAnnotation.value();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public boolean isValid(Object value, ConstraintValidatorContext context) {
-        // will be validated by other constraints
-        if (value == null) {
-            return true;
-        }
-
-        Expression expression = expressionParser.parseExpression(spelExpression);
-
-        return Boolean.TRUE.equals(expression.getValue(evaluationContext, value, Boolean.class));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private EvaluationContext createEvaluationContext(ApplicationContext applicationContext) {
         SpelParserConfiguration config = new SpelParserConfiguration(SpelCompilerMode.MIXED, this.getClass().getClassLoader());
         StandardEvaluationContext standardEvaluationContext = new StandardEvaluationContext(config);
-
         standardEvaluationContext.setBeanResolver(new BeanFactoryResolver(applicationContext));
         standardEvaluationContext.addPropertyAccessor(new MapAccessor());
         standardEvaluationContext.addPropertyAccessor(new EnvironmentAccessor());
-
         standardEvaluationContext.setVariable(ENVIRONMENT_VARIABLE_NAME, applicationContext.getEnvironment());
         standardEvaluationContext.setVariable(SYSTEM_PROPERTIES_VARIABLE_NAME, System.getProperties());
-
         return standardEvaluationContext;
     }
 }

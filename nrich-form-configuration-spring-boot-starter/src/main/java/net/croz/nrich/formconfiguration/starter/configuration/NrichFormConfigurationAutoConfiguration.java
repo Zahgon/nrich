@@ -14,7 +14,6 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.formconfiguration.starter.configuration;
 
 import net.croz.nrich.formconfiguration.api.customizer.FormConfigurationMappingCustomizer;
@@ -45,7 +44,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.util.CollectionUtils;
-
 import jakarta.validation.Validator;
 import java.util.List;
 import java.util.Map;
@@ -59,58 +57,43 @@ public class NrichFormConfigurationAutoConfiguration {
     @ConditionalOnMissingBean
     @Bean
     public FieldErrorMessageResolverService fieldErrorMessageResolverService(MessageSource messageSource) {
-        return new MessageSourceFieldErrorMessageResolverService(messageSource);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @ConditionalOnProperty(name = "nrich.form-configuration.default-converter-enabled", havingValue = "true", matchIfMissing = true)
     @Bean
     public ConstrainedPropertyValidatorConverterService constrainedPropertyValidatorConverterService(FieldErrorMessageResolverService fieldErrorMessageResolverService) {
-        return new DefaultConstrainedPropertyValidatorConverterService(fieldErrorMessageResolverService);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @ConditionalOnMissingBean
     @Bean
     public FormConfigurationAnnotationResolvingService formConfigurationAnnotationResolvingService() {
-        return new DefaultFormConfigurationAnnotationResolvingService();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @ConditionalOnProperty(name = "nrich.form-configuration.default-java-to-javascript-converter-enabled", havingValue = "true", matchIfMissing = true)
     @ConditionalOnMissingBean(name = "formJavaToJavascriptTypeConverter")
     @Bean
     public JavaToJavascriptTypeConverter formJavaToJavascriptTypeConverter() {
-        return new DefaultJavaToJavascriptTypeConverter();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @ConditionalOnMissingBean(name = "formJavaToJavascriptTypeConversionService")
     @Bean
     public JavaToJavascriptTypeConversionService formJavaToJavascriptTypeConversionService(@Autowired(required = false) List<JavaToJavascriptTypeConverter> converters) {
-        return new DefaultJavaToJavascriptTypeConversionService(converters);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @ConditionalOnMissingBean
     @Bean
-    public FormConfigurationService formConfigurationService(@Lazy Validator validator, NrichFormConfigurationProperties configurationProperties,
-                                                             List<ConstrainedPropertyValidatorConverterService> constrainedPropertyValidatorConverterServiceList,
-                                                             FormConfigurationAnnotationResolvingService formConfigurationAnnotationResolvingService,
-                                                             @Autowired(required = false) List<FormConfigurationMappingCustomizer> formConfigurationCustomizerList,
-                                                             JavaToJavascriptTypeConversionService formJavaToJavascriptTypeConversionService) {
-        Map<String, Class<?>> formConfigurationMapping = FormConfigurationMappingCustomizerUtil.applyCustomizerList(
-            configurationProperties.formConfigurationMapping(), formConfigurationCustomizerList
-        );
-
-        List<String> packageList = configurationProperties.formValidationConfigurationClassesPackageList();
-        if (!CollectionUtils.isEmpty(packageList)) {
-            Map<String, Class<?>> classPathFormConfiguration = formConfigurationAnnotationResolvingService.resolveFormConfigurations(packageList);
-
-            classPathFormConfiguration.forEach(formConfigurationMapping::putIfAbsent);
-        }
-
-        return new DefaultFormConfigurationService(validator, formConfigurationMapping, constrainedPropertyValidatorConverterServiceList, formJavaToJavascriptTypeConversionService);
+    public FormConfigurationService formConfigurationService(@Lazy Validator validator, NrichFormConfigurationProperties configurationProperties, List<ConstrainedPropertyValidatorConverterService> constrainedPropertyValidatorConverterServiceList, FormConfigurationAnnotationResolvingService formConfigurationAnnotationResolvingService, @Autowired(required = false) List<FormConfigurationMappingCustomizer> formConfigurationCustomizerList, JavaToJavascriptTypeConversionService formJavaToJavascriptTypeConversionService) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @ConditionalOnMissingBean
     @Bean
     public FormConfigurationController formConfigurationController(FormConfigurationService formConfigurationService) {
-        return new FormConfigurationController(formConfigurationService);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

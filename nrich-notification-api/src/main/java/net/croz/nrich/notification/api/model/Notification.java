@@ -14,13 +14,11 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.notification.api.model;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
@@ -69,6 +67,6 @@ public class Notification {
     private final Instant timestamp = Instant.now();
 
     public boolean isValidationFailure() {
-        return false;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

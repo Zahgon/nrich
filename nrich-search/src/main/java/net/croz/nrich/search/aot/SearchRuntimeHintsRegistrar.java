@@ -14,7 +14,6 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.search.aot;
 
 import net.croz.nrich.search.repository.JpaSearchExecutor;
@@ -23,7 +22,6 @@ import org.springframework.aot.hint.MemberCategory;
 import org.springframework.aot.hint.RuntimeHints;
 import org.springframework.aot.hint.RuntimeHintsRegistrar;
 import org.springframework.aot.hint.TypeReference;
-
 import java.util.Collections;
 import java.util.List;
 
@@ -33,6 +31,6 @@ public class SearchRuntimeHintsRegistrar implements RuntimeHintsRegistrar {
 
     @Override
     public void registerHints(RuntimeHints hints, ClassLoader classLoader) {
-        hints.reflection().registerTypes(TYPE_REFERENCE_LIST, hint -> hint.withMembers(MemberCategory.INVOKE_DECLARED_CONSTRUCTORS, MemberCategory.INVOKE_PUBLIC_METHODS));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

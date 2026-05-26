@@ -25,3 +25,8 @@ nbbuild/
 nbdist/
 .nb-gradle/
 **/bin
+
+.aider*
+logs/
+.commit0_scripts/
+.github/workflows/

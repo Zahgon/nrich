@@ -14,7 +14,6 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.logging.service;
 
 import lombok.RequiredArgsConstructor;
@@ -26,7 +25,6 @@ import net.croz.nrich.logging.constant.LoggingConstants;
 import org.springframework.context.MessageSource;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.context.support.MessageSourceAccessor;
-
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -38,81 +36,27 @@ public class Slf4jLoggingService implements LoggingService {
 
     @Override
     public void logInternalException(Exception exception, Map<String, ?> exceptionAuxiliaryData) {
-        LoggingVerbosityLevel configuredLoggingVerbosityLevelForException = fetchConfiguredLoggingVerbosityLevelForException(exception);
-
-        if (configuredLoggingVerbosityLevelForException == LoggingVerbosityLevel.COMPACT) {
-            logInternalExceptionAtCompactVerbosityLevel(exception, exceptionAuxiliaryData);
-        }
-        else if (configuredLoggingVerbosityLevelForException == LoggingVerbosityLevel.FULL) {
-            logInternalExceptionAtFullVerbosityLevel(exception, exceptionAuxiliaryData);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void logInternalExceptionAtCompactVerbosityLevel(Exception exception, Map<String, ?> exceptionAuxiliaryData) {
-        String exceptionAuxiliaryDataMessage = prepareExceptionAuxiliaryDataMessage(exceptionAuxiliaryData);
-        String className = fetchClassNameForException(exception);
-        String message = fetchMessageForException(exception);
-        String exceptionLogMessage = String.format(LoggingConstants.EXCEPTION_COMPACT_LEVEL_LOG_FORMAT, className, message, exceptionAuxiliaryDataMessage);
-        LoggingLevel loggingLevel = fetchConfiguredLoggingLevelForException(className);
-
-        logOnLevel(loggingLevel, exceptionLogMessage);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void logInternalExceptionAtFullVerbosityLevel(Exception exception, Map<String, ?> exceptionAuxiliaryData) {
-        String className = fetchClassNameForException(exception);
-        String message = fetchMessageForException(exception);
-        LoggingLevel loggingLevel = fetchConfiguredLoggingLevelForException(className);
-
-        logOnLevel(loggingLevel, "Exception occurred", exception);
-
-        String exceptionAuxiliaryDataMessage = prepareExceptionAuxiliaryDataMessage(exceptionAuxiliaryData);
-        String exceptionLogMessage = String.format(LoggingConstants.EXCEPTION_FULL_LEVEL_LOG_FORMAT, className, message, exceptionAuxiliaryDataMessage);
-
-        logOnLevel(loggingLevel, exceptionLogMessage);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void logInternalException(Exception exception, LoggingLevel loggingLevel, LoggingVerbosityLevel loggingVerbosityLevel, Map<String, ?> exceptionAuxiliaryData) {
-        String className = fetchClassNameForException(exception);
-        LoggingLevel resolvedLoggingLevel = loggingLevel == null ? fetchConfiguredLoggingLevelForException(className) : loggingLevel;
-        LoggingVerbosityLevel resolvedLoggingVerbosityLevel = loggingVerbosityLevel == null ? fetchConfiguredLoggingVerbosityLevelForException(exception) : loggingVerbosityLevel;
-
-        if (resolvedLoggingVerbosityLevel == LoggingVerbosityLevel.NONE) {
-            return;
-        }
-
-        String message = fetchMessageForException(exception);
-        String exceptionAuxiliaryDataMessage = prepareExceptionAuxiliaryDataMessage(exceptionAuxiliaryData);
-
-        String exceptionLogMessage;
-        if (resolvedLoggingVerbosityLevel == LoggingVerbosityLevel.COMPACT) {
-            exceptionLogMessage = String.format(LoggingConstants.EXCEPTION_COMPACT_LEVEL_LOG_FORMAT, className, message, exceptionAuxiliaryDataMessage);
-
-            logOnLevel(resolvedLoggingLevel, exceptionLogMessage);
-        }
-        else {
-            exceptionLogMessage = String.format(LoggingConstants.EXCEPTION_FULL_LEVEL_LOG_FORMAT, className, message, exceptionAuxiliaryDataMessage);
-
-            logOnLevel(resolvedLoggingLevel, "Exception occurred", exception);
-            logOnLevel(resolvedLoggingLevel, exceptionLogMessage);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void logExternalException(String exceptionClassName, String exceptionMessage, Map<String, ?> exceptionAuxiliaryData) {
-        if (exceptionClassName == null) {
-            return;
-        }
-
-        String exceptionAuxiliaryDataMessage = prepareExceptionAuxiliaryDataMessage(exceptionAuxiliaryData);
-        String exceptionLogMessage = String.format(LoggingConstants.EXCEPTION_FULL_LEVEL_LOG_FORMAT, exceptionClassName, exceptionMessage, exceptionAuxiliaryDataMessage);
-
-
-        LoggingLevel loggingLevel = fetchConfiguredLoggingLevelForException(exceptionClassName);
-
-        logOnLevel(loggingLevel, exceptionLogMessage);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private LoggingVerbosityLevel fetchConfiguredLoggingVerbosityLevelForException(Exception exception) {
@@ -120,46 +64,31 @@ public class Slf4jLoggingService implements LoggingService {
         String className = fetchClassNameForException(exception);
         String messageCode = String.format(LoggingConstants.LOGGING_VERBOSITY_LEVEL_RESOLVING_FORMAT, className);
         String configuredLoggingVerbosityLevel = messageSourceAccessor.getMessage(new DefaultMessageSourceResolvable(new String[] { messageCode }, LoggingVerbosityLevel.FULL.name())).toUpperCase();
-
         try {
             return LoggingVerbosityLevel.valueOf(configuredLoggingVerbosityLevel);
-        }
-        catch (IllegalArgumentException ignored) {
+        } catch (IllegalArgumentException ignored) {
             log.warn("Unrecognized verbosity level {} defined for {}", configuredLoggingVerbosityLevel, messageCode);
         }
-
         return LoggingVerbosityLevel.FULL;
     }
 
     protected String fetchClassNameForException(Exception exception) {
-        if (exception == null) {
-            return "";
-        }
-
-        return exception.getClass().getName();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected String fetchMessageForException(Exception exception) {
-        if (exception == null) {
-            return "";
-        }
-
-        return exception.getMessage();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private LoggingLevel fetchConfiguredLoggingLevelForException(String exceptionClassName) {
         MessageSourceAccessor messageSourceAccessor = new MessageSourceAccessor(messageSource);
-
         String messageCode = String.format(LoggingConstants.LOGGING_LEVEL_RESOLVING_FORMAT, exceptionClassName);
         String loggingLevel = messageSourceAccessor.getMessage(new DefaultMessageSourceResolvable(new String[] { messageCode }, LoggingLevel.ERROR.name())).toUpperCase();
-
         try {
             return LoggingLevel.valueOf(loggingLevel);
-        }
-        catch (IllegalArgumentException ignored) {
+        } catch (IllegalArgumentException ignored) {
             log.warn("Unrecognized level {} defined for {}", loggingLevel, messageCode);
         }
-
         return LoggingLevel.ERROR;
     }
 
@@ -167,10 +96,7 @@ public class Slf4jLoggingService implements LoggingService {
         if (exceptionAuxiliaryData == null) {
             return "";
         }
-
-        return exceptionAuxiliaryData.entrySet().stream()
-            .map(entry -> String.format(LoggingConstants.AUXILIARY_DATA_FORMAT, entry.getKey(), entry.getValue()))
-            .collect(Collectors.joining(", "));
+        return exceptionAuxiliaryData.entrySet().stream().map(entry -> String.format(LoggingConstants.AUXILIARY_DATA_FORMAT, entry.getKey(), entry.getValue())).collect(Collectors.joining(", "));
     }
 
     private void logOnLevel(LoggingLevel loggingLevel, String message) {
@@ -178,7 +104,7 @@ public class Slf4jLoggingService implements LoggingService {
     }
 
     private void logOnLevel(LoggingLevel loggingLevel, String message, Exception exception) {
-        switch (loggingLevel) {
+        switch(loggingLevel) {
             case DEBUG:
                 log.debug(message, exception);
                 break;

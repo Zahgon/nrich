@@ -14,30 +14,21 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.validation.constraint.validator;
 
 import net.croz.nrich.validation.api.constraint.LastTimestampInDay;
-
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
-
 import static net.croz.nrich.validation.constraint.util.DateConverterUtil.convertToInstant;
 
 public class LastTimestampInDayValidator implements ConstraintValidator<LastTimestampInDay, Object> {
 
     @Override
     public boolean isValid(Object value, ConstraintValidatorContext context) {
-        if (value == null) {
-            return true;
-        }
-
-        Instant lastTimestampInDay = LocalDate.now().atTime(LocalTime.MAX).atZone(ZoneId.systemDefault()).toInstant();
-
-        return convertToInstant(value).isBefore(lastTimestampInDay);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

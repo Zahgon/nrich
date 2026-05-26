@@ -14,7 +14,6 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.formconfiguration.service;
 
 import lombok.RequiredArgsConstructor;
@@ -24,7 +23,6 @@ import net.croz.nrich.formconfiguration.api.service.ConstrainedPropertyValidator
 import net.croz.nrich.formconfiguration.api.service.FieldErrorMessageResolverService;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.annotation.Order;
-
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -35,16 +33,11 @@ public class DefaultConstrainedPropertyValidatorConverterService implements Cons
 
     @Override
     public List<ConstrainedPropertyClientValidatorConfiguration> convert(ConstrainedProperty constrainedProperty) {
-        String message = fieldErrorMessageResolverService.resolveErrorMessage(constrainedProperty, LocaleContextHolder.getLocale());
-        ConstrainedPropertyClientValidatorConfiguration validator = new ConstrainedPropertyClientValidatorConfiguration(
-            constrainedProperty.getConstraintName(), constrainedProperty.getConstraintArgumentMap(), message
-        );
-
-        return List.of(validator);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public boolean supports(ConstrainedProperty constrainedProperty) {
-        return true;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

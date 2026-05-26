@@ -14,28 +14,23 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.registry.core.model;
 
 import net.croz.nrich.registry.core.support.ManagedTypeWrapper;
-
 import java.util.List;
 import java.util.Map;
 
 public record RegistryDataConfigurationHolder(Map<String, ManagedTypeWrapper> classNameManagedTypeWrapperMap, List<RegistryDataConfiguration<Object, Object>> registryDataConfigurationList) {
 
     public void verifyConfigurationExists(String classFullName) {
-        findRegistryConfigurationForClass(classFullName);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public RegistryDataConfiguration<Object, Object> findRegistryConfigurationForClass(String classFullName) {
-        return registryDataConfigurationList.stream()
-            .filter(configuration -> configuration.registryType().getName().equals(classFullName))
-            .findFirst()
-            .orElseThrow(() -> new IllegalArgumentException(String.format("Configuration for registry entity %s is not defined!", classFullName)));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public ManagedTypeWrapper resolveManagedTypeWrapper(String className) {
-        return classNameManagedTypeWrapperMap.get(className);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

@@ -14,12 +14,10 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.validation.constraint.validator;
 
 import net.croz.nrich.validation.api.constraint.NullWhen;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
-
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import java.util.function.Predicate;
@@ -36,17 +34,16 @@ public class NullWhenValidator extends BaseNullableCheckValidator implements Con
 
     @Override
     public void initialize(NullWhen constraintAnnotation) {
-        propertyName = constraintAnnotation.property();
-        conditionClass = constraintAnnotation.condition();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public boolean isValid(Object value, ConstraintValidatorContext context) {
-        return isValid(value, conditionClass, propertyName);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     protected boolean isPropertyValueValid(Object propertyValue) {
-        return propertyValue == null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

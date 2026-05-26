@@ -14,7 +14,6 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.encrypt.aot;
 
 import net.croz.nrich.encrypt.aspect.EncryptDataAspect;
@@ -28,6 +27,6 @@ public class EncryptRuntimeHintsRegistrar implements RuntimeHintsRegistrar {
 
     @Override
     public void registerHints(RuntimeHints hints, ClassLoader classLoader) {
-        hints.reflection().registerType(TYPE, MemberCategory.INVOKE_DECLARED_METHODS);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

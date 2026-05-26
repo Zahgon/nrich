@@ -14,7 +14,6 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.jackson.starter.aot;
 
 import org.springframework.aot.hint.RuntimeHints;
@@ -26,6 +25,6 @@ public class JacksonRuntimeHintsRegistrar implements RuntimeHintsRegistrar {
 
     @Override
     public void registerHints(RuntimeHints hints, ClassLoader classLoader) {
-        hints.resources().registerPattern(RESOURCE_PATTERN);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

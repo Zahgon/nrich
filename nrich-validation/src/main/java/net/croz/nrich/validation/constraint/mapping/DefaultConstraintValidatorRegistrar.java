@@ -14,7 +14,6 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.validation.constraint.mapping;
 
 import lombok.RequiredArgsConstructor;
@@ -25,7 +24,6 @@ import org.hibernate.validator.cfg.ConstraintMapping;
 import org.reflections.Reflections;
 import org.reflections.scanners.Scanners;
 import org.reflections.util.ConfigurationBuilder;
-
 import jakarta.validation.Configuration;
 import jakarta.validation.ConstraintValidator;
 import java.lang.annotation.Annotation;
@@ -44,46 +42,22 @@ public class DefaultConstraintValidatorRegistrar implements ConstraintValidatorR
 
     @Override
     public void registerConstraintValidators(Configuration<?> configuration) {
-        if (configuration instanceof HibernateValidatorConfiguration hibernateValidatorConfiguration) {
-            registerConstraintsInternal(hibernateValidatorConfiguration);
-        }
-        else {
-            log.warn("Unable to register validation configuration, automatic registration is only supported for hibernate validator");
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected <A extends Annotation> void registerConstraintsInternal(HibernateValidatorConfiguration configuration) {
-        org.reflections.Configuration reflectionsConfiguration = new ConfigurationBuilder()
-            .forPackages(constraintPacakgeList.toArray(new String[0]))
-            .setScanners(Scanners.SubTypes);
-
-        @SuppressWarnings("rawtypes")
-        Set<Class<? extends ConstraintValidator>> constraintValidators = new Reflections(reflectionsConfiguration).getSubTypesOf(ConstraintValidator.class);
-
-        constraintValidators.forEach(validatorClass -> {
-            @SuppressWarnings("unchecked")
-            Class<? extends ConstraintValidator<A, ?>> castedValidatorClass = (Class<? extends ConstraintValidator<A, ?>>) validatorClass;
-            Class<A> annotationClass = annotationClass(validatorClass);
-
-            registerConstraint(configuration, castedValidatorClass, annotationClass);
-        });
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @SuppressWarnings("unchecked")
     private <A extends Annotation> Class<A> annotationClass(Class<?> type) {
-        ParameterizedType parameterizedType = (ParameterizedType) Arrays.stream(type.getGenericInterfaces())
-            .filter(genericInterface -> ((ParameterizedType) genericInterface).getRawType().getTypeName().equals(ConstraintValidator.class.getName()))
-            .findFirst()
-            .orElseThrow();
-
+        ParameterizedType parameterizedType = (ParameterizedType) Arrays.stream(type.getGenericInterfaces()).filter(genericInterface -> ((ParameterizedType) genericInterface).getRawType().getTypeName().equals(ConstraintValidator.class.getName())).findFirst().orElseThrow();
         return (Class<A>) parameterizedType.getActualTypeArguments()[INDEX_OF_CONSTRAINT_TYPE];
     }
 
     private <A extends Annotation> void registerConstraint(HibernateValidatorConfiguration hibernateValidatorConfiguration, Class<? extends ConstraintValidator<A, ?>> validator, Class<A> annotationClass) {
         ConstraintMapping constraintMapping = hibernateValidatorConfiguration.createConstraintMapping();
-
         constraintMapping.constraintDefinition(annotationClass).validatedBy(validator);
-
         hibernateValidatorConfiguration.addMapping(constraintMapping);
     }
 }

@@ -14,7 +14,6 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.search.factory;
 
 import net.croz.nrich.search.api.converter.StringToEntityPropertyMapConverter;
@@ -29,7 +28,6 @@ import org.springframework.data.jpa.repository.support.JpaRepositoryFactory;
 import org.springframework.data.repository.core.RepositoryMetadata;
 import org.springframework.data.repository.core.support.RepositoryComposition;
 import org.springframework.data.repository.core.support.RepositoryFragment;
-
 import jakarta.persistence.EntityManager;
 import java.io.Serializable;
 
@@ -47,26 +45,6 @@ public class SearchRepositoryJpaRepositoryFactory extends JpaRepositoryFactory {
 
     @Override
     protected RepositoryComposition.RepositoryFragments getRepositoryFragments(RepositoryMetadata metadata) {
-        RepositoryComposition.RepositoryFragments fragments = super.getRepositoryFragments(metadata);
-        JpaEntityInformation<?, Serializable> entityInformation = getEntityInformation(metadata.getDomainType());
-        Class<?> repositoryInterface = metadata.getRepositoryInterface();
-
-        if (SearchExecutor.class.isAssignableFrom(repositoryInterface)) {
-            SearchExecutor<?> searchExecutorFragment = instantiateClass(JpaSearchExecutor.class, entityManager, entityInformation);
-
-            fragments = fragments.append(RepositoryFragment.implemented(SearchExecutor.class, searchExecutorFragment));
-        }
-        if (StringSearchExecutor.class.isAssignableFrom(repositoryInterface)) {
-            StringSearchExecutor<?> stringSearchExecutorFragment = instantiateClass(JpaStringSearchExecutor.class, stringToEntityPropertyMapConverter, entityManager, entityInformation);
-
-            fragments = fragments.append(RepositoryFragment.implemented(StringSearchExecutor.class, stringSearchExecutorFragment));
-        }
-        if (NaturalIdSearchExecutor.class.isAssignableFrom(repositoryInterface)) {
-            NaturalIdSearchExecutor<?> naturalIdSearchExecutorFragment = instantiateClass(HibernateNaturalIdSearchExecutor.class, entityManager, metadata.getDomainType());
-
-            fragments = fragments.append(RepositoryFragment.implemented(NaturalIdSearchExecutor.class, naturalIdSearchExecutorFragment));
-        }
-
-        return fragments;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

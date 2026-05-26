@@ -14,12 +14,10 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.validation.constraint.validator;
 
 import net.croz.nrich.validation.api.constraint.ValidFileResolvable;
 import org.springframework.core.env.Environment;
-
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import java.util.Optional;
@@ -34,21 +32,18 @@ public class ValidFileResolvableValidator extends BaseValidFileValidator impleme
 
     @Override
     public void initialize(ValidFileResolvable constraintAnnotation) {
-        this.allowedContentTypeList = resolvePropertyValue(constraintAnnotation.allowedContentTypeListPropertyName(), String[].class, new String[0]);
-        this.allowedExtensionList = resolvePropertyValue(constraintAnnotation.allowedExtensionListPropertyName(), String[].class, new String[0]);
-        this.allowedFileNameRegex = resolvePropertyValue(constraintAnnotation.allowedFileNameRegexPropertyName(), String.class, "");
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public boolean isValid(Object value, ConstraintValidatorContext context) {
-        return isValid(value);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private <T> T resolvePropertyValue(String propertyName, Class<T> propertyType, T defaultPropertyValue) {
         if (!propertyName.isEmpty()) {
             return Optional.ofNullable(environment.getProperty(propertyName, propertyType)).orElse(defaultPropertyValue);
         }
-
         return defaultPropertyValue;
     }
 }

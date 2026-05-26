@@ -14,7 +14,6 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.search.repository;
 
 import net.croz.nrich.search.api.model.SearchConfiguration;
@@ -28,7 +27,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.support.JpaEntityInformation;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.transaction.annotation.Transactional;
-
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.TypedQuery;
@@ -54,66 +52,42 @@ public class JpaSearchExecutor<T> implements SearchExecutor<T> {
 
     @Override
     public <R, P> Optional<P> findOne(R request, SearchConfiguration<T, P, R> searchConfiguration) {
-        CriteriaQuery<P> query = queryBuilder.buildQuery(request, searchConfiguration, Sort.unsorted());
-
-        try {
-            return Optional.of(entityManager.createQuery(query).getSingleResult());
-        }
-        catch (NoResultException ignored) {
-            return Optional.empty();
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public <R, P> List<P> findAll(R request, SearchConfiguration<T, P, R> searchConfiguration) {
-        CriteriaQuery<P> query = queryBuilder.buildQuery(request, searchConfiguration, Sort.unsorted());
-
-        return entityManager.createQuery(query).getResultList();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public <R, P> List<P> findAll(R request, SearchConfiguration<T, P, R> searchConfiguration, Sort sort) {
-        CriteriaQuery<P> query = queryBuilder.buildQuery(request, searchConfiguration, sort);
-
-        return entityManager.createQuery(query).getResultList();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public <R, P> Page<P> findAll(R request, SearchConfiguration<T, P, R> searchConfiguration, Pageable pageable) {
-        CriteriaQuery<P> query = queryBuilder.buildQuery(request, searchConfiguration, pageable.getSort());
-        TypedQuery<P> typedQuery = entityManager.createQuery(query);
-
-        if (pageable.isPaged()) {
-            typedQuery.setFirstResult((int) pageable.getOffset()).setMaxResults(pageable.getPageSize());
-
-            return PageableExecutionUtils.getPage(typedQuery.getResultList(), pageable, () -> executeCountQuery(request, searchConfiguration));
-        }
-
-        return new PageImpl<>(typedQuery.getResultList());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public <R, P> long count(R request, SearchConfiguration<T, P, R> searchConfiguration) {
-        return executeCountQuery(request, searchConfiguration);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public <R, P> boolean exists(R request, SearchConfiguration<T, P, R> searchConfiguration) {
-        CriteriaQuery<Integer>  query = queryBuilder.buildExistsQuery(request, searchConfiguration);
-
-        return entityManager.createQuery(query).setMaxResults(1).getResultList().size() == 1;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Class<T> getDomainClass() {
-        return domainClass;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private <R, P> long executeCountQuery(R request, SearchConfiguration<T, P, R> searchConfiguration) {
         CriteriaQuery<Long> countQuery = queryBuilder.buildCountQuery(request, searchConfiguration);
-
         List<Long> totals = entityManager.createQuery(countQuery).getResultList();
-
         return QueryUtil.toCountResult(totals);
     }
 }

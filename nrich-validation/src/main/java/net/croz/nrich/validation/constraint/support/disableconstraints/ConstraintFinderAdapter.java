@@ -14,11 +14,9 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.validation.constraint.support.disableconstraints;
 
 import lombok.RequiredArgsConstructor;
-
 import jakarta.validation.metadata.ConstraintDescriptor;
 import jakarta.validation.metadata.ElementDescriptor;
 import jakarta.validation.metadata.Scope;
@@ -37,35 +35,26 @@ public class ConstraintFinderAdapter implements ElementDescriptor.ConstraintFind
 
     @Override
     public Set<ConstraintDescriptor<?>> getConstraintDescriptors() {
-        Set<ConstraintDescriptor<?>> constraintDescriptors = target.getConstraintDescriptors();
-
-        return constraintDescriptors.stream().filter(constraintDescriptor -> !disabledConstraintTypes.contains(constraintDescriptor.getAnnotation().annotationType()))
-            .collect(Collectors.toSet());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public ElementDescriptor.ConstraintFinder unorderedAndMatchingGroups(Class<?>... groups) {
-        target.unorderedAndMatchingGroups(groups);
-
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public ElementDescriptor.ConstraintFinder lookingAt(Scope scope) {
-        target.lookingAt(scope);
-
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public ElementDescriptor.ConstraintFinder declaredOn(ElementType... types) {
-        target.declaredOn(types);
-
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public boolean hasConstraints() {
-        return target.hasConstraints();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

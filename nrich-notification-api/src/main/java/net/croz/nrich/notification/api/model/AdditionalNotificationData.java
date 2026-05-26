@@ -14,12 +14,10 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.notification.api.model;
 
 import lombok.Builder;
 import lombok.Getter;
-
 import java.util.Map;
 
 /**
@@ -47,6 +45,6 @@ public class AdditionalNotificationData {
     private final Map<String, ?> uxNotificationOptions;
 
     public static AdditionalNotificationData empty() {
-        return AdditionalNotificationData.builder().build();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

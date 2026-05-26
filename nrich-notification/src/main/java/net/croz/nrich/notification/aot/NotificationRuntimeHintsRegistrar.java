@@ -14,7 +14,6 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.notification.aot;
 
 import org.springframework.aot.hint.RuntimeHints;
@@ -26,6 +25,6 @@ public class NotificationRuntimeHintsRegistrar implements RuntimeHintsRegistrar 
 
     @Override
     public void registerHints(RuntimeHints hints, ClassLoader classLoader) {
-        hints.resources().registerResourceBundle(RESOURCE_BUNDLE);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

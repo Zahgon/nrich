@@ -14,7 +14,6 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.encrypt.aspect;
 
 import lombok.RequiredArgsConstructor;
@@ -27,7 +26,6 @@ import net.croz.nrich.encrypt.constants.EncryptConstants;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.aop.ProxyMethodInvocation;
-
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -44,54 +42,12 @@ public class EncryptMethodInterceptor extends BaseEncryptDataAdvice implements M
 
     @Override
     public Object invoke(MethodInvocation invocation) throws Throwable {
-        if (!(invocation instanceof ProxyMethodInvocation proxyMethodInvocation)) {
-            log.debug("Found method: {} was not instance of ProxyMethodInvocation it will not be encrypted!!", methodName(invocation));
-
-            return invocation.proceed();
-        }
-
-        String methodName = methodName(invocation);
-        String anyMethodName = anyClassMethod(invocation);
-
-        if (Optional.ofNullable(ignoredMethodList).orElse(Collections.emptyList()).contains(methodName)) {
-            return invocation.proceed();
-        }
-
-        List<EncryptionConfiguration> foundConfigurationList = encryptionConfigurationList.stream()
-            .filter(configuration -> methodName.equals(configuration.methodToEncryptDecrypt()) || anyMethodName.equals(configuration.methodToEncryptDecrypt()))
-            .toList();
-
-        if (!foundConfigurationList.isEmpty()) {
-            EncryptionConfiguration decryptArgumentsConfiguration = findEncryptionConfigurationForOperation(foundConfigurationList, EncryptionOperation.DECRYPT);
-            EncryptionConfiguration encryptResultConfiguration = findEncryptionConfigurationForOperation(foundConfigurationList, EncryptionOperation.ENCRYPT);
-            Object[] arguments = invocation.getArguments();
-
-            Object[] decryptedArguments = null;
-            if (decryptArgumentsConfiguration != null) {
-                log.debug("Found decrypt arguments configuration: {} for method: {}", decryptArgumentsConfiguration, methodName);
-
-                EncryptionContext context = createEncryptionContext(methodName, arguments);
-
-                decryptedArguments = decryptArguments(context, arguments, decryptArgumentsConfiguration.propertyToEncryptDecryptList());
-
-                proxyMethodInvocation.setArguments(decryptedArguments);
-            }
-
-            if (encryptResultConfiguration != null) {
-                log.debug("Found encrypt result configuration: {} for method: {}", encryptResultConfiguration, methodName);
-
-                EncryptionContext context = createEncryptionContext(methodName, decryptedArguments == null ? arguments : decryptedArguments);
-
-                return encryptResult(context, proxyMethodInvocation.proceed(), encryptResultConfiguration.propertyToEncryptDecryptList());
-            }
-        }
-
-        return proxyMethodInvocation.proceed();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     protected DataEncryptionService getDataEncryptionService() {
-        return dataEncryptionService;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private String methodName(MethodInvocation invocation) {
@@ -103,21 +59,12 @@ public class EncryptMethodInterceptor extends BaseEncryptDataAdvice implements M
     }
 
     private EncryptionConfiguration findEncryptionConfigurationForOperation(List<EncryptionConfiguration> encryptionConfigurationList, EncryptionOperation encryptionOperation) {
-        return encryptionConfigurationList.stream()
-            .filter(configuration -> configuration.encryptionOperation() == encryptionOperation)
-            .findFirst()
-            .orElse(null);
+        return encryptionConfigurationList.stream().filter(configuration -> configuration.encryptionOperation() == encryptionOperation).findFirst().orElse(null);
     }
 
     private EncryptionContext createEncryptionContext(String methodName, Object[] arguments) {
         List<Object> argumentList = List.of(arguments);
         String currentUsername = currentUsername();
-
-        return EncryptionContext.builder()
-            .fullyQualifiedMethodName(methodName)
-            .methodArguments(argumentList)
-            .methodDecryptedArguments(argumentList)
-            .currentUsername(currentUsername)
-            .build();
+        return EncryptionContext.builder().fullyQualifiedMethodName(methodName).methodArguments(argumentList).methodDecryptedArguments(argumentList).currentUsername(currentUsername).build();
     }
 }

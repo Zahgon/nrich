@@ -14,7 +14,6 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.registry.core.service;
 
 import lombok.RequiredArgsConstructor;
@@ -24,7 +23,6 @@ import net.croz.nrich.registry.core.support.ManagedTypeWrapper;
 import org.modelmapper.ModelMapper;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
-
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import java.util.ArrayList;
@@ -45,67 +43,41 @@ public class EntityManagerRegistryEntityFinderService implements RegistryEntityF
 
     @Override
     public <T> T findEntityInstance(Class<T> type, Object id) {
-        QueryCondition queryCondition = queryWherePartWithParameterMap(type, id, true);
-
-        String entityWithAlias = String.format(RegistryQueryConstants.PROPERTY_SPACE_FORMAT, type.getName(), RegistryQueryConstants.ENTITY_ALIAS);
-        String fullQuery = String.format(RegistryQueryConstants.FIND_QUERY, entityWithAlias, queryCondition.wherePart);
-
-        @SuppressWarnings("unchecked")
-        TypedQuery<T> query = (TypedQuery<T>) entityManager.createQuery(fullQuery);
-
-        queryCondition.parameterMap.forEach(query::setParameter);
-
-        return query.getSingleResult();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public <T> Map<String, Object> resolveIdParameterMap(Class<T> type, Object id) {
-        return queryWherePartWithParameterMap(type, id, false).parameterMap;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private <T> QueryCondition queryWherePartWithParameterMap(Class<T> type, Object id, boolean convertParameterToQueryFormat) {
         ManagedTypeWrapper managedTypeWrapper = classNameManagedTypeWrapperMap.get(type.getName());
-
         List<String> wherePartList = new ArrayList<>();
         Map<String, Object> parameterMap = new HashMap<>();
-
         if (managedTypeWrapper.isIdClassIdentifier()) {
             Assert.isTrue(id instanceof Map, "Id should be instance of Map for @IdClass identifier");
-
             @SuppressWarnings("unchecked")
-            Map<String, Object> idMap = ((Map<Object, Object>) id).entrySet().stream()
-                .collect(Collectors.toMap(entry -> entry.getKey().toString(), Map.Entry::getValue));
-
+            Map<String, Object> idMap = ((Map<Object, Object>) id).entrySet().stream().collect(Collectors.toMap(entry -> entry.getKey().toString(), Map.Entry::getValue));
             Map<String, Class<?>> idClassPropertyMap = managedTypeWrapper.getIdClassPropertyMap();
-
             idClassPropertyMap.forEach((key, value) -> {
                 Object convertedIdValue = modelMapper.map(idMap.get(key), value);
-
                 wherePartList.add(toParameterExpression(key, convertParameterToQueryFormat));
-
                 parameterMap.put(toParameterVariable(key, convertParameterToQueryFormat), convertedIdValue);
             });
-        }
-        else {
+        } else {
             Object convertedIdValue;
             if (managedTypeWrapper.isEmbeddedIdentifier()) {
                 boolean isMapOrEmbeddedId = id instanceof Map || managedTypeWrapper.getEmbeddableIdType().getJavaType().equals(id.getClass());
-
                 Assert.isTrue(isMapOrEmbeddedId, "Id should be instance of Map or EmbeddedId for @EmbeddedId identifier");
-
                 convertedIdValue = modelMapper.map(id, managedTypeWrapper.getEmbeddableIdType().getJavaType());
-            }
-            else {
+            } else {
                 convertedIdValue = modelMapper.map(id, managedTypeWrapper.getIdentifiableType().getIdType().getJavaType());
             }
-
             String idAttributeName = managedTypeWrapper.getIdAttributeName();
-
             wherePartList.add(toParameterExpression(idAttributeName, convertParameterToQueryFormat));
-
             parameterMap.put(toParameterVariable(idAttributeName, convertParameterToQueryFormat), convertedIdValue);
         }
-
         return new QueryCondition(String.join(RegistryQueryConstants.FIND_QUERY_SEPARATOR, wherePartList), parameterMap);
     }
 
@@ -117,15 +89,10 @@ public class EntityManagerRegistryEntityFinderService implements RegistryEntityF
         if (!convertParameterToQueryFormat) {
             return key;
         }
-
         String[] keyList = key.split(RegistryQueryConstants.PATH_SEPARATOR_REGEX);
-
-        return Arrays.stream(keyList)
-            .map(StringUtils::capitalize)
-            .collect(Collectors.joining());
+        return Arrays.stream(keyList).map(StringUtils::capitalize).collect(Collectors.joining());
     }
 
     private record QueryCondition(String wherePart, Map<String, Object> parameterMap) {
-
     }
 }

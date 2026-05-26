@@ -14,11 +14,9 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.search.bean;
 
 import org.springframework.data.util.DirectFieldAccessFallbackBeanWrapper;
-
 import java.util.Map;
 
 public class MapSupportingDirectFieldAccessFallbackBeanWrapper extends DirectFieldAccessFallbackBeanWrapper {
@@ -32,21 +30,12 @@ public class MapSupportingDirectFieldAccessFallbackBeanWrapper extends DirectFie
 
     @Override
     public Object getPropertyValue(String propertyName) {
-        if (entityAsMap == null) {
-            return super.getPropertyValue(propertyName);
-        }
-
-        return entityAsMap.get(propertyName);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void setPropertyValue(String propertyName, Object value) {
-        if (entityAsMap == null) {
-            super.setPropertyValue(propertyName, value);
-        }
-        else {
-            entityAsMap.put(propertyName, value);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @SuppressWarnings("unchecked")
@@ -55,6 +44,6 @@ public class MapSupportingDirectFieldAccessFallbackBeanWrapper extends DirectFie
     }
 
     public Map<String, Object> getEntityAsMap() {
-        return entityAsMap;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

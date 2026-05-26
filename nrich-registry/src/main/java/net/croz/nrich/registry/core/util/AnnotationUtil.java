@@ -14,7 +14,6 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.registry.core.util;
 
 import java.lang.annotation.Annotation;
@@ -26,26 +25,10 @@ public final class AnnotationUtil {
     }
 
     public static boolean isAnnotationPresent(Field field, String annotationName) {
-        try {
-            @SuppressWarnings("unchecked")
-            Class<? extends Annotation> annotation = (Class<? extends Annotation>) Class.forName(annotationName);
-
-            return field.getAnnotationsByType(annotation).length > 0;
-        }
-        catch (Exception ignored) {
-            return false;
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public static boolean isAnnotationPresent(Class<?> type, String annotationName) {
-        try {
-            @SuppressWarnings("unchecked")
-            Class<? extends Annotation> annotation = (Class<? extends Annotation>) Class.forName(annotationName);
-
-            return type.isAnnotationPresent(annotation);
-        }
-        catch (Exception ignored) {
-            return false;
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

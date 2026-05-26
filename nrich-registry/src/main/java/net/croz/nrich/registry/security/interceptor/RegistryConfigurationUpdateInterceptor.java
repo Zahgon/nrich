@@ -14,13 +14,11 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.registry.security.interceptor;
 
 import net.croz.nrich.registry.api.core.model.RegistryOverrideConfiguration;
 import net.croz.nrich.registry.api.data.interceptor.BaseRegistryDataInterceptor;
 import net.croz.nrich.registry.api.security.exception.RegistryUpdateNotAllowedException;
-
 import java.util.Collections;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -35,30 +33,23 @@ public class RegistryConfigurationUpdateInterceptor extends BaseRegistryDataInte
 
     @Override
     public void beforeRegistryCreate(String classFullName, Object entityData) {
-        RegistryOverrideConfiguration registryOverrideConfiguration = resolveConfiguration(classFullName);
-
-        verifyRegistryOperation(classFullName, registryOverrideConfiguration.isReadOnly() || !registryOverrideConfiguration.isCreatable());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void beforeRegistryUpdate(String classFullName, Object id, Object entityData) {
-        RegistryOverrideConfiguration registryOverrideConfiguration = resolveConfiguration(classFullName);
-
-        verifyRegistryOperation(classFullName, registryOverrideConfiguration.isReadOnly() || !registryOverrideConfiguration.isUpdateable());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void beforeRegistryDelete(String classFullName, Object id) {
-        RegistryOverrideConfiguration registryOverrideConfiguration = resolveConfiguration(classFullName);
-
-        verifyRegistryOperation(classFullName, registryOverrideConfiguration.isReadOnly() || !registryOverrideConfiguration.isDeletable());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private RegistryOverrideConfiguration resolveConfiguration(String classFullName) {
         if (registryOverrideConfigurationMap.get(classFullName) == null) {
             return new RegistryOverrideConfiguration();
         }
-
         return registryOverrideConfigurationMap.get(classFullName);
     }
 
@@ -66,9 +57,7 @@ public class RegistryConfigurationUpdateInterceptor extends BaseRegistryDataInte
         if (registryOverrideConfigurationMap == null) {
             return Collections.emptyMap();
         }
-
-        return registryOverrideConfigurationMap.entrySet().stream()
-            .collect(Collectors.toMap(entry -> entry.getKey().getName(), Map.Entry::getValue));
+        return registryOverrideConfigurationMap.entrySet().stream().collect(Collectors.toMap(entry -> entry.getKey().getName(), Map.Entry::getValue));
     }
 
     private void verifyRegistryOperation(String registryClassName, boolean isNotAllowed) {

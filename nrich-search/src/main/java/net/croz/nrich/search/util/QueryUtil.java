@@ -14,7 +14,6 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.search.util;
 
 import java.util.List;
@@ -25,6 +24,6 @@ public final class QueryUtil {
     }
 
     public static Long toCountResult(List<Long> results) {
-        return results.stream().mapToLong(value -> value == null ? 0L : value).sum();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

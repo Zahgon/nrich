@@ -14,7 +14,6 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.registry.data.controller;
 
 import lombok.RequiredArgsConstructor;
@@ -36,7 +35,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import jakarta.validation.Valid;
 import java.util.Map;
 
@@ -53,43 +51,33 @@ public class RegistryDataController {
 
     @PostMapping("list-bulk")
     public Map<String, Page<Object>> listBulk(@RequestBody @Valid ListBulkRegistryRequest request) {
-        return registryDataService.listBulk(request);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @PostMapping("list")
     public Page<Object> list(@RequestBody @Valid ListRegistryRequest request) {
-        return registryDataService.list(request);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @PostMapping("delete")
     public void delete(@RequestBody @Valid DeleteRegistryRequest request) {
-        registryDataService.delete(request.classFullName(), request.id());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @PostMapping("create")
     public Object create(@RequestBody @Valid CreateRegistryRequest request) {
-        Object entityData = registryDataRequestConversionService.convertEntityDataToTyped(request);
-
-        validateEntityData("create", CreateRegistryRequest.class, entityData);
-
-        return registryDataService.create(request.classFullName(), entityData);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @PostMapping("update")
     public Object update(@RequestBody @Valid UpdateRegistryRequest request) {
-        Object entityData = registryDataRequestConversionService.convertEntityDataToTyped(request);
-
-        validateEntityData("update", UpdateRegistryRequest.class, entityData);
-
-        return registryDataService.update(request.classFullName(), request.id(), entityData);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @SneakyThrows
     private void validateEntityData(String methodName, Class<?> methodParameter, Object entityData) {
         BindingResult errors = new BeanPropertyBindingResult(entityData, "entityData");
-
         validator.validate(entityData, errors);
-
         if (errors.hasErrors()) {
             throw new MethodArgumentNotValidException(new MethodParameter(this.getClass().getMethod(methodName, methodParameter), 0), errors);
         }

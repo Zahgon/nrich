@@ -14,7 +14,6 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.search.parser;
 
 import lombok.RequiredArgsConstructor;
@@ -34,7 +33,6 @@ import net.croz.nrich.search.util.PathResolvingUtil;
 import net.croz.nrich.search.util.PropertyNameUtil;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
-
 import jakarta.persistence.metamodel.Attribute;
 import jakarta.persistence.metamodel.ManagedType;
 import java.lang.reflect.Field;
@@ -58,84 +56,62 @@ public class SearchDataParser {
     private final SearchDataParserConfiguration searchConfiguration;
 
     public Set<Restriction> resolveRestrictionList() {
-        return resolveRestrictionList(null);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public Set<Restriction> resolveRestrictionList(String propertyPrefix) {
-        return resolveRestrictionListInternal(new MapSupportingDirectFieldAccessFallbackBeanWrapper(searchData), propertyPrefix, null, managedType, new HashSet<>(), false);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    private Set<Restriction> resolveRestrictionListInternal(MapSupportingDirectFieldAccessFallbackBeanWrapper wrapper, String propertyPrefix, String path,
-                                                            ManagedType<?> managedType, Set<Restriction> restrictionList, boolean isPluralAttribute) {
+    private Set<Restriction> resolveRestrictionListInternal(MapSupportingDirectFieldAccessFallbackBeanWrapper wrapper, String propertyPrefix, String path, ManagedType<?> managedType, Set<Restriction> restrictionList, boolean isPluralAttribute) {
         List<String> fieldNameList = resolveFieldNameList(wrapper);
         JpaEntityAttributeResolver attributeResolver = new JpaEntityAttributeResolver(managedType);
-
         fieldNameList.forEach(originalFieldName -> {
             String fieldNameWithoutPrefixAndSuffix = fieldNameWithoutSuffixAndPrefix(originalFieldName, propertyPrefix);
             Object value = wrapper.getPropertyValue(originalFieldName);
-
             if (shouldSkipValue(value)) {
                 return;
             }
-
             AttributeHolder attributeHolder = attributeResolver.resolveAttributeByPath(fieldNameWithoutPrefixAndSuffix);
-
             if (attributeHolder.isFound()) {
                 String currentPath = resolveCurrentPath(path, fieldNameWithoutPrefixAndSuffix);
-
                 if (attributeHolder.managedType() != null) {
                     MapSupportingDirectFieldAccessFallbackBeanWrapper currentWrapper = new MapSupportingDirectFieldAccessFallbackBeanWrapper(value);
-
                     resolveRestrictionListInternal(currentWrapper, propertyPrefix, currentPath, attributeHolder.managedType(), restrictionList, attributeHolder.isPlural());
                     return;
                 }
-
                 // element collections have null managed type but should be treated as plural attributes
                 boolean isCurrentAttributePlural = attributeHolder.isPlural() || attributeHolder.isElementCollection() || isPluralAttribute;
-
                 restrictionList.add(createAttributeRestriction(attributeHolder.attribute().getJavaType(), originalFieldName, currentPath, value, isCurrentAttributePlural));
-            }
-            else if (searchUsingPropertyMapping(searchConfiguration)) {
+            } else if (searchUsingPropertyMapping(searchConfiguration)) {
                 AttributeHolderWithPath attributeWithPath = resolveAttributeFromSearchConfigurationOrPrefix(attributeResolver, originalFieldName);
-
                 if (attributeWithPath.isFound()) {
                     attributeHolder = attributeWithPath.attributeHolder();
                     restrictionList.add(createAttributeRestriction(attributeHolder.attribute().getJavaType(), originalFieldName, attributeWithPath.path(), value, attributeHolder.isPlural()));
                 }
             }
         });
-
         return restrictionList;
     }
 
     private List<String> resolveFieldNameList(MapSupportingDirectFieldAccessFallbackBeanWrapper wrapper) {
         List<String> configuredIgnoredFieldList = searchConfiguration.getSearchPropertyConfiguration().getSearchIgnoredPropertyList();
         List<String> ignoredFieldList = configuredIgnoredFieldList == null ? Collections.emptyList() : configuredIgnoredFieldList;
-
         if (wrapper.getEntityAsMap() != null) {
-            return wrapper.getEntityAsMap().keySet().stream()
-                .filter(key -> !ignoredFieldList.contains(key))
-                .toList();
+            return wrapper.getEntityAsMap().keySet().stream().filter(key -> !ignoredFieldList.contains(key)).toList();
         }
-
-        return FieldExtractionUtil.getAllFields(wrapper.getRootClass()).stream()
-            .filter(field -> shouldIncludeField(ignoredFieldList, field))
-            .map(Field::getName)
-            .toList();
+        return FieldExtractionUtil.getAllFields(wrapper.getRootClass()).stream().filter(field -> shouldIncludeField(ignoredFieldList, field)).map(Field::getName).toList();
     }
 
     private boolean shouldIncludeField(List<String> ignoredFieldList, Field field) {
-        return !(ignoredFieldList.contains(field.getName()) || field.isSynthetic()
-            || Modifier.isStatic(field.getModifiers()) || Modifier.isTransient(field.getModifiers()));
+        return !(ignoredFieldList.contains(field.getName()) || field.isSynthetic() || Modifier.isStatic(field.getModifiers()) || Modifier.isTransient(field.getModifiers()));
     }
 
     private String fieldNameWithoutSuffixAndPrefix(String originalFieldName, String prefix) {
         String fieldName = PropertyNameUtil.propertyNameWithoutSuffix(originalFieldName, searchConfiguration.getSearchPropertyConfiguration());
-
         if (prefix != null && fieldName.length() > prefix.length()) {
             return StringUtils.uncapitalize(fieldName.substring(prefix.length()));
         }
-
         return fieldName;
     }
 
@@ -143,11 +119,9 @@ public class SearchDataParser {
         boolean skipValue;
         if (value instanceof Collection<?> collection) {
             skipValue = CollectionUtils.isEmpty(collection);
-        }
-        else {
+        } else {
             skipValue = value == null;
         }
-
         return skipValue;
     }
 
@@ -155,38 +129,29 @@ public class SearchDataParser {
         boolean isRangeSearchSupported = isRangeSearchSupported(attributeType);
         SearchOperator resolvedOperator = resolveFromSearchConfiguration(searchConfiguration, path, attributeType);
         SearchPropertyConfiguration searchPropertyConfiguration = searchConfiguration.getSearchPropertyConfiguration();
-
         SearchOperator operator = DefaultSearchOperator.EQ;
         if (resolvedOperator != null) {
             operator = resolvedOperator;
-        }
-        else if (Collection.class.isAssignableFrom(value.getClass())) {
+        } else if (Collection.class.isAssignableFrom(value.getClass())) {
             operator = DefaultSearchOperator.IN;
-        }
-        else if (String.class.isAssignableFrom(attributeType)) {
+        } else if (String.class.isAssignableFrom(attributeType)) {
             operator = DefaultSearchOperator.ILIKE;
-        }
-        else if (isRangeSearchSupported) {
+        } else if (isRangeSearchSupported) {
             if (attributeName.endsWith(searchPropertyConfiguration.getRangeQueryFromIncludingSuffix())) {
                 operator = DefaultSearchOperator.GE;
-            }
-            else if (attributeName.endsWith(searchPropertyConfiguration.getRangeQueryFromSuffix())) {
+            } else if (attributeName.endsWith(searchPropertyConfiguration.getRangeQueryFromSuffix())) {
                 operator = DefaultSearchOperator.GT;
-            }
-            else if (attributeName.endsWith(searchPropertyConfiguration.getRangeQueryToIncludingSuffix())) {
+            } else if (attributeName.endsWith(searchPropertyConfiguration.getRangeQueryToIncludingSuffix())) {
                 operator = DefaultSearchOperator.LE;
-            }
-            else if (attributeName.endsWith(searchPropertyConfiguration.getRangeQueryToSuffix())) {
+            } else if (attributeName.endsWith(searchPropertyConfiguration.getRangeQueryToSuffix())) {
                 operator = DefaultSearchOperator.LT;
             }
         }
-
         return new Restriction(path, operator, value, isPluralAttribute);
     }
 
     private boolean isRangeSearchSupported(Class<?> attributeType) {
-        return searchConfiguration.getSearchPropertyConfiguration().getRangeQuerySupportedClassList() != null
-            && searchConfiguration.getSearchPropertyConfiguration().getRangeQuerySupportedClassList().stream().anyMatch(type -> type.isAssignableFrom(attributeType));
+        return searchConfiguration.getSearchPropertyConfiguration().getRangeQuerySupportedClassList() != null && searchConfiguration.getSearchPropertyConfiguration().getRangeQuerySupportedClassList().stream().anyMatch(type -> type.isAssignableFrom(attributeType));
     }
 
     private String resolveCurrentPath(String path, String fieldNameWithoutPrefixAndSuffix) {
@@ -195,65 +160,41 @@ public class SearchDataParser {
 
     private AttributeHolderWithPath resolveAttributeFromSearchConfigurationOrPrefix(JpaEntityAttributeResolver attributeResolver, String originalFieldName) {
         String mappedPath = findPathUsingMapping(searchConfiguration.getPropertyMappingList(), originalFieldName);
-
         if (mappedPath == null) {
             return resolveAttributeByPrefix(attributeResolver, originalFieldName, new ArrayList<>());
         }
-
         return new AttributeHolderWithPath(mappedPath, attributeResolver.resolveAttributeByPath(mappedPath));
     }
 
     private AttributeHolderWithPath resolveAttributeByPrefix(JpaEntityAttributeResolver attributeResolver, String path, List<String> previousPathList) {
         String mappedPath = findPathUsingAttributePrefix(path, attributeResolver.managedType());
-
         if (mappedPath == null) {
             return AttributeHolderWithPath.notFound();
         }
-
         AttributeHolder attributeHolder = attributeResolver.resolveAttributeByPath(mappedPath);
-
         if (attributeHolder.isFound()) {
             String fullPath = PathResolvingUtil.joinPath(previousPathList, mappedPath);
-
             return new AttributeHolderWithPath(fullPath, attributeHolder);
-        }
-        else {
+        } else {
             String[] currentPath = PathResolvingUtil.convertToPathList(mappedPath);
             String currentPrefix = currentPath[0];
             attributeHolder = attributeResolver.resolveAttributeByPath(currentPrefix);
-
             if (attributeHolder.isFound()) {
                 String leftOverPath = PathResolvingUtil.removeFirstPathElement(currentPath);
                 previousPathList.add(currentPrefix);
-
                 return resolveAttributeByPrefix(new JpaEntityAttributeResolver(attributeHolder.managedType()), leftOverPath, previousPathList);
             }
         }
-
         return AttributeHolderWithPath.notFound();
     }
 
     private String findPathUsingMapping(List<SearchPropertyMapping> propertyMappingList, String fieldName) {
-        return Optional.ofNullable(propertyMappingList)
-            .orElse(Collections.emptyList())
-            .stream()
-            .filter(mapping -> fieldName.equals(mapping.name()))
-            .map(SearchPropertyMapping::path)
-            .findAny()
-            .orElse(null);
+        return Optional.ofNullable(propertyMappingList).orElse(Collections.emptyList()).stream().filter(mapping -> fieldName.equals(mapping.name())).map(SearchPropertyMapping::path).findAny().orElse(null);
     }
 
     private String findPathUsingAttributePrefix(String originalFieldName, ManagedType<?> managedType) {
-        List<String> attributeNameList = managedType.getAttributes().stream()
-            .filter(attribute -> attribute.isAssociation() || attribute.getPersistentAttributeType() == Attribute.PersistentAttributeType.EMBEDDED)
-            .map(Attribute::getName)
-            .toList();
-
-        return attributeNameList.stream()
-            .filter(attribute -> isFieldNameValid(originalFieldName, attribute))
-            .map(attribute -> PathResolvingUtil.joinPath(attribute, StringUtils.uncapitalize(originalFieldName.substring(attribute.length()))))
-            .findFirst()
-            .orElse(null);
+        List<String> attributeNameList = managedType.getAttributes().stream().filter(attribute -> attribute.isAssociation() || attribute.getPersistentAttributeType() == Attribute.PersistentAttributeType.EMBEDDED).map(Attribute::getName).toList();
+        return attributeNameList.stream().filter(attribute -> isFieldNameValid(originalFieldName, attribute)).map(attribute -> PathResolvingUtil.joinPath(attribute, StringUtils.uncapitalize(originalFieldName.substring(attribute.length())))).findFirst().orElse(null);
     }
 
     private boolean searchUsingPropertyMapping(SearchDataParserConfiguration searchConfiguration) {
@@ -263,27 +204,18 @@ public class SearchDataParser {
     private SearchOperator resolveFromSearchConfiguration(SearchDataParserConfiguration searchConfiguration, String path, Class<?> attributeType) {
         SearchOperator operator = null;
         SearchOperatorOverride operatorOverride = findOperatorOverride(searchConfiguration.getSearchOperatorOverrideList(), value -> path.equals(value.getPropertyPath()));
-
         if (operatorOverride == null) {
             Predicate<SearchOperatorOverride> operatorOverridePredicate = value -> value.getPropertyType() != null && attributeType.isAssignableFrom(value.getPropertyType());
-
             operatorOverride = findOperatorOverride(searchConfiguration.getSearchOperatorOverrideList(), operatorOverridePredicate);
         }
-
         if (operatorOverride != null) {
             operator = operatorOverride.getSearchOperator();
         }
-
         return operator;
     }
 
     private SearchOperatorOverride findOperatorOverride(List<SearchOperatorOverride> searchOperatorOverrideList, Predicate<SearchOperatorOverride> searchOperatorOverridePredicate) {
-        return Optional.ofNullable(searchOperatorOverrideList)
-            .orElse(Collections.emptyList())
-            .stream()
-            .filter(searchOperatorOverridePredicate)
-            .findFirst()
-            .orElse(null);
+        return Optional.ofNullable(searchOperatorOverrideList).orElse(Collections.emptyList()).stream().filter(searchOperatorOverridePredicate).findFirst().orElse(null);
     }
 
     private boolean isFieldNameValid(String fieldName, String attribute) {

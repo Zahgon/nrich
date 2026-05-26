@@ -14,7 +14,6 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.formconfiguration.controller;
 
 import lombok.RequiredArgsConstructor;
@@ -25,7 +24,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import jakarta.validation.Valid;
 import java.util.List;
 
@@ -38,11 +36,11 @@ public class FormConfigurationController {
 
     @PostMapping("fetch-all")
     public List<FormConfiguration> fetchAll() {
-        return formConfigurationService.fetchFormConfigurationList();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @PostMapping("fetch")
     public List<FormConfiguration> fetch(@RequestBody @Valid FetchFormConfigurationRequest request) {
-        return formConfigurationService.fetchFormConfigurationList(request.getFormIdList());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

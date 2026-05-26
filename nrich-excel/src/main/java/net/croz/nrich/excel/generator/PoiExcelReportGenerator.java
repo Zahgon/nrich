@@ -14,7 +14,6 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.excel.generator;
 
 import lombok.SneakyThrows;
@@ -33,7 +32,6 @@ import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.util.Assert;
-
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.HashMap;
@@ -71,8 +69,7 @@ public class PoiExcelReportGenerator implements ExcelReportGenerator {
 
     private boolean templateOpen = true;
 
-    public PoiExcelReportGenerator(List<CellValueConverter> cellValueConverterList, OutputStream outputStream, InputStream template, List<TemplateVariable> templateVariableList,
-                                   List<TypeDataFormat> typeDataFormatList, List<ColumnDataFormat> columnDataFormatList, int startIndex, boolean autoSizeColumns) {
+    public PoiExcelReportGenerator(List<CellValueConverter> cellValueConverterList, OutputStream outputStream, InputStream template, List<TemplateVariable> templateVariableList, List<TypeDataFormat> typeDataFormatList, List<ColumnDataFormat> columnDataFormatList, int startIndex, boolean autoSizeColumns) {
         this.cellValueConverterList = cellValueConverterList;
         this.outputStream = outputStream;
         this.workbook = initializeWorkBookWithTemplate(template, templateVariableList);
@@ -89,46 +86,25 @@ public class PoiExcelReportGenerator implements ExcelReportGenerator {
 
     @Override
     public void writeRowData(Object... reportDataList) {
-        Assert.isTrue(templateOpen, "Template has been closed and cannot be written anymore");
-
-        Row row = sheet.createRow(currentRowNumber++);
-
-        IntStream.range(0, reportDataList.length).forEach(index -> {
-            Object value = reportDataList[index];
-            Cell cell = row.createCell(index);
-            CellStyle defaultStyle = Optional.ofNullable(value).map(Object::getClass).map(defaultStyleMap::get).orElse(null);
-            CellStyle cellStyle = Optional.ofNullable(cellStyleMap.get(index)).orElse(defaultStyle);
-
-            setCellValue(cell, value, cellStyle);
-        });
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @SneakyThrows
     @Override
     public void flush() {
-        autoSizeColumnsIfRequired();
-        workbook.write(outputStream);
-        this.templateOpen = false;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private void processTemplateVariableMap(Sheet sheet, List<TemplateVariable> templateVariableList) {
         if (templateVariableList == null) {
             return;
         }
-
         sheet.forEach(row -> row.forEach(cell -> {
             Matcher matcher = TEMPLATE_VARIABLE_PATTERN.matcher(cell.getStringCellValue());
-
             if (matcher.find()) {
                 String matchedExpression = matcher.group(1);
-                String variableValue = templateVariableList.stream()
-                    .filter(variable -> matchedExpression.equals(variable.name()))
-                    .map(TemplateVariable::value)
-                    .findFirst()
-                    .orElse("");
-
+                String variableValue = templateVariableList.stream().filter(variable -> matchedExpression.equals(variable.name())).map(TemplateVariable::value).findFirst().orElse("");
                 String updatedValue = matcher.replaceFirst(variableValue);
-
                 setCellValue(cell, updatedValue, cell.getCellStyle());
             }
         }));
@@ -138,26 +114,18 @@ public class PoiExcelReportGenerator implements ExcelReportGenerator {
         if (value == null) {
             return;
         }
-
         if (style != null) {
             cell.setCellStyle(style);
         }
-
         PoiCellHolder cellHolder = new PoiCellHolder(cell);
-
-        CellValueConverter converter = cellValueConverterList.stream()
-            .filter(cellValueConverter -> cellValueConverter.supports(cellHolder, value))
-            .findFirst()
-            .orElse(null);
-
+        CellValueConverter converter = cellValueConverterList.stream().filter(cellValueConverter -> cellValueConverter.supports(cellHolder, value)).findFirst().orElse(null);
         if (converter == null) {
             String stringValue = value.toString();
             cell.setCellValue(stringValue);
             if (stringValue != null && FORMULA_CHARACTER_LIST.stream().anyMatch(stringValue::startsWith)) {
                 cell.getCellStyle().setQuotePrefixed(true);
             }
-        }
-        else {
+        } else {
             converter.setCellValue(cellHolder, value);
         }
     }
@@ -166,34 +134,26 @@ public class PoiExcelReportGenerator implements ExcelReportGenerator {
         if (columnDataFormatList == null) {
             return new HashMap<>();
         }
-
-        return columnDataFormatList.stream()
-            .collect(Collectors.toMap(ColumnDataFormat::columnIndex, entry -> createCellStyle(entry.dataFormat())));
+        return columnDataFormatList.stream().collect(Collectors.toMap(ColumnDataFormat::columnIndex, entry -> createCellStyle(entry.dataFormat())));
     }
 
     private CellStyle createCellStyle(String dataFormat) {
         CellStyle style = workbook.createCellStyle();
-
         if (dataFormat != null) {
             style.setDataFormat(creationHelper.createDataFormat().getFormat(dataFormat));
         }
-
         return style;
     }
 
     @SneakyThrows
     private SXSSFWorkbook initializeWorkBookWithTemplate(InputStream template, List<TemplateVariable> templateVariableList) {
         XSSFWorkbook xssfWorkbook = new XSSFWorkbook(template);
-
         processTemplateVariableMap(xssfWorkbook.getSheetAt(0), templateVariableList);
-
         return new SXSSFWorkbook(xssfWorkbook);
     }
 
     private Map<Class<?>, CellStyle> createDefaultStyleMap(List<TypeDataFormat> typeDataFormatList) {
-        return typeDataFormatList.stream()
-            .filter(typeDataFormat -> typeDataFormat.dataFormat() != null)
-            .collect(Collectors.toMap(TypeDataFormat::type, value -> createCellStyle(value.dataFormat())));
+        return typeDataFormatList.stream().filter(typeDataFormat -> typeDataFormat.dataFormat() != null).collect(Collectors.toMap(TypeDataFormat::type, value -> createCellStyle(value.dataFormat())));
     }
 
     private void autoSizeColumnsIfRequired() {

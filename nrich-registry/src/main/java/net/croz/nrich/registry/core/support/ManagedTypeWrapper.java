@@ -14,13 +14,11 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.registry.core.support;
 
 import lombok.Getter;
 import net.croz.nrich.registry.core.constants.RegistryCoreConstants;
 import org.springframework.util.Assert;
-
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.metamodel.Attribute;
 import jakarta.persistence.metamodel.EmbeddableType;
@@ -61,7 +59,6 @@ public class ManagedTypeWrapper {
 
     public ManagedTypeWrapper(ManagedType<?> managedType) {
         Assert.isTrue(managedType instanceof IdentifiableType, "Managed type has no id attribute, no operations will be possible!");
-
         identifiableType = (IdentifiableType<?>) managedType;
         embeddableIdType = resolveEmbeddedIdentifierType(identifiableType);
         isEmbeddedIdentifier = embeddableIdType != null;
@@ -75,7 +72,7 @@ public class ManagedTypeWrapper {
     }
 
     public Class<?> getJavaType() {
-        return identifiableType.getJavaType();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private EmbeddableType<?> resolveEmbeddedIdentifierType(IdentifiableType<?> identifiableType) {
@@ -87,42 +84,29 @@ public class ManagedTypeWrapper {
     }
 
     private Map<String, Class<?>> resolveIdClassPropertyMap(IdentifiableType<?> identifiableType) {
-        return identifiableType.hasSingleIdAttribute() ? Collections.emptyMap() : identifiableType.getIdClassAttributes().stream()
-            .collect(Collectors.toMap(Attribute::getName, Attribute::getJavaType));
+        return identifiableType.hasSingleIdAttribute() ? Collections.emptyMap() : identifiableType.getIdClassAttributes().stream().collect(Collectors.toMap(Attribute::getName, Attribute::getJavaType));
     }
 
     private boolean resolveIsIdentifierAssigned(IdentifiableType<?> managedType) {
-        return managedType.getAttributes().stream()
-            .map(Attribute::getJavaMember)
-            .filter(Field.class::isInstance)
-            .map(Field.class::cast)
-            .map(Field::getDeclaredAnnotations)
-            .noneMatch(annotationList -> Arrays.stream(annotationList).anyMatch(annotation -> GeneratedValue.class.equals(annotation.annotationType())));
+        return managedType.getAttributes().stream().map(Attribute::getJavaMember).filter(Field.class::isInstance).map(Field.class::cast).map(Field::getDeclaredAnnotations).noneMatch(annotationList -> Arrays.stream(annotationList).anyMatch(annotation -> GeneratedValue.class.equals(annotation.annotationType())));
     }
 
     private List<SingularAssociation> resolveSingularAssociationList(ManagedType<?> managedType) {
         Map<String, SingularAssociation> associationMap = new HashMap<>();
-
         resolveSingularAssociationList(managedType, null, null, associationMap);
-
         return new ArrayList<>(associationMap.values());
     }
 
     private void resolveSingularAssociationList(ManagedType<?> managedType, Boolean isCurrentAssociationPathOptional, String currentPrefix, Map<String, SingularAssociation> singularAssociationMap) {
         @SuppressWarnings("unchecked")
-        List<SingularAttribute<?, ?>> currentAssociations = (List<SingularAttribute<?, ?>>) managedType.getSingularAttributes().stream()
-            .filter(Attribute::isAssociation)
-            .toList();
-
+        List<SingularAttribute<?, ?>> currentAssociations = (List<SingularAttribute<?, ?>>) managedType.getSingularAttributes().stream().filter(Attribute::isAssociation).toList();
         for (SingularAttribute<?, ?> association : currentAssociations) {
             String associationName = currentPrefix == null ? association.getName() : String.format(RegistryCoreConstants.PREFIX_FORMAT, currentPrefix, association.getName());
             boolean isCurrentPathOptional = isCurrentAssociationPathOptional == null ? association.isOptional() : isCurrentAssociationPathOptional || association.isOptional();
-
             singularAssociationMap.put(associationName, new SingularAssociation(associationName, isCurrentPathOptional));
             if (currentPrefix != null) {
                 singularAssociationMap.remove(currentPrefix);
             }
-
             if (!association.getJavaType().equals(managedType.getJavaType())) {
                 resolveSingularAssociationList((ManagedType<?>) association.getType(), association.isOptional(), associationName, singularAssociationMap);
             }

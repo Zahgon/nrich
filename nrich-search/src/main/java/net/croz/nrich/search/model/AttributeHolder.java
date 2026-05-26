@@ -14,24 +14,22 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.search.model;
 
 import jakarta.persistence.metamodel.Attribute;
 import jakarta.persistence.metamodel.ManagedType;
 
-
 public record AttributeHolder(Attribute<?, ?> attribute, ManagedType<?> managedType, boolean isPlural) {
 
     public boolean isFound() {
-        return attribute != null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public boolean isElementCollection() {
-        return isFound() && attribute.getPersistentAttributeType() == Attribute.PersistentAttributeType.ELEMENT_COLLECTION;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public static AttributeHolder notFound() {
-        return new AttributeHolder(null, null, false);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

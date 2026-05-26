@@ -14,12 +14,10 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.excel.model;
 
 import net.croz.nrich.excel.api.model.CellHolder;
 import org.apache.poi.ss.usermodel.Cell;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Calendar;
@@ -29,39 +27,16 @@ public record PoiCellHolder(Cell cell) implements CellHolder {
 
     @Override
     public int getColumnIndex() {
-        return cell.getColumnIndex();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public int getRowIndex() {
-        return cell.getRowIndex();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void setCellValue(Object value) {
-        if (value instanceof Boolean booleanValue) {
-            cell.setCellValue(booleanValue);
-        }
-        else if (value instanceof Number numberValue) {
-            cell.setCellValue(numberValue.doubleValue());
-        }
-        else if (value instanceof Date dateValue) {
-            cell.setCellValue(dateValue);
-        }
-        else if (value instanceof Calendar calendarValue) {
-            cell.setCellValue(calendarValue);
-        }
-        else if (value instanceof LocalDateTime localDateTimeValue) {
-            cell.setCellValue(localDateTimeValue);
-        }
-        else if (value instanceof LocalDate localDateValue) {
-            cell.setCellValue(localDateValue);
-        }
-        else if (value instanceof String stringValue) {
-            cell.setCellValue(stringValue);
-        }
-        else {
-            throw new IllegalArgumentException("Set cell value called with unrecognized type!");
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

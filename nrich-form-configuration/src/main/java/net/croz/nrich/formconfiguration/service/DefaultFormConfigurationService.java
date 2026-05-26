@@ -14,7 +14,6 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.formconfiguration.service;
 
 import lombok.RequiredArgsConstructor;
@@ -26,7 +25,6 @@ import net.croz.nrich.formconfiguration.api.service.ConstrainedPropertyValidator
 import net.croz.nrich.formconfiguration.api.service.FormConfigurationService;
 import net.croz.nrich.javascript.api.service.JavaToJavascriptTypeConversionService;
 import org.springframework.cache.annotation.Cacheable;
-
 import jakarta.validation.Validator;
 import jakarta.validation.metadata.BeanDescriptor;
 import jakarta.validation.metadata.ConstraintDescriptor;
@@ -54,50 +52,37 @@ public class DefaultFormConfigurationService implements FormConfigurationService
     @Cacheable(value = "nrich.formConfiguration.cache", key = "'all-forms-' + T(org.springframework.context.i18n.LocaleContextHolder).locale.toLanguageTag()")
     @Override
     public List<FormConfiguration> fetchFormConfigurationList() {
-        return formIdConstraintHolderMap.keySet().stream()
-            .map(this::resolveFormConfiguration)
-            .toList();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Cacheable(value = "nrich.formConfiguration.cache", key = "#formIdList.hashCode() + T(org.springframework.context.i18n.LocaleContextHolder).locale.toLanguageTag()")
     @Override
     public List<FormConfiguration> fetchFormConfigurationList(List<String> formIdList) {
-        return formIdList.stream()
-            .map(this::resolveFormConfiguration)
-            .toList();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private FormConfiguration resolveFormConfiguration(String formId) {
-        Class<?> validationDefinitionHolder = Optional.ofNullable(formIdConstraintHolderMap.get(formId))
-            .orElseThrow(() -> new IllegalArgumentException(String.format("Form id: %s is not registered", formId)));
-
+        Class<?> validationDefinitionHolder = Optional.ofNullable(formIdConstraintHolderMap.get(formId)).orElseThrow(() -> new IllegalArgumentException(String.format("Form id: %s is not registered", formId)));
         List<ConstrainedPropertyConfiguration> propertyConfigurationList = recursiveResolveFieldConfiguration(validationDefinitionHolder, new ArrayList<>(), null);
-
         return new FormConfiguration(formId, propertyConfigurationList);
     }
 
     private List<ConstrainedPropertyConfiguration> recursiveResolveFieldConfiguration(Class<?> type, List<ConstrainedPropertyConfiguration> constrainedPropertyConfigurationList, String prefix) {
         BeanDescriptor constraintBeanDescriptor = validator.getConstraintsForClass(type);
         Set<PropertyDescriptor> constraintPropertyList = constraintBeanDescriptor.getConstrainedProperties();
-
         Optional.ofNullable(constraintPropertyList).orElse(Collections.emptySet()).forEach(propertyDescriptor -> {
             String propertyName = propertyDescriptor.getPropertyName();
             String propertyPath = prefix == null ? propertyName : String.format(PREFIX_FORMAT, prefix, propertyName);
             List<ConstrainedPropertyClientValidatorConfiguration> constrainedPropertyClientValidatorConfigurationList = resolvePropertyValidatorList(type, propertyPath, propertyDescriptor);
-
             if (!constrainedPropertyClientValidatorConfigurationList.isEmpty()) {
                 Class<?> propertyType = propertyDescriptor.getElementClass();
                 String javascriptType = javaToJavascriptTypeConversionService.convert(propertyType);
-                constrainedPropertyConfigurationList.add(
-                    new ConstrainedPropertyConfiguration(propertyPath, propertyType, javascriptType, constrainedPropertyClientValidatorConfigurationList)
-                );
+                constrainedPropertyConfigurationList.add(new ConstrainedPropertyConfiguration(propertyPath, propertyType, javascriptType, constrainedPropertyClientValidatorConfigurationList));
             }
-
             if (shouldResolveConstraintListForType(propertyDescriptor)) {
                 recursiveResolveFieldConfiguration(propertyDescriptor.getElementClass(), constrainedPropertyConfigurationList, propertyPath);
             }
         });
-
         return constrainedPropertyConfigurationList;
     }
 
@@ -107,28 +92,12 @@ public class DefaultFormConfigurationService implements FormConfigurationService
 
     private List<ConstrainedPropertyClientValidatorConfiguration> resolvePropertyValidatorList(Class<?> parentType, String propertyPath, PropertyDescriptor propertyDescriptor) {
         Set<ConstraintDescriptor<?>> constraintDescriptorList = propertyDescriptor.getConstraintDescriptors();
-
-        return constraintDescriptorList.stream()
-            .map(constraintDescriptor -> convertProperty(constraintDescriptor, parentType, propertyPath, propertyDescriptor))
-            .flatMap(List::stream)
-            .toList();
+        return constraintDescriptorList.stream().map(constraintDescriptor -> convertProperty(constraintDescriptor, parentType, propertyPath, propertyDescriptor)).flatMap(List::stream).toList();
     }
 
-    private List<ConstrainedPropertyClientValidatorConfiguration> convertProperty(ConstraintDescriptor<?> constraintDescriptor, Class<?> parentType, String propertyPath,
-                                                                                  PropertyDescriptor propertyDescriptor) {
-        ConstrainedProperty constrainedProperty = ConstrainedProperty.builder()
-            .constraintDescriptor(constraintDescriptor)
-            .parentType(parentType)
-            .path(propertyPath)
-            .name(propertyDescriptor.getPropertyName())
-            .type(propertyDescriptor.getElementClass())
-            .build();
-
-        ConstrainedPropertyValidatorConverterService converterService = constraintConverterServiceList.stream()
-            .filter(converter -> converter.supports(constrainedProperty))
-            .findFirst()
-            .orElseThrow(() -> new IllegalArgumentException(String.format("No converter found for constrained property: %s", constrainedProperty)));
-
+    private List<ConstrainedPropertyClientValidatorConfiguration> convertProperty(ConstraintDescriptor<?> constraintDescriptor, Class<?> parentType, String propertyPath, PropertyDescriptor propertyDescriptor) {
+        ConstrainedProperty constrainedProperty = ConstrainedProperty.builder().constraintDescriptor(constraintDescriptor).parentType(parentType).path(propertyPath).name(propertyDescriptor.getPropertyName()).type(propertyDescriptor.getElementClass()).build();
+        ConstrainedPropertyValidatorConverterService converterService = constraintConverterServiceList.stream().filter(converter -> converter.supports(constrainedProperty)).findFirst().orElseThrow(() -> new IllegalArgumentException(String.format("No converter found for constrained property: %s", constrainedProperty)));
         return converterService.convert(constrainedProperty);
     }
 }

@@ -14,7 +14,6 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.excel.aot;
 
 import lombok.SneakyThrows;
@@ -90,7 +89,6 @@ import org.springframework.aot.hint.ExecutableMode;
 import org.springframework.aot.hint.MemberCategory;
 import org.springframework.aot.hint.RuntimeHints;
 import org.springframework.aot.hint.RuntimeHintsRegistrar;
-
 import java.util.List;
 import java.util.ServiceLoader;
 
@@ -101,36 +99,14 @@ public class ExcelRuntimeHintsRegistrar implements RuntimeHintsRegistrar {
 
     public static final String RESOURCE_BUNDLE = "org.apache.xmlbeans.impl.regex.message";
 
-    public static final List<Class<?>> CLASS_LIST = List.of(
-        DefaultFlowMessageFactory.class, XSSFWorkbook.class, ParameterizedMessageFactory.class, AsiExtraField.class, JarMarker.class,
-        ResourceAlignmentExtraField.class, UnicodeCommentExtraField.class, UnicodePathExtraField.class, X000A_NTFS.class, X0015_CertificateIdForFile.class,
-        X0016_CertificateIdForCentralDirectory.class, X0017_StrongEncryptionHeader.class, X0019_EncryptionRecipientCertificateList.class,
-        X5455_ExtendedTimestamp.class, X7875_NewUnix.class, X0014_X509Certificates.class, Zip64ExtendedInformationExtraField.class
-    );
+    public static final List<Class<?>> CLASS_LIST = List.of(DefaultFlowMessageFactory.class, XSSFWorkbook.class, ParameterizedMessageFactory.class, AsiExtraField.class, JarMarker.class, ResourceAlignmentExtraField.class, UnicodeCommentExtraField.class, UnicodePathExtraField.class, X000A_NTFS.class, X0015_CertificateIdForFile.class, X0016_CertificateIdForCentralDirectory.class, X0017_StrongEncryptionHeader.class, X0019_EncryptionRecipientCertificateList.class, X5455_ExtendedTimestamp.class, X7875_NewUnix.class, X0014_X509Certificates.class, Zip64ExtendedInformationExtraField.class);
 
-    public static final List<Class<?>> CONSTRUCTOR_CLASS_LIST = List.of(
-        ThemeDocumentImpl.class, CTPropertiesImpl.class, PropertiesDocumentImpl.class, org.openxmlformats.schemas.officeDocument.x2006.extendedProperties.impl.CTPropertiesImpl.class,
-        org.openxmlformats.schemas.officeDocument.x2006.extendedProperties.impl.PropertiesDocumentImpl.class, STRelationshipIdImpl.class, STXstringImpl.class, CTBorderImpl.class,
-        CTBordersImpl.class, CTCellImpl.class, CTCellStyleXfsImpl.class, CTCellXfsImpl.class, CTColImpl.class, CTColorsImpl.class, CTColsImpl.class, CTDxfsImpl.class, CTFillImpl.class,
-        CTFillsImpl.class, CTFontImpl.class, CTFontNameImpl.class, CTFontSizeImpl.class, CTFontsImpl.class, CTIndexedColorsImpl.class, CTNumFmtImpl.class, CTNumFmtsImpl.class,
-        CTRgbColorImpl.class, CTRowImpl.class, CTRstImpl.class, CTSheetDataImpl.class, CTSheetDimensionImpl.class, CTSheetImpl.class, CTSheetsImpl.class, CTSstImpl.class, CTStylesheetImpl.class,
-        CTTableStylesImpl.class, CTWorkbookImpl.class, CTWorksheetImpl.class, CTXfImpl.class, STBorderIdImpl.class, STCellRefImpl.class, STCellStyleXfIdImpl.class, STCellTypeImpl.class,
-        STFillIdImpl.class, STFontIdImpl.class, STNumFmtIdImpl.class, STRefImpl.class, STUnsignedIntHexImpl.class, SstDocumentImpl.class, StyleSheetDocumentImpl.class,
-        WorkbookDocumentImpl.class, WorksheetDocumentImpl.class
-    );
+    public static final List<Class<?>> CONSTRUCTOR_CLASS_LIST = List.of(ThemeDocumentImpl.class, CTPropertiesImpl.class, PropertiesDocumentImpl.class, org.openxmlformats.schemas.officeDocument.x2006.extendedProperties.impl.CTPropertiesImpl.class, org.openxmlformats.schemas.officeDocument.x2006.extendedProperties.impl.PropertiesDocumentImpl.class, STRelationshipIdImpl.class, STXstringImpl.class, CTBorderImpl.class, CTBordersImpl.class, CTCellImpl.class, CTCellStyleXfsImpl.class, CTCellXfsImpl.class, CTColImpl.class, CTColorsImpl.class, CTColsImpl.class, CTDxfsImpl.class, CTFillImpl.class, CTFillsImpl.class, CTFontImpl.class, CTFontNameImpl.class, CTFontSizeImpl.class, CTFontsImpl.class, CTIndexedColorsImpl.class, CTNumFmtImpl.class, CTNumFmtsImpl.class, CTRgbColorImpl.class, CTRowImpl.class, CTRstImpl.class, CTSheetDataImpl.class, CTSheetDimensionImpl.class, CTSheetImpl.class, CTSheetsImpl.class, CTSstImpl.class, CTStylesheetImpl.class, CTTableStylesImpl.class, CTWorkbookImpl.class, CTWorksheetImpl.class, CTXfImpl.class, STBorderIdImpl.class, STCellRefImpl.class, STCellStyleXfIdImpl.class, STCellTypeImpl.class, STFillIdImpl.class, STFontIdImpl.class, STNumFmtIdImpl.class, STRefImpl.class, STUnsignedIntHexImpl.class, SstDocumentImpl.class, StyleSheetDocumentImpl.class, WorkbookDocumentImpl.class, WorksheetDocumentImpl.class);
 
     @SneakyThrows
     @Override
     public void registerHints(RuntimeHints hints, ClassLoader classLoader) {
-        CLASS_LIST.forEach(type -> registerHint(type, hints));
-        CONSTRUCTOR_CLASS_LIST.forEach(type -> registerConstructor(type, hints));
-
-        hints.resources().registerResourceBundle(RESOURCE_BUNDLE);
-        hints.resources().registerPattern(RESOURCE_PATTERN);
-
-        hints.reflection().registerMethod(ServiceLoader.class.getMethod("load", Class.class, ClassLoader.class), ExecutableMode.INVOKE);
-
-        hints.reflection().registerField(STCellType.Enum.class.getField("table"));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @SneakyThrows

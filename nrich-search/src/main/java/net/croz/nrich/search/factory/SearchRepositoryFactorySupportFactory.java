@@ -14,14 +14,12 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.search.factory;
 
 import lombok.RequiredArgsConstructor;
 import net.croz.nrich.search.api.converter.StringToEntityPropertyMapConverter;
 import net.croz.nrich.search.api.factory.RepositoryFactorySupportFactory;
 import org.springframework.data.repository.core.support.RepositoryFactorySupport;
-
 import jakarta.persistence.EntityManager;
 
 @RequiredArgsConstructor
@@ -31,6 +29,6 @@ public class SearchRepositoryFactorySupportFactory implements RepositoryFactoryS
 
     @Override
     public RepositoryFactorySupport createRepositoryFactory(Class<?> repositoryInterface, EntityManager entityManager) {
-        return new SearchRepositoryJpaRepositoryFactory(entityManager, stringToEntityPropertyMapConverter);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

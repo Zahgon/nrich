@@ -14,12 +14,10 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.validation.constraint.validator;
 
 import net.croz.nrich.validation.api.constraint.ValidSearchProperties;
 import net.croz.nrich.validation.constraint.util.ValidationReflectionUtil;
-
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import java.lang.reflect.Method;
@@ -35,23 +33,11 @@ public class ValidSearchPropertiesValidator implements ConstraintValidator<Valid
 
     @Override
     public void initialize(ValidSearchProperties constraintAnnotation) {
-        ValidSearchProperties.PropertyGroup[] propertyGroupList = constraintAnnotation.propertyGroup();
-
-        propertyGroupMap = IntStream.range(0, propertyGroupList.length)
-            .boxed()
-            .collect(Collectors.toConcurrentMap(Object::toString, value -> propertyGroupList[value].value()));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public boolean isValid(Object value, ConstraintValidatorContext context) {
-        Class<?> type = value.getClass();
-
-        return propertyGroupMap.entrySet().stream().anyMatch(fieldGroup -> {
-            List<Method> methodList = Arrays.stream(fieldGroup.getValue())
-                .map(fieldName -> ValidationReflectionUtil.findGetterMethod(type, fieldName))
-                .toList();
-
-            return methodList.stream().allMatch(method -> ValidationReflectionUtil.invokeMethod(method, value) != null);
-        });
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

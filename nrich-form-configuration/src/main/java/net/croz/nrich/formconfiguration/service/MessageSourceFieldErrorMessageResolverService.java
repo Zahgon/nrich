@@ -14,7 +14,6 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.formconfiguration.service;
 
 import lombok.RequiredArgsConstructor;
@@ -24,7 +23,6 @@ import net.croz.nrich.formconfiguration.constants.FormConfigurationConstants;
 import org.springframework.context.MessageSource;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.util.StringUtils;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -37,12 +35,7 @@ public class MessageSourceFieldErrorMessageResolverService implements FieldError
 
     @Override
     public String resolveErrorMessage(ConstrainedProperty constrainedProperty, Locale locale) {
-        List<String> messageCodeList = resolveConstraintMessageCodeList(constrainedProperty);
-        Object[] argumentList = convertArraysInArgumentList(constrainedProperty.getConstraintArgumentList());
-        String message = constrainedProperty.getConstraintMessage();
-        DefaultMessageSourceResolvable defaultMessageSourceResolvable = new DefaultMessageSourceResolvable(messageCodeList.toArray(new String[0]), argumentList, message);
-
-        return messageSource.getMessage(defaultMessageSourceResolvable, locale);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private List<String> resolveConstraintMessageCodeList(ConstrainedProperty constrainedProperty) {
@@ -50,21 +43,15 @@ public class MessageSourceFieldErrorMessageResolverService implements FieldError
         String constraintOwningClassShortName = StringUtils.uncapitalize(constrainedProperty.getParentType().getSimpleName());
         String constraintPropertyName = constrainedProperty.getName();
         String constraintName = constrainedProperty.getConstraintName();
-
         List<String> codeList = new ArrayList<>();
-
         codeList.add(resolveMessageCode(FormConfigurationConstants.CONSTRAINT_FULL_CLIENT_MESSAGE_FORMAT, constraintOwningClassName, constraintPropertyName, constraintName));
         codeList.add(resolveMessageCode(FormConfigurationConstants.CONSTRAINT_FULL_CLIENT_MESSAGE_FORMAT, constraintOwningClassShortName, constraintPropertyName, constraintName));
-
         codeList.add(resolveMessageCode(FormConfigurationConstants.CONSTRAINT_FULL_MESSAGE_FORMAT, constraintOwningClassName, constraintPropertyName, constraintName));
         codeList.add(resolveMessageCode(FormConfigurationConstants.CONSTRAINT_FULL_MESSAGE_FORMAT, constraintOwningClassShortName, constraintPropertyName, constraintName));
-
         codeList.add(resolveMessageCode(FormConfigurationConstants.CONSTRAINT_MEDIUM_CLIENT_MESSAGE_FORMAT, constraintPropertyName, constraintName));
         codeList.add(resolveMessageCode(FormConfigurationConstants.CONSTRAINT_MEDIUM_MESSAGE_FORMAT, constraintPropertyName, constraintName));
-
         codeList.add(resolveMessageCode(FormConfigurationConstants.CONSTRAINT_SHORT_CLIENT_MESSAGE_FORMAT, constraintName));
         codeList.add(resolveMessageCode(FormConfigurationConstants.CONSTRAINT_SHORT_MESSAGE_FORMAT, constraintName));
-
         return codeList;
     }
 
@@ -76,10 +63,7 @@ public class MessageSourceFieldErrorMessageResolverService implements FieldError
         if (argumentList == null) {
             return new Object[0];
         }
-
-        return Arrays.stream(argumentList)
-            .map(value -> value instanceof Object[] objectArray ? convertToString(objectArray) : value)
-            .toArray();
+        return Arrays.stream(argumentList).map(value -> value instanceof Object[] objectArray ? convertToString(objectArray) : value).toArray();
     }
 
     private String convertToString(Object[] value) {

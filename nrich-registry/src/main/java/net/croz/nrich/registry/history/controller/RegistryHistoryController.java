@@ -14,7 +14,6 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.registry.history.controller;
 
 import lombok.RequiredArgsConstructor;
@@ -26,7 +25,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import jakarta.validation.Valid;
 
 @RequiredArgsConstructor
@@ -38,6 +36,6 @@ public class RegistryHistoryController {
 
     @PostMapping("list")
     public Page<EntityWithRevision<Object>> historyList(@RequestBody @Valid ListRegistryHistoryRequest request) {
-        return registryHistoryService.historyList(request);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

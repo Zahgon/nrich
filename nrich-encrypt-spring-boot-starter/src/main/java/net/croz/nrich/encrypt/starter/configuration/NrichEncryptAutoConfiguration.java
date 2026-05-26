@@ -14,7 +14,6 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.encrypt.starter.configuration;
 
 import net.croz.nrich.encrypt.api.service.DataEncryptionService;
@@ -46,33 +45,25 @@ public class NrichEncryptAutoConfiguration {
     @ConditionalOnMissingBean
     @Bean
     public TextEncryptionService textEncryptionService(NrichEncryptProperties encryptProperties) {
-        String password = ObjectUtils.isEmpty(encryptProperties.encryptPassword()) ? KeyGenerators.string().generateKey() : encryptProperties.encryptPassword();
-        String salt = ObjectUtils.isEmpty(encryptProperties.encryptSalt()) ? KeyGenerators.string().generateKey() : encryptProperties.encryptSalt();
-        BytesEncryptor encryptor = Encryptors.standard(password, salt);
-
-        return new BytesEncryptorTextEncryptService(encryptor, encryptProperties.textEncryptCharset());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @ConditionalOnMissingBean
     @Bean
     public DataEncryptionService dataEncryptionService(TextEncryptionService textEncryptionService) {
-        return new DefaultDataEncryptService(textEncryptionService);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @ConditionalOnProperty(name = "nrich.encrypt.encrypt-aspect-enabled", havingValue = "true", matchIfMissing = true)
     @Bean
     public EncryptDataAspect encryptDataAspect(DataEncryptionService dataEncryptionService) {
-        return new EncryptDataAspect(dataEncryptionService);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @ConditionalOnProperty(name = "nrich.encrypt.encrypt-advisor-enabled", havingValue = "true", matchIfMissing = true)
     @ConditionalOnPropertyNotEmpty("nrich.encrypt.encryption-configuration-list")
     @Bean
     public Advisor encryptAdvisor(DataEncryptionService dataEncryptionService, NrichEncryptProperties encryptProperties) {
-        AspectJExpressionPointcut pointcut = new AspectJExpressionPointcut();
-
-        pointcut.setExpression(PointcutResolvingUtil.resolvePointcutFromEncryptionConfigurationList(encryptProperties.encryptionConfigurationList()));
-
-        return new DefaultPointcutAdvisor(pointcut, new EncryptMethodInterceptor(dataEncryptionService, encryptProperties.encryptionConfigurationList(), encryptProperties.ignoredMethodList()));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

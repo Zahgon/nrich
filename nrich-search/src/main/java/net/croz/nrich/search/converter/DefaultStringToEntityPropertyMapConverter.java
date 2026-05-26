@@ -14,7 +14,6 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.search.converter;
 
 import lombok.RequiredArgsConstructor;
@@ -27,7 +26,6 @@ import net.croz.nrich.search.util.PathResolvingUtil;
 import net.croz.nrich.search.util.PropertyNameUtil;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
-
 import jakarta.persistence.metamodel.Attribute;
 import jakarta.persistence.metamodel.IdentifiableType;
 import jakarta.persistence.metamodel.ManagedType;
@@ -38,7 +36,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 @RequiredArgsConstructor
 public class DefaultStringToEntityPropertyMapConverter implements StringToEntityPropertyMapConverter {
 
@@ -46,64 +43,14 @@ public class DefaultStringToEntityPropertyMapConverter implements StringToEntity
 
     @Override
     public Map<String, Object> convert(String value, List<String> propertyToSearchList, ManagedType<?> managedType, SearchPropertyConfiguration searchPropertyConfiguration) {
-        if (value == null || CollectionUtils.isEmpty(propertyToSearchList)) {
-            return Collections.emptyMap();
-        }
-
-        Assert.notNull(managedType, "Managed type cannot be null!");
-
-        JpaEntityAttributeResolver attributeResolver = new JpaEntityAttributeResolver(managedType);
-
-        Map<String, Object> resultMap = new HashMap<>();
-
-        propertyToSearchList.forEach(property -> {
-            AttributeHolder attributeHolder = attributeResolver.resolveAttributeByPath(property);
-
-            if (!attributeHolder.isFound()) {
-                String propertyWithoutSuffix = PropertyNameUtil.propertyNameWithoutSuffix(property, searchPropertyConfiguration);
-
-                attributeHolder = attributeResolver.resolveAttributeByPath(propertyWithoutSuffix);
-            }
-
-            if (!attributeHolder.isFound()) {
-                return;
-            }
-
-            Attribute<?, ?> attribute = attributeHolder.attribute();
-
-            Object convertedValue = doConversion(value, attribute.getJavaType());
-
-            if (convertedValue == null && attribute.isAssociation()) {
-                IdentifiableType<?> identifiableType = asIdentifiableType(attribute);
-                if (identifiableType == null || !identifiableType.hasSingleIdAttribute()) {
-                    return;
-                }
-
-                Class<?> idType = identifiableType.getIdType().getJavaType();
-                String idName = identifiableType.getId(idType).getName();
-
-                convertedValue = doConversion(value, idType);
-
-                resultMap.put(PathResolvingUtil.joinPath(property, idName), convertedValue);
-            }
-            else {
-                resultMap.put(property, convertedValue);
-            }
-        });
-
-        return resultMap;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private Object doConversion(String searchTerm, Class<?> attributeType) {
         if (String.class.isAssignableFrom(attributeType)) {
             return searchTerm;
         }
-
-        StringToTypeConverter<?> converter = converterList.stream()
-            .filter(value -> value.supports(attributeType))
-            .findFirst()
-            .orElseThrow(() -> new IllegalArgumentException(String.format("No converter found for attribute type %s", attributeType.getName())));
-
+        StringToTypeConverter<?> converter = converterList.stream().filter(value -> value.supports(attributeType)).findFirst().orElseThrow(() -> new IllegalArgumentException(String.format("No converter found for attribute type %s", attributeType.getName())));
         return converter.convert(searchTerm, attributeType);
     }
 
@@ -114,7 +61,6 @@ public class DefaultStringToEntityPropertyMapConverter implements StringToEntity
         if (attribute instanceof PluralAttribute<?, ?, ?> pluralAttribute && pluralAttribute.getElementType() instanceof IdentifiableType<?> identifiableType) {
             return identifiableType;
         }
-
         return null;
     }
 }

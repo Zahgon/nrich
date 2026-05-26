@@ -14,13 +14,11 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.search.converter;
 
 import lombok.SneakyThrows;
 import net.croz.nrich.search.api.converter.StringToTypeConverter;
 import org.springframework.core.annotation.Order;
-
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -63,104 +61,56 @@ public class DefaultStringToTypeConverter implements StringToTypeConverter<Objec
 
     @Override
     public Object convert(String value, Class<?> requiredType) {
-        if (value == null) {
-            return null;
-        }
-
-        Optional<ConverterHolder> converterHolder = converterHolderList.stream()
-            .filter(holder -> holder.type().isAssignableFrom(requiredType))
-            .findFirst();
-
-        return converterHolder
-            .map(holder -> convertWithExceptionIgnored(() -> holder.conversionFunction().apply(value, requiredType)))
-            .orElse(null);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public boolean supports(Class<?> requiredType) {
-        return true;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private Object convertWithExceptionIgnored(Supplier<Object> conversionFunction) {
         try {
             return conversionFunction.get();
-        }
-        catch (Exception ignored) {
+        } catch (Exception ignored) {
             return null;
         }
     }
 
     private List<ConverterHolder> initializeConverterList() {
-        return List.of(
-            new ConverterHolder(Boolean.class, (value, type) -> booleanConverter(value)),
-            new ConverterHolder(Long.class, (value, type) -> Long.valueOf(value)),
-            new ConverterHolder(Integer.class, (value, type) -> Integer.valueOf(value)),
-            new ConverterHolder(Short.class, (value, type) -> Short.valueOf(value)),
-            new ConverterHolder(Enum.class, this::enumConverter),
-            new ConverterHolder(Date.class, (value, type) -> dateConverter(value)),
-            new ConverterHolder(Instant.class, (value, type) -> temporalConverter(value, Instant::from)),
-            new ConverterHolder(LocalDate.class, (value, type) -> temporalConverter(value, LocalDate::from)),
-            new ConverterHolder(LocalDateTime.class, (value, type) -> temporalConverter(value, LocalDateTime::from)),
-            new ConverterHolder(OffsetTime.class, (value, type) -> temporalConverter(value, OffsetTime::from)),
-            new ConverterHolder(OffsetDateTime.class, (value, type) -> temporalConverter(value, OffsetDateTime::from)),
-            new ConverterHolder(ZonedDateTime.class, (value, type) -> temporalConverter(value, ZonedDateTime::from)),
-            new ConverterHolder(Float.class, (value, type) -> numberConverter(value, false)),
-            new ConverterHolder(Double.class, (value, type) -> numberConverter(value, false)),
-            new ConverterHolder(BigDecimal.class, (value, type) -> numberConverter(value, true))
-        );
+        return List.of(new ConverterHolder(Boolean.class, (value, type) -> booleanConverter(value)), new ConverterHolder(Long.class, (value, type) -> Long.valueOf(value)), new ConverterHolder(Integer.class, (value, type) -> Integer.valueOf(value)), new ConverterHolder(Short.class, (value, type) -> Short.valueOf(value)), new ConverterHolder(Enum.class, this::enumConverter), new ConverterHolder(Date.class, (value, type) -> dateConverter(value)), new ConverterHolder(Instant.class, (value, type) -> temporalConverter(value, Instant::from)), new ConverterHolder(LocalDate.class, (value, type) -> temporalConverter(value, LocalDate::from)), new ConverterHolder(LocalDateTime.class, (value, type) -> temporalConverter(value, LocalDateTime::from)), new ConverterHolder(OffsetTime.class, (value, type) -> temporalConverter(value, OffsetTime::from)), new ConverterHolder(OffsetDateTime.class, (value, type) -> temporalConverter(value, OffsetDateTime::from)), new ConverterHolder(ZonedDateTime.class, (value, type) -> temporalConverter(value, ZonedDateTime::from)), new ConverterHolder(Float.class, (value, type) -> numberConverter(value, false)), new ConverterHolder(Double.class, (value, type) -> numberConverter(value, false)), new ConverterHolder(BigDecimal.class, (value, type) -> numberConverter(value, true)));
     }
 
     private Boolean booleanConverter(String value) {
         Boolean convertedValue = null;
-
         if (value.matches(booleanTrueRegexPattern)) {
             convertedValue = Boolean.TRUE;
-        }
-        else if (value.matches(booleanFalseRegexPattern)) {
+        } else if (value.matches(booleanFalseRegexPattern)) {
             convertedValue = Boolean.FALSE;
         }
-
         return convertedValue;
     }
 
     private <E extends Enum<E>> E enumConverter(String value, Class<?> requiredType) {
         @SuppressWarnings("unchecked")
         Class<E> enumType = (Class<E>) requiredType;
-
         return Enum.valueOf(enumType, value);
     }
 
     private Object dateConverter(String value) {
-        return dateFormatList.stream()
-            .map(SimpleDateFormat::new)
-            .map(formatter -> convertWithExceptionIgnored(() -> parseDate(formatter, value)))
-            .filter(Objects::nonNull)
-            .findFirst()
-            .orElse(null);
+        return dateFormatList.stream().map(SimpleDateFormat::new).map(formatter -> convertWithExceptionIgnored(() -> parseDate(formatter, value))).filter(Objects::nonNull).findFirst().orElse(null);
     }
 
     private Object temporalConverter(String value, TemporalQuery<?> query) {
-        return dateFormatList.stream()
-            .map(pattern -> DateTimeFormatter.ofPattern(pattern).withZone(ZoneId.systemDefault()))
-            .map(formatter -> convertWithExceptionIgnored(() -> formatter.parse(value, query)))
-            .filter(Objects::nonNull)
-            .findFirst()
-            .orElse(null);
+        return dateFormatList.stream().map(pattern -> DateTimeFormatter.ofPattern(pattern).withZone(ZoneId.systemDefault())).map(formatter -> convertWithExceptionIgnored(() -> formatter.parse(value, query))).filter(Objects::nonNull).findFirst().orElse(null);
     }
 
     private Object numberConverter(String value, boolean parseBigDecimal) {
-        return decimalNumberFormatList.stream()
-            .map(format -> {
-                DecimalFormat decimalFormat = new DecimalFormat(format);
-
-                decimalFormat.setParseBigDecimal(parseBigDecimal);
-
-                return decimalFormat;
-            })
-            .map(format -> convertWithExceptionIgnored(() -> parseNumber(format, value)))
-            .filter(Objects::nonNull)
-            .findFirst()
-            .orElse(null);
+        return decimalNumberFormatList.stream().map(format -> {
+            DecimalFormat decimalFormat = new DecimalFormat(format);
+            decimalFormat.setParseBigDecimal(parseBigDecimal);
+            return decimalFormat;
+        }).map(format -> convertWithExceptionIgnored(() -> parseNumber(format, value))).filter(Objects::nonNull).findFirst().orElse(null);
     }
 
     @SneakyThrows
@@ -174,6 +124,5 @@ public class DefaultStringToTypeConverter implements StringToTypeConverter<Objec
     }
 
     public record ConverterHolder(Class<?> type, BiFunction<String, Class<?>, Object> conversionFunction) {
-
     }
 }

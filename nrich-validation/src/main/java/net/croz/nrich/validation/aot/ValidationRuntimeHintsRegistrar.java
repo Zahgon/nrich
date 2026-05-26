@@ -14,7 +14,6 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.validation.aot;
 
 import net.croz.nrich.validation.constraint.mapping.DefaultConstraintMappingContributor;
@@ -34,7 +33,6 @@ import org.springframework.aot.hint.MemberCategory;
 import org.springframework.aot.hint.RuntimeHints;
 import org.springframework.aot.hint.RuntimeHintsRegistrar;
 import org.springframework.aot.hint.TypeReference;
-
 import java.util.Collections;
 import java.util.List;
 
@@ -44,18 +42,10 @@ public class ValidationRuntimeHintsRegistrar implements RuntimeHintsRegistrar {
 
     public static final List<String> RESOURCE_PATTERN_LIST = List.of("META-INF/validation.xml", "META-INF/validation-configuration-1.1.xsd");
 
-    public static final List<TypeReference> TYPE_REFERENCE_LIST = Collections.unmodifiableList(TypeReference.listOf(
-        DefaultConstraintMappingContributor.class, ValidOibValidator.class, ValidSearchPropertiesValidator.class, ValidRangeValidator.class, MaxSizeInBytesValidator.class,
-        NotNullWhenValidator.class, NullWhenValidator.class, ValidFileValidator.class, ValidFileResolvableValidator.class, InListValidator.class, SpelExpressionValidator.class,
-        MinDateValidator.class, LastTimestampInDayValidator.class
-    ));
+    public static final List<TypeReference> TYPE_REFERENCE_LIST = Collections.unmodifiableList(TypeReference.listOf(DefaultConstraintMappingContributor.class, ValidOibValidator.class, ValidSearchPropertiesValidator.class, ValidRangeValidator.class, MaxSizeInBytesValidator.class, NotNullWhenValidator.class, NullWhenValidator.class, ValidFileValidator.class, ValidFileResolvableValidator.class, InListValidator.class, SpelExpressionValidator.class, MinDateValidator.class, LastTimestampInDayValidator.class));
 
     @Override
     public void registerHints(RuntimeHints hints, ClassLoader classLoader) {
-        RESOURCE_PATTERN_LIST.forEach(hints.resources()::registerPattern);
-
-        hints.resources().registerResourceBundle(RESOURCE_BUNDLE);
-
-        hints.reflection().registerTypes(TYPE_REFERENCE_LIST, hint -> hint.withMembers(MemberCategory.INVOKE_PUBLIC_CONSTRUCTORS));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

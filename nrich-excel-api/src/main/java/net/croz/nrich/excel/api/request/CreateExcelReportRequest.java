@@ -14,7 +14,6 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.excel.api.request;
 
 import lombok.Builder;
@@ -22,7 +21,6 @@ import lombok.Getter;
 import net.croz.nrich.excel.api.model.ColumnDataFormat;
 import net.croz.nrich.excel.api.model.MultiRowDataProvider;
 import net.croz.nrich.excel.api.model.TemplateVariable;
-
 import java.io.OutputStream;
 import java.util.List;
 
@@ -77,7 +75,7 @@ public class CreateExcelReportRequest {
      * @return A {@link CreateExcelReportRequest} builder instance
      */
     public static CreateExcelReportRequest.CreateExcelReportRequestBuilder fromFlatData(Object[][] data) {
-        return CreateExcelReportRequest.builder().multiRowDataProvider((start, limit) -> start == 0 ? data : null);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -87,13 +85,14 @@ public class CreateExcelReportRequest {
      * @return A {@link CreateExcelReportRequest} builder instance
      */
     public static CreateExcelReportRequest.CreateExcelReportRequestBuilder fromRowDataProvider(MultiRowDataProvider multiRowDataProvider) {
-        return CreateExcelReportRequest.builder().multiRowDataProvider(multiRowDataProvider);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * CreateExcelReportRequest builder (explicit to avoid errors while publishing javadoc).
      */
-    public static class CreateExcelReportRequestBuilder { // NOSONAR
+    public static class // NOSONAR
+    CreateExcelReportRequestBuilder {
     }
 
     private static CreateExcelReportRequest.CreateExcelReportRequestBuilder builder() {

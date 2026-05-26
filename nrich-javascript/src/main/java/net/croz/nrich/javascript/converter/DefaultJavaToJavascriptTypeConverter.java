@@ -14,13 +14,11 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.javascript.converter;
 
 import net.croz.nrich.javascript.api.converter.JavaToJavascriptTypeConverter;
 import net.croz.nrich.javascript.api.model.JavascriptType;
 import org.springframework.core.annotation.Order;
-
 import java.time.temporal.Temporal;
 import java.util.Calendar;
 import java.util.Collection;
@@ -31,37 +29,15 @@ import java.util.Map;
 @Order
 public class DefaultJavaToJavascriptTypeConverter implements JavaToJavascriptTypeConverter {
 
-    private static final Map<Class<?>, JavascriptType> CLASS_JAVASCRIPT_TYPE_MAP = Map.of(
-        Boolean.class, JavascriptType.BOOLEAN,
-        String.class, JavascriptType.STRING,
-        Character.class, JavascriptType.STRING,
-        Calendar.class, JavascriptType.DATE,
-        Date.class, JavascriptType.DATE,
-        Temporal.class, JavascriptType.DATE,
-        Number.class, JavascriptType.NUMBER,
-        Enum.class, JavascriptType.STRING,
-        Collection.class, JavascriptType.ARRAY
-    );
+    private static final Map<Class<?>, JavascriptType> CLASS_JAVASCRIPT_TYPE_MAP = Map.of(Boolean.class, JavascriptType.BOOLEAN, String.class, JavascriptType.STRING, Character.class, JavascriptType.STRING, Calendar.class, JavascriptType.DATE, Date.class, JavascriptType.DATE, Temporal.class, JavascriptType.DATE, Number.class, JavascriptType.NUMBER, Enum.class, JavascriptType.STRING, Collection.class, JavascriptType.ARRAY);
 
     @Override
     public boolean supports(Class<?> type) {
-        return true;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public String convert(Class<?> type) {
-        JavascriptType javascriptType;
-        if (type.isArray()) {
-            javascriptType = JavascriptType.ARRAY;
-        }
-        else {
-            javascriptType = CLASS_JAVASCRIPT_TYPE_MAP.entrySet().stream()
-                .filter(entry -> entry.getKey().isAssignableFrom(type))
-                .findFirst()
-                .map(Map.Entry::getValue)
-                .orElse(JavascriptType.OBJECT);
-        }
-
-        return javascriptType.name().toLowerCase(Locale.ROOT);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

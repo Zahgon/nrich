@@ -14,14 +14,12 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.registry.data.customizer;
 
 import lombok.RequiredArgsConstructor;
 import net.croz.nrich.formconfiguration.api.customizer.FormConfigurationMappingCustomizer;
 import net.croz.nrich.registry.api.core.service.RegistryClassResolvingService;
 import net.croz.nrich.registry.core.constants.RegistryClassResolvingConstants;
-
 import java.util.List;
 import java.util.Map;
 
@@ -34,7 +32,7 @@ public class RegistryDataFormConfigurationMappingCustomizer implements FormConfi
 
     @Override
     public void customizeConfigurationMapping(Map<String, Class<?>> formConfigurationMapping) {
-        registerRegistryFormConfiguration(formConfigurationMapping);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private void registerRegistryFormConfiguration(Map<String, Class<?>> formConfigurationMap) {
@@ -42,7 +40,6 @@ public class RegistryDataFormConfigurationMappingCustomizer implements FormConfi
             String registryClassName = registryClass.getName();
             String registryCreateFormId = String.format(RegistryClassResolvingConstants.REGISTRY_FORM_ID_FORMAT, registryClassName, RegistryClassResolvingConstants.REGISTRY_FORM_ID_CREATE_SUFFIX);
             String registryUpdateFormId = String.format(RegistryClassResolvingConstants.REGISTRY_FORM_ID_FORMAT, registryClassName, RegistryClassResolvingConstants.REGISTRY_FORM_ID_UPDATE_SUFFIX);
-
             formConfigurationMap.computeIfAbsent(registryCreateFormId, key -> registryClassResolvingService.resolveCreateClass(registryClassName));
             formConfigurationMap.computeIfAbsent(registryUpdateFormId, key -> registryClassResolvingService.resolveUpdateClass(registryClassName));
         });

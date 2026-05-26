@@ -14,7 +14,6 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.registry.data.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -33,16 +32,12 @@ public class DefaultRegistryDataRequestConversionService implements RegistryData
 
     @Override
     public Object convertEntityDataToTyped(CreateRegistryRequest request) {
-        Class<?> type = registryClassResolvingService.resolveCreateClass(request.classFullName());
-
-        return convertStringToInstance(request.jsonEntityData(), type);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Object convertEntityDataToTyped(UpdateRegistryRequest request) {
-        Class<?> type = registryClassResolvingService.resolveUpdateClass(request.classFullName());
-
-        return convertStringToInstance(request.jsonEntityData(), type);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @SneakyThrows

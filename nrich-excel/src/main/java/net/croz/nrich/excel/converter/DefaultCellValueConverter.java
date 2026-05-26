@@ -14,7 +14,6 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.excel.converter;
 
 import lombok.RequiredArgsConstructor;
@@ -23,7 +22,6 @@ import net.croz.nrich.excel.api.model.CellHolder;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.annotation.Order;
-
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -48,51 +46,30 @@ public class DefaultCellValueConverter implements CellValueConverter {
 
     @Override
     public void setCellValue(CellHolder cell, Object value) {
-        Optional.ofNullable(findConverter(value)).ifPresent(converterHolder -> converterHolder.setCellValueFunction.accept(cell, value));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public boolean supports(CellHolder cell, Object value) {
-        return findConverter(value) != null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private List<ConverterHolder> initializeConverterList() {
-        return List.of(
-            new ConverterHolder(Date.class, CellHolder::setCellValue),
-            new ConverterHolder(Calendar.class, CellHolder::setCellValue),
-            new ConverterHolder(Instant.class, (cell, value) -> cell.setCellValue(new Date(((Instant) value).toEpochMilli()))),
-            new ConverterHolder(LocalDate.class, CellHolder::setCellValue),
-            new ConverterHolder(LocalDateTime.class, CellHolder::setCellValue),
-            new ConverterHolder(ZonedDateTime.class, (cell, value) -> cell.setCellValue(((ZonedDateTime) value).toLocalDateTime())),
-            new ConverterHolder(OffsetDateTime.class, (cell, value) -> cell.setCellValue(((OffsetDateTime) value).toLocalDateTime())),
-            new ConverterHolder(Short.class, (cell, value) -> cell.setCellValue(((Number) value).longValue())),
-            new ConverterHolder(Integer.class, (cell, value) -> cell.setCellValue(((Number) value).longValue())),
-            new ConverterHolder(Long.class, (cell, value) -> cell.setCellValue(((Number) value).longValue())),
-            new ConverterHolder(BigDecimal.class, (cell, value) -> cell.setCellValue(((Number) value).doubleValue())),
-            new ConverterHolder(Float.class, (cell, value) -> cell.setCellValue(((Number) value).doubleValue())),
-            new ConverterHolder(Double.class, (cell, value) -> cell.setCellValue(((Number) value).doubleValue())),
-            new ConverterHolder(Enum.class, (cell, value) -> cell.setCellValue(resolveEnumValue(value)))
-        );
+        return List.of(new ConverterHolder(Date.class, CellHolder::setCellValue), new ConverterHolder(Calendar.class, CellHolder::setCellValue), new ConverterHolder(Instant.class, (cell, value) -> cell.setCellValue(new Date(((Instant) value).toEpochMilli()))), new ConverterHolder(LocalDate.class, CellHolder::setCellValue), new ConverterHolder(LocalDateTime.class, CellHolder::setCellValue), new ConverterHolder(ZonedDateTime.class, (cell, value) -> cell.setCellValue(((ZonedDateTime) value).toLocalDateTime())), new ConverterHolder(OffsetDateTime.class, (cell, value) -> cell.setCellValue(((OffsetDateTime) value).toLocalDateTime())), new ConverterHolder(Short.class, (cell, value) -> cell.setCellValue(((Number) value).longValue())), new ConverterHolder(Integer.class, (cell, value) -> cell.setCellValue(((Number) value).longValue())), new ConverterHolder(Long.class, (cell, value) -> cell.setCellValue(((Number) value).longValue())), new ConverterHolder(BigDecimal.class, (cell, value) -> cell.setCellValue(((Number) value).doubleValue())), new ConverterHolder(Float.class, (cell, value) -> cell.setCellValue(((Number) value).doubleValue())), new ConverterHolder(Double.class, (cell, value) -> cell.setCellValue(((Number) value).doubleValue())), new ConverterHolder(Enum.class, (cell, value) -> cell.setCellValue(resolveEnumValue(value))));
     }
 
     private ConverterHolder findConverter(Object value) {
         if (value == null) {
             return null;
         }
-
-        return converterHolderList.stream()
-            .filter(converterHolder -> converterHolder.type().isAssignableFrom(value.getClass()))
-            .findFirst()
-            .orElse(null);
+        return converterHolderList.stream().filter(converterHolder -> converterHolder.type().isAssignableFrom(value.getClass())).findFirst().orElse(null);
     }
 
     private String resolveEnumValue(Object value) {
         String messageCode = String.format(ENUM_MESSAGE_FORMAT, value.getClass().getName(), value);
-
         return messageSource.getMessage(messageCode, null, value.toString(), LocaleContextHolder.getLocale());
     }
 
     public record ConverterHolder(Class<?> type, BiConsumer<CellHolder, Object> setCellValueFunction) {
-
     }
 }

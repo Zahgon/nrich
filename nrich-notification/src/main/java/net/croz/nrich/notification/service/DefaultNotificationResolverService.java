@@ -14,7 +14,6 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.notification.service;
 
 import lombok.RequiredArgsConstructor;
@@ -33,7 +32,6 @@ import net.croz.nrich.notification.constant.NotificationConstants;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
-
 import jakarta.validation.ConstraintViolationException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -52,104 +50,40 @@ public class DefaultNotificationResolverService implements NotificationResolverS
 
     @Override
     public ValidationFailureNotification createNotificationForValidationFailure(Errors errors, Class<?> validationFailedOwningType, AdditionalNotificationData additionalNotificationData) {
-        String typeName = validationFailedOwningType == null ? null : validationFailedOwningType.getName();
-        NotificationSeverity severity = Optional.ofNullable(additionalNotificationData.getSeverity()).orElse(NotificationSeverity.WARNING);
-
-        String title;
-        if (typeName == null) {
-            title = notificationMessageResolverService.resolveMessage(toList(NotificationConstants.VALIDATION_FAILED_MESSAGE_TITLE_CODE), NotificationConstants.EMPTY_MESSAGE);
-        }
-        else {
-            String titleCode = String.format(NotificationConstants.PREFIX_MESSAGE_FORMAT, typeName, NotificationConstants.MESSAGE_TITLE_SUFFIX);
-
-            title = notificationMessageResolverService.resolveMessage(toList(titleCode, NotificationConstants.VALIDATION_FAILED_MESSAGE_TITLE_CODE), NotificationConstants.EMPTY_MESSAGE);
-        }
-
-        String content = notificationMessageResolverService.resolveMessage(toList(NotificationConstants.VALIDATION_FAILED_CONTENT_CODE));
-        List<ValidationError> validationErrorList = convertValidationErrorsToMessageList(errors, validationFailedOwningType);
-        List<String> additionalNotificationDataMessageList = resolveMessageListFromNotificationData(additionalNotificationData.getMessageListDataMap());
-        List<String> validationMessageList = validationErrorList.stream()
-            .flatMap(value -> value.errorMessageList().stream())
-            .toList();
-
-        List<String> messageList = Stream.concat(additionalNotificationDataMessageList.stream(), validationMessageList.stream()).toList();
-        String notificationCodeMessage = notificationMessageResolverService.resolveMessage(toList(NotificationConstants.VALIDATION_FAILED_CODE), NotificationConstants.VALIDATION_FAILED_CODE);
-
-        return new ValidationFailureNotification(
-            title, content, notificationCodeMessage, messageList, severity, additionalNotificationData.getUxNotificationOptions(), validationErrorList
-        );
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public ValidationFailureNotification createNotificationForValidationFailure(ConstraintViolationException exception, AdditionalNotificationData additionalNotificationData) {
-        Object target = constraintConversionService.resolveTarget(exception.getConstraintViolations());
-        Errors errors = constraintConversionService.convertConstraintViolationsToErrors(exception.getConstraintViolations(), target, NotificationConstants.UNKNOWN_VALIDATION_TARGET);
-
-        Class<?> targetClass = Optional.ofNullable(target).map(Object::getClass).orElse(null);
-
-        return createNotificationForValidationFailure(errors, targetClass, additionalNotificationData);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Notification createNotificationForException(Throwable throwable, AdditionalNotificationData additionalNotificationData) {
-        String typeName = throwable.getClass().getName();
-
-        String titleCode = String.format(NotificationConstants.PREFIX_MESSAGE_FORMAT, typeName, NotificationConstants.MESSAGE_TITLE_SUFFIX);
-        String title = notificationMessageResolverService.resolveMessage(toList(titleCode, NotificationConstants.ERROR_OCCURRED_MESSAGE_TITLE_CODE), NotificationConstants.EMPTY_MESSAGE);
-
-        String severityCode = String.format(NotificationConstants.PREFIX_MESSAGE_FORMAT, typeName, NotificationConstants.MESSAGE_SEVERITY_SUFFIX);
-        String content = resolveExceptionContent(throwable);
-
-        String notificationCode = String.format(NotificationConstants.PREFIX_MESSAGE_FORMAT, typeName, NotificationConstants.MESSAGE_CODE_SUFFIX);
-        String notificationCodeMessage = notificationMessageResolverService.resolveMessage(toList(notificationCode), notificationCode);
-
-        NotificationSeverity severity = Optional.ofNullable(additionalNotificationData.getSeverity()).orElse(resolveExceptionSeverity(severityCode));
-        List<String> messageList = resolveMessageListFromNotificationData(additionalNotificationData.getMessageListDataMap());
-
-        return new Notification(title, content, notificationCodeMessage, messageList, severity, additionalNotificationData.getUxNotificationOptions());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Notification createNotificationForAction(String actionName, AdditionalNotificationData additionalNotificationData) {
-        String titleCode = String.format(NotificationConstants.PREFIX_MESSAGE_FORMAT, actionName, NotificationConstants.MESSAGE_TITLE_SUFFIX);
-        String contentCode = String.format(NotificationConstants.PREFIX_MESSAGE_FORMAT, actionName, NotificationConstants.MESSAGE_CONTENT_SUFFIX);
-
-        String title = notificationMessageResolverService.resolveMessage(toList(titleCode, NotificationConstants.SUCCESS_MESSAGE_TITLE_CODE), NotificationConstants.EMPTY_MESSAGE);
-        String content = notificationMessageResolverService.resolveMessage(toList(contentCode, NotificationConstants.SUCCESS_DEFAULT_CODE));
-        NotificationSeverity severity = Optional.ofNullable(additionalNotificationData.getSeverity()).orElse(NotificationSeverity.INFO);
-        List<String> messageList = resolveMessageListFromNotificationData(additionalNotificationData.getMessageListDataMap());
-
-        String notificationCodeMessage = notificationMessageResolverService.resolveMessage(toList(actionName), actionName);
-
-        return new Notification(title, content, notificationCodeMessage, messageList, severity, additionalNotificationData.getUxNotificationOptions());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private List<ValidationError> convertValidationErrorsToMessageList(Errors errors, Class<?> validationFailedOwningType) {
         Map<String, List<String>> resultMap = new LinkedHashMap<>();
-
         for (ObjectError objectError : errors.getAllErrors()) {
             String constraintFieldName = constraintFieldNameOrDefault(objectError);
             String message = notificationMessageResolverService.resolveMessageForObjectError(validationFailedOwningType, objectError);
-
             resultMap.computeIfAbsent(constraintFieldName, key -> new ArrayList<>());
-
             resultMap.get(constraintFieldName).add(message);
         }
-
-        return resultMap.entrySet().stream()
-            .map(value -> new ValidationError(value.getKey(), value.getValue()))
-            .toList();
+        return resultMap.entrySet().stream().map(value -> new ValidationError(value.getKey(), value.getValue())).toList();
     }
 
     private List<String> resolveMessageListFromNotificationData(Map<String, ?> additionalNotificationData) {
         if (additionalNotificationData == null) {
             return Collections.emptyList();
         }
-
-        return additionalNotificationData.entrySet().stream()
-            .map(this::resolveMessageForAdditionalData)
-            .filter(message -> !NotificationConstants.UNDEFINED_MESSAGE_VALUE.equals(message))
-            .toList();
+        return additionalNotificationData.entrySet().stream().map(this::resolveMessageForAdditionalData).filter(message -> !NotificationConstants.UNDEFINED_MESSAGE_VALUE.equals(message)).toList();
     }
 
     private String constraintFieldNameOrDefault(ObjectError objectError) {
@@ -158,13 +92,11 @@ public class DefaultNotificationResolverService implements NotificationResolverS
 
     private String resolveMessageForAdditionalData(Map.Entry<String, ?> additionalDataEntry) {
         String messageCode = String.format(NotificationConstants.ADDITIONAL_EXCEPTION_DATA_MESSAGE_CODE_FORMAT, additionalDataEntry.getKey());
-
         return notificationMessageResolverService.resolveMessage(toList(messageCode), toList(additionalDataEntry.getValue()), NotificationConstants.UNDEFINED_MESSAGE_VALUE);
     }
 
     private NotificationSeverity resolveExceptionSeverity(String messageCode) {
         String severityValue = notificationMessageResolverService.resolveMessage(toList(messageCode), NotificationSeverity.ERROR.name());
-
         return NotificationSeverity.valueOf(severityValue);
     }
 
@@ -172,21 +104,17 @@ public class DefaultNotificationResolverService implements NotificationResolverS
         if (throwable instanceof ExceptionWithMessage) {
             return throwable.getMessage();
         }
-
         String contentCode;
         if (throwable instanceof ExceptionWithMessageCode exceptionWithMessageCode) {
             contentCode = exceptionWithMessageCode.getMessageCode();
-        }
-        else {
+        } else {
             String typeName = throwable.getClass().getName();
             contentCode = String.format(NotificationConstants.PREFIX_MESSAGE_FORMAT, typeName, NotificationConstants.MESSAGE_CONTENT_SUFFIX);
         }
-
         List<Object> argumentList = new ArrayList<>();
         if (throwable instanceof ExceptionWithArguments exceptionWithArguments) {
             argumentList.addAll(toList(exceptionWithArguments.getArgumentList()));
         }
-
         return notificationMessageResolverService.resolveMessage(toList(contentCode, NotificationConstants.ERROR_OCCURRED_DEFAULT_CODE), argumentList, null);
     }
 
@@ -195,7 +123,6 @@ public class DefaultNotificationResolverService implements NotificationResolverS
         if (codeList == null) {
             return Collections.emptyList();
         }
-
         return List.of(codeList);
     }
 }

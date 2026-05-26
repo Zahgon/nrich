@@ -14,12 +14,10 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.webmvc.localeresolver;
 
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 import org.springframework.web.util.WebUtils;
-
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -38,11 +36,6 @@ public class ConstrainedSessionLocaleResolver extends SessionLocaleResolver {
 
     @Override
     public void setLocale(HttpServletRequest request, HttpServletResponse response, Locale locale) {
-        Locale localeToSet = locale;
-        if (locale == null || !supportedLocaleCodeList.contains(locale.toString())) {
-            localeToSet = Locale.forLanguageTag(defaultLocaleCode);
-        }
-
-        WebUtils.setSessionAttribute(request, LOCALE_SESSION_ATTRIBUTE_NAME, localeToSet);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

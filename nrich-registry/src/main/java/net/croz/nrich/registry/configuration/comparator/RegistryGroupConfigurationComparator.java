@@ -14,12 +14,10 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.registry.configuration.comparator;
 
 import net.croz.nrich.registry.api.configuration.model.RegistryGroupConfiguration;
 import org.springframework.util.CollectionUtils;
-
 import java.util.Comparator;
 import java.util.List;
 
@@ -31,13 +29,6 @@ public class RegistryGroupConfigurationComparator extends DisplayOrderComparator
 
     @Override
     public int compare(RegistryGroupConfiguration firstConfiguration, RegistryGroupConfiguration secondConfiguration) {
-        String firstGroupId = firstConfiguration.groupId();
-        String secondGroupId = secondConfiguration.groupId();
-
-        if (CollectionUtils.isEmpty(getPropertyDisplayOrderList())) {
-            return firstGroupId.compareTo(secondGroupId);
-        }
-
-        return comparePropertiesByDisplayList(firstGroupId, secondGroupId);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

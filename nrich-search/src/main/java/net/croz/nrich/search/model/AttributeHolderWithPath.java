@@ -14,16 +14,15 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.search.model;
 
 public record AttributeHolderWithPath(String path, AttributeHolder attributeHolder) {
 
     public boolean isFound() {
-        return attributeHolder.isFound();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public static AttributeHolderWithPath notFound() {
-        return new AttributeHolderWithPath(null, AttributeHolder.notFound());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

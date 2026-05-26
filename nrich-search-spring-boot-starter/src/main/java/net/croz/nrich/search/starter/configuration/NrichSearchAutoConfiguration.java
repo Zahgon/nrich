@@ -14,7 +14,6 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.search.starter.configuration;
 
 import net.croz.nrich.search.api.converter.StringToEntityPropertyMapConverter;
@@ -33,7 +32,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
-
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -50,29 +48,18 @@ public class NrichSearchAutoConfiguration {
     @ConditionalOnMissingBean(name = "searchDefaultStringToTypeConverter")
     @Bean
     public StringToTypeConverter<Object> searchDefaultStringToTypeConverter(NrichSearchProperties searchProperties) {
-        List<String> dateFormatList = searchProperties.stringSearch().dateFormatList();
-        List<String> decimalFormatList = searchProperties.stringSearch().decimalNumberFormatList();
-        String booleanTrueRegexPattern = searchProperties.stringSearch().booleanTrueRegexPattern();
-        String booleanFalseRegexPattern = searchProperties.stringSearch().booleanFalseRegexPattern();
-
-        return new DefaultStringToTypeConverter(dateFormatList, decimalFormatList, booleanTrueRegexPattern, booleanFalseRegexPattern);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @ConditionalOnMissingBean(name = "searchStringToEntityPropertyMapConverter")
     @Bean
     public StringToEntityPropertyMapConverter searchStringToEntityPropertyMapConverter(@Lazy @Autowired(required = false) Map<String, StringToTypeConverter<?>> stringToTypeConverterList) {
-        @SuppressWarnings("java:S6204")
-        List<StringToTypeConverter<?>> searchConverters = stringToTypeConverterList.entrySet().stream()
-            .filter(entry -> entry.getKey().toLowerCase(Locale.ROOT).contains(SEARCH_CONVERTER))
-            .map(Map.Entry::getValue)
-            .collect(Collectors.toList());
-
-        return new DefaultStringToEntityPropertyMapConverter(searchConverters);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @ConditionalOnMissingBean
     @Bean
     public RepositoryFactorySupportFactory searchRepositoryFactorySupportFactory(StringToEntityPropertyMapConverter searchStringToEntityPropertyMapConverter) {
-        return new SearchRepositoryFactorySupportFactory(searchStringToEntityPropertyMapConverter);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

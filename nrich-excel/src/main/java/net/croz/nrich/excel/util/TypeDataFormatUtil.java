@@ -14,11 +14,9 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.excel.util;
 
 import net.croz.nrich.excel.api.model.TypeDataFormat;
-
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.Timestamp;
@@ -38,46 +36,11 @@ public final class TypeDataFormatUtil {
     private TypeDataFormatUtil() {
     }
 
-    public static List<TypeDataFormat> resolveTypeDataFormatList(
-        String dateFormat, String dateTimeFormat, String integerNumberFormat, String decimalNumberFormat, boolean writeDateWithTime, List<TypeDataFormat> additionalTypeDataFormatList
-    ) {
-        String resolvedDateTimeFormat = writeDateWithTime ? dateTimeFormat : dateFormat;
-
-        List<TypeDataFormat> nonNullAdditionalDataFormatList = Optional.ofNullable(additionalTypeDataFormatList).orElse(Collections.emptyList());
-
-        List<TypeDataFormat> typeDataFormatList = List.of(
-            new TypeDataFormat(Date.class, dateFormat),
-            new TypeDataFormat(Instant.class, dateFormat),
-            new TypeDataFormat(LocalDate.class, dateFormat),
-            new TypeDataFormat(java.sql.Date.class, dateFormat),
-            new TypeDataFormat(LocalDateTime.class, resolvedDateTimeFormat),
-            new TypeDataFormat(ZonedDateTime.class, resolvedDateTimeFormat),
-            new TypeDataFormat(OffsetDateTime.class, resolvedDateTimeFormat),
-            new TypeDataFormat(Timestamp.class, resolvedDateTimeFormat),
-            new TypeDataFormat(Short.class, integerNumberFormat),
-            new TypeDataFormat(Integer.class, integerNumberFormat),
-            new TypeDataFormat(Long.class, integerNumberFormat),
-            new TypeDataFormat(BigInteger.class, integerNumberFormat),
-            new TypeDataFormat(Float.class, decimalNumberFormat),
-            new TypeDataFormat(Double.class, decimalNumberFormat),
-            new TypeDataFormat(BigDecimal.class, decimalNumberFormat)
-        );
-
-        List<TypeDataFormat> allTypeDataFormatList = typeDataFormatList.stream()
-            .map(typeDataFormat -> Optional.ofNullable(findTypeDataFormat(nonNullAdditionalDataFormatList, typeDataFormat.type())).orElse(typeDataFormat))
-            .toList();
-
-        List<TypeDataFormat> notAddedAdditionalTypeDataFormatList = nonNullAdditionalDataFormatList.stream()
-            .filter(typeDataFormat -> findTypeDataFormat(allTypeDataFormatList, typeDataFormat.type()) == null)
-            .toList();
-
-        return Stream.concat(allTypeDataFormatList.stream(), notAddedAdditionalTypeDataFormatList.stream()).toList();
+    public static List<TypeDataFormat> resolveTypeDataFormatList(String dateFormat, String dateTimeFormat, String integerNumberFormat, String decimalNumberFormat, boolean writeDateWithTime, List<TypeDataFormat> additionalTypeDataFormatList) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private static TypeDataFormat findTypeDataFormat(List<TypeDataFormat> typeDataFormatList, Class<?> type) {
-        return typeDataFormatList.stream()
-            .filter(typeDataFormat -> type.equals(typeDataFormat.type()))
-            .findFirst()
-            .orElse(null);
+        return typeDataFormatList.stream().filter(typeDataFormat -> type.equals(typeDataFormat.type())).findFirst().orElse(null);
     }
 }

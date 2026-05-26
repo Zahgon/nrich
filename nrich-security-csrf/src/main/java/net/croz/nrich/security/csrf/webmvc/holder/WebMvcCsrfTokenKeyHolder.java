@@ -14,12 +14,10 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.security.csrf.webmvc.holder;
 
 import lombok.RequiredArgsConstructor;
 import net.croz.nrich.security.csrf.api.holder.CsrfTokenKeyHolder;
-
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.security.Key;
@@ -37,27 +35,21 @@ public class WebMvcCsrfTokenKeyHolder implements CsrfTokenKeyHolder {
 
     @Override
     public String getToken() {
-        String token = request.getHeader(tokenKeyName);
-
-        if (token == null) {
-            token = request.getParameter(tokenKeyName);
-        }
-
-        return token;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void storeToken(String csrfToken) {
-        response.setHeader(tokenKeyName, csrfToken);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Key getCryptoKey() {
-        return (Key) request.getSession().getAttribute(cryptoKeyName);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void storeCryptoKey(Key cryptoKey) {
-        request.getSession().setAttribute(cryptoKeyName, cryptoKey);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

@@ -14,7 +14,6 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.registry.api.data.interceptor;
 
 import net.croz.nrich.registry.api.data.request.ListRegistryRequest;
@@ -23,21 +22,21 @@ public abstract class BaseRegistryDataInterceptor implements RegistryDataInterce
 
     @Override
     public void beforeRegistryList(ListRegistryRequest request) {
-
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void beforeRegistryCreate(String classFullName, Object entityData) {
-
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void beforeRegistryUpdate(String classFullName, Object id, Object entityData) {
-
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void beforeRegistryDelete(String classFullName, Object id) {
-
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

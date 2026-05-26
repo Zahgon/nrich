@@ -14,7 +14,6 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.webmvc.service;
 
 import lombok.RequiredArgsConstructor;
@@ -34,18 +33,6 @@ public class MessageSourceExceptionHttpStatusResolverService implements Exceptio
 
     @Override
     public Integer resolveHttpStatusForException(Exception exception) {
-        String statusMessageCode = String.format(PREFIX_FORMAT, exception.getClass().getName(), EXCEPTION_HTTP_STATUS_SUFFIX);
-
-        DefaultMessageSourceResolvable defaultMessageSourceResolvable = new DefaultMessageSourceResolvable(statusMessageCode);
-
-        Integer status = null;
-        try {
-            status = Integer.valueOf(messageSource.getMessage(defaultMessageSourceResolvable, LocaleContextHolder.getLocale()));
-        }
-        catch (Exception ignored) {
-            // ignored
-        }
-
-        return status;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

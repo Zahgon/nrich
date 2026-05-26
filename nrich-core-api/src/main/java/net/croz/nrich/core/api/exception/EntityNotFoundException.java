@@ -14,7 +14,6 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.core.api.exception;
 
 /**
@@ -32,6 +31,6 @@ public class EntityNotFoundException extends RuntimeException implements Excepti
 
     @Override
     public Object[] getArgumentList() {
-        return argumentList;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

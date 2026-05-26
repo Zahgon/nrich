@@ -14,7 +14,6 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.excel.starter.configuration;
 
 import net.croz.nrich.excel.api.converter.CellValueConverter;
@@ -33,7 +32,6 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ResourceLoader;
-
 import java.util.List;
 
 @EnableConfigurationProperties(NrichExcelProperties.class)
@@ -43,23 +41,18 @@ public class NrichExcelAutoConfiguration {
     @ConditionalOnProperty(name = "nrich.excel.default-converter-enabled", havingValue = "true", matchIfMissing = true)
     @Bean
     public CellValueConverter defaultCellValueConverter(MessageSource messageSource) {
-        return new DefaultCellValueConverter(messageSource);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @ConditionalOnMissingBean
     @Bean
     public ExcelReportGeneratorFactory excelReportGeneratorFactory(ResourceLoader resourceLoader, List<CellValueConverter> cellValueConverterList, NrichExcelProperties excelProperties) {
-        List<TypeDataFormat> typeDataFormatList = TypeDataFormatUtil.resolveTypeDataFormatList(
-            excelProperties.dateFormat(), excelProperties.dateTimeFormat(), excelProperties.integerNumberFormat(),
-            excelProperties.decimalNumberFormat(), excelProperties.writeDateWithTime(), excelProperties.typeDataFormatList()
-        );
-
-        return new PoiExcelReportGeneratorFactory(resourceLoader, cellValueConverterList, typeDataFormatList);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @ConditionalOnMissingBean
     @Bean
     public ExcelReportService excelReportService(ExcelReportGeneratorFactory excelReportGeneratorFactory) {
-        return new DefaultExcelReportService(excelReportGeneratorFactory);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

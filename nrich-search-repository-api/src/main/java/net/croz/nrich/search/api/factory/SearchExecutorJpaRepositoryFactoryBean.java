@@ -14,14 +14,12 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.search.api.factory;
 
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.data.jpa.repository.support.JpaRepositoryFactoryBean;
 import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.core.support.RepositoryFactorySupport;
-
 import jakarta.persistence.EntityManager;
 
 /**
@@ -46,18 +44,16 @@ public class SearchExecutorJpaRepositoryFactoryBean<T extends Repository<S, I>, 
 
     @Override
     public void afterPropertiesSet() {
-        this.repositoryFactorySupportFactory = beanFactory.getBean(RepositoryFactorySupportFactory.class);
-        super.afterPropertiesSet();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void setBeanFactory(BeanFactory beanFactory) {
-        this.beanFactory = beanFactory;
-        super.setBeanFactory(beanFactory);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     protected RepositoryFactorySupport createRepositoryFactory(EntityManager entityManager) {
-        return repositoryFactorySupportFactory.createRepositoryFactory(repositoryInterface, entityManager);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

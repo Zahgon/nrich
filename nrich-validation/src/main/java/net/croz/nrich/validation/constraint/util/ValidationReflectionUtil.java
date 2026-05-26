@@ -14,12 +14,10 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.validation.constraint.util;
 
 import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
-
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Objects;
@@ -33,20 +31,15 @@ public final class ValidationReflectionUtil {
     }
 
     public static Method findGetterMethod(Class<?> type, String fieldName) {
-        return getterMethodNames(fieldName)
-            .map(methodName -> ReflectionUtils.findMethod(type, methodName))
-            .filter(Objects::nonNull)
-            .findFirst()
-            .orElse(null);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public static Object invokeMethod(Method method, Object target) {
-        return ReflectionUtils.invokeMethod(method, target);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private static Stream<String> getterMethodNames(String fieldName) {
         String capitalizedFieldName = StringUtils.capitalize(fieldName);
-
         return Stream.concat(Arrays.stream(METHOD_PATTERN_LIST).map(value -> String.format(value, capitalizedFieldName)), Stream.of(fieldName));
     }
 }

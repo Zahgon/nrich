@@ -14,7 +14,6 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.excel.generator;
 
 import lombok.RequiredArgsConstructor;
@@ -26,7 +25,6 @@ import net.croz.nrich.excel.api.model.TypeDataFormat;
 import net.croz.nrich.excel.api.request.CreateReportGeneratorRequest;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.util.Assert;
-
 import java.io.InputStream;
 import java.util.List;
 
@@ -41,16 +39,7 @@ public class PoiExcelReportGeneratorFactory implements ExcelReportGeneratorFacto
 
     @Override
     public ExcelReportGenerator createReportGenerator(CreateReportGeneratorRequest request) {
-        Assert.isTrue(request.getOutputStream() != null, "OutputStream cannot be null");
-        Assert.hasText(request.getTemplatePath(), "Template path cannot be null");
-        Assert.isTrue(request.getFirstRowIndex() >= 0, "Row index must be greater or equal to 0");
-
-        InputStream template = resolveTemplate(request.getTemplatePath());
-
-        return new PoiExcelReportGenerator(
-            cellValueConverterList, request.getOutputStream(), template, request.getTemplateVariableList(), typeDataFormatList, request.getColumnDataFormatList(), request.getFirstRowIndex(),
-            request.isAutoSizeColumns()
-        );
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @SneakyThrows

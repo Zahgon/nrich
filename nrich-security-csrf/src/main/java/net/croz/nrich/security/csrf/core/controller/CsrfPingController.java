@@ -14,13 +14,11 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.security.csrf.core.controller;
 
 import net.croz.nrich.security.csrf.core.constants.CsrfConstants;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import java.util.Map;
 
 /**
@@ -34,6 +32,6 @@ public class CsrfPingController {
 
     @RequestMapping("${nrich.security.csrf.endpoint-path:" + CsrfConstants.CSRF_DEFAULT_PING_URI + "}")
     public Map<String, Boolean> ping() {
-        return Map.of(SUCCESS_KEY, true);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

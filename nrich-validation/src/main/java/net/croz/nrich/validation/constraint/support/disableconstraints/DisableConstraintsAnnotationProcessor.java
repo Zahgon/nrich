@@ -14,13 +14,11 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.validation.constraint.support.disableconstraints;
 
 import net.croz.nrich.validation.api.constraint.DisableConstraints;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
-
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -38,33 +36,25 @@ public class DisableConstraintsAnnotationProcessor {
     private final ConcurrentMap<Class<?>, Map<String, List<Class<? extends Annotation>>>> disableConstraintsHolderMap = new ConcurrentHashMap<>();
 
     public Map<String, List<Class<? extends Annotation>>> getDisabledConstraintForType(Class<?> type) {
-        return disableConstraintsHolderMap.computeIfAbsent(type, this::createDisableConstraintsPathMap);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private Map<String, List<Class<? extends Annotation>>> createDisableConstraintsPathMap(Class<?> type) {
         Map<String, List<Class<? extends Annotation>>> pathHolderMap = new HashMap<>();
-
         ReflectionUtils.doWithFields(type, field -> {
             DisableConstraints[] disableConstraints = field.getAnnotationsByType(DisableConstraints.class);
-
             registerDisableConstraints(pathHolderMap, disableConstraints, PathUtil.getPath(type, field.getName()), false);
         });
-
         ReflectionUtils.doWithMethods(type, method -> {
             DisableConstraints[] disableConstraints = method.getAnnotationsByType(DisableConstraints.class);
             Matcher matcher = GETTER_METHOD_PATTERN.matcher(method.getName());
-
             if (matcher.matches()) {
                 String propertyName = StringUtils.uncapitalize(matcher.group(2));
-
                 registerDisableConstraints(pathHolderMap, disableConstraints, PathUtil.getPath(type, propertyName), false);
             }
         });
-
         DisableConstraints[] disableConstraints = type.getAnnotationsByType(DisableConstraints.class);
-
         registerDisableConstraints(pathHolderMap, disableConstraints, PathUtil.getPath(type, null), true);
-
         return pathHolderMap;
     }
 
@@ -73,9 +63,7 @@ public class DisableConstraintsAnnotationProcessor {
             if (StringUtils.hasText(disableConstraint.propertyName()) && !isTypeAnnotation) {
                 throw new IllegalArgumentException("Property name not allowed on method or property annotation.");
             }
-
             String fullPath = PathUtil.getPath(path, disableConstraint.propertyName());
-
             pathHolderMap.put(fullPath, List.of(disableConstraint.value()));
         });
     }

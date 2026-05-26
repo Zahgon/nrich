@@ -14,7 +14,6 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.registry.enumdata.controller;
 
 import lombok.RequiredArgsConstructor;
@@ -26,7 +25,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Map;
@@ -40,11 +38,11 @@ public class RegistryEnumController {
 
     @PostMapping("list-bulk")
     public Map<String, List<EnumResult>> listBulk(@RequestBody @Valid ListBulkRegistryEnumRequest request) {
-        return registryEnumService.listBulk(request);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @PostMapping("list")
     public List<EnumResult> list(@RequestBody @Valid ListRegistryEnumRequest request) {
-        return registryEnumService.list(request);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

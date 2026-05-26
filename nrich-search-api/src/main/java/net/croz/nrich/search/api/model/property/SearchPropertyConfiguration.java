@@ -14,13 +14,11 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.search.api.model.property;
 
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-
 import java.sql.Date;
 import java.time.temporal.Temporal;
 import java.util.List;
@@ -74,14 +72,6 @@ public class SearchPropertyConfiguration {
     private String collectionQuerySuffix;
 
     public static SearchPropertyConfiguration defaultSearchPropertyConfiguration() {
-        return new SearchPropertyConfigurationBuilder()
-            .rangeQuerySupportedClassList(List.of(Date.class, java.util.Date.class, Temporal.class, Number.class))
-            .defaultSubqueryJoinAttribute("id")
-            .rangeQueryFromIncludingSuffix("FromIncluding")
-            .rangeQueryFromSuffix("From")
-            .rangeQueryToIncludingSuffix("ToIncluding")
-            .rangeQueryToSuffix("To")
-            .collectionQuerySuffix("SearchList")
-            .build();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

@@ -14,7 +14,6 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.notification.service;
 
 import lombok.RequiredArgsConstructor;
@@ -29,7 +28,6 @@ import org.springframework.validation.Errors;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.util.UrlPathHelper;
-
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
 import java.util.Locale;
@@ -42,68 +40,52 @@ public class WebMvcNotificationResponseService implements NotificationResponseSe
 
     @Override
     public NotificationResponse responseWithValidationFailureNotification(Errors errors, Class<?> validationFailedOwningType, AdditionalNotificationData additionalNotificationData) {
-        Notification notification = notificationResolverService.createNotificationForValidationFailure(errors, validationFailedOwningType, additionalNotificationData);
-
-        return new NotificationResponse(notification);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public NotificationResponse responseWithValidationFailureNotification(ConstraintViolationException exception, AdditionalNotificationData additionalNotificationData) {
-        Notification notification = notificationResolverService.createNotificationForValidationFailure(exception, additionalNotificationData);
-
-        return new NotificationResponse(notification);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public NotificationResponse responseWithExceptionNotification(Throwable throwable, AdditionalNotificationData additionalNotificationData) {
-        Notification notification = notificationResolverService.createNotificationForException(throwable, additionalNotificationData);
-
-        return new NotificationResponse(notification);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public NotificationResponse responseWithNotificationActionResolvedFromRequest(AdditionalNotificationData additionalNotificationData) {
-        String actionName = extractActionNameFromCurrentRequest();
-
-        return responseWithNotification(actionName, additionalNotificationData);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public NotificationResponse responseWithNotification(String actionName, AdditionalNotificationData additionalNotificationData) {
-        Notification notification = notificationResolverService.createNotificationForAction(actionName, additionalNotificationData);
-
-        return new NotificationResponse(notification);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public <D> NotificationDataResponse<D> responseWithNotificationActionResolvedFromRequest(D data, AdditionalNotificationData additionalNotificationData) {
-        String actionName = extractActionNameFromCurrentRequest();
-
-        return responseWithNotification(data, actionName, additionalNotificationData);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public <D> NotificationDataResponse<D> responseWithNotification(D data, String actionName, AdditionalNotificationData additionalNotificationData) {
-        Notification notification = notificationResolverService.createNotificationForAction(actionName, additionalNotificationData);
-
-        return new NotificationDataResponse<>(notification, data);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public NotificationResolverService notificationResolverService() {
-        return notificationResolverService;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private String extractActionNameFromCurrentRequest() {
         HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
         String method = request.getMethod().toLowerCase(Locale.ROOT);
-
         return String.format(NotificationConstants.PREFIX_MESSAGE_FORMAT, extractActionNameFromRequest(request), method);
     }
 
     private String extractActionNameFromRequest(HttpServletRequest request) {
         String path = new UrlPathHelper().getPathWithinApplication(request);
-
         return path.substring(1).replace(NotificationConstants.REQUEST_PATH_SEPARATOR, NotificationConstants.MESSAGE_PATH_SEPARATOR);
     }
 }

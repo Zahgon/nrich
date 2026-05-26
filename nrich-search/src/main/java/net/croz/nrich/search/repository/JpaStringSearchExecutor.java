@@ -14,7 +14,6 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.search.repository;
 
 import net.croz.nrich.search.api.converter.StringToEntityPropertyMapConverter;
@@ -29,7 +28,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.support.JpaEntityInformation;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.transaction.annotation.Transactional;
-
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.TypedQuery;
@@ -62,71 +60,37 @@ public class JpaStringSearchExecutor<T> implements StringSearchExecutor<T> {
 
     @Override
     public <P> Optional<P> findOne(String searchTerm, List<String> propertyToSearchList, SearchConfiguration<T, P, Map<String, Object>> searchConfiguration) {
-        Map<String, Object> searchMap = convertToMap(searchTerm, propertyToSearchList, searchConfiguration);
-
-        CriteriaQuery<P> query = queryBuilder.buildQuery(searchMap, searchConfiguration, Sort.unsorted());
-
-        try {
-            return Optional.of(entityManager.createQuery(query).getSingleResult());
-        }
-        catch (NoResultException ignored) {
-            return Optional.empty();
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public <P> List<P> findAll(String searchTerm, List<String> propertyToSearchList, SearchConfiguration<T, P, Map<String, Object>> searchConfiguration) {
-        Map<String, Object> searchMap = convertToMap(searchTerm, propertyToSearchList, searchConfiguration);
-
-        CriteriaQuery<P> query = queryBuilder.buildQuery(searchMap, searchConfiguration, Sort.unsorted());
-
-        return entityManager.createQuery(query).getResultList();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public <P> List<P> findAll(String searchTerm, List<String> propertyToSearchList, SearchConfiguration<T, P, Map<String, Object>> searchConfiguration, Sort sort) {
-        Map<String, Object> searchMap = convertToMap(searchTerm, propertyToSearchList, searchConfiguration);
-
-        CriteriaQuery<P> query = queryBuilder.buildQuery(searchMap, searchConfiguration, sort);
-
-        return entityManager.createQuery(query).getResultList();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public <P> Page<P> findAll(String searchTerm, List<String> propertyToSearchList, SearchConfiguration<T, P, Map<String, Object>> searchConfiguration, Pageable pageable) {
-        Map<String, Object> searchMap = convertToMap(searchTerm, propertyToSearchList, searchConfiguration);
-
-        CriteriaQuery<P> query = queryBuilder.buildQuery(searchMap, searchConfiguration, pageable.getSort());
-        TypedQuery<P> typedQuery = entityManager.createQuery(query);
-
-        if (pageable.isPaged()) {
-            typedQuery.setFirstResult((int) pageable.getOffset()).setMaxResults(pageable.getPageSize());
-
-            return PageableExecutionUtils.getPage(typedQuery.getResultList(), pageable, () -> executeCountQuery(searchMap, searchConfiguration));
-        }
-
-        return new PageImpl<>(typedQuery.getResultList());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public <P> long count(String searchTerm, List<String> propertyToSearchList, SearchConfiguration<T, P, Map<String, Object>> searchConfiguration) {
-        Map<String, Object> searchMap = convertToMap(searchTerm, propertyToSearchList, searchConfiguration);
-
-        return executeCountQuery(searchMap, searchConfiguration);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public <P> boolean exists(String searchTerm, List<String> propertyToSearchList, SearchConfiguration<T, P, Map<String, Object>> searchConfiguration) {
-        Map<String, Object> searchMap = convertToMap(searchTerm, propertyToSearchList, searchConfiguration);
-
-        CriteriaQuery<Integer> query = queryBuilder.buildExistsQuery(searchMap, searchConfiguration);
-
-        return entityManager.createQuery(query).setMaxResults(1).getResultList().size() == 1;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Class<T> getDomainClass() {
-        return domainClass;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private Map<String, Object> convertToMap(String searchTerm, List<String> propertyToSearchList, SearchConfiguration<T, ?, Map<String, Object>> searchConfiguration) {
@@ -135,9 +99,7 @@ public class JpaStringSearchExecutor<T> implements StringSearchExecutor<T> {
 
     private <P> long executeCountQuery(Map<String, Object> searchMap, SearchConfiguration<T, P, Map<String, Object>> searchConfiguration) {
         CriteriaQuery<Long> countQuery = queryBuilder.buildCountQuery(searchMap, searchConfiguration);
-
         List<Long> totals = entityManager.createQuery(countQuery).getResultList();
-
         return QueryUtil.toCountResult(totals);
     }
 }

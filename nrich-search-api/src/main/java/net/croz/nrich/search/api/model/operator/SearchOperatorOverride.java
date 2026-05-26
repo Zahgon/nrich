@@ -14,7 +14,6 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.search.api.model.operator;
 
 import lombok.AccessLevel;
@@ -44,10 +43,10 @@ public class SearchOperatorOverride {
     private final SearchOperator searchOperator;
 
     public static SearchOperatorOverride forType(Class<?> propertyType, SearchOperator searchOperator) {
-        return new SearchOperatorOverride(propertyType, null, searchOperator);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public static SearchOperatorOverride forPath(String propertyPath, SearchOperator searchOperator) {
-        return new SearchOperatorOverride(null, propertyPath, searchOperator);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

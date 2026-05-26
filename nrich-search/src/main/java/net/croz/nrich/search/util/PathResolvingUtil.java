@@ -14,7 +14,6 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.search.util;
 
 import jakarta.persistence.criteria.From;
@@ -40,59 +39,35 @@ public final class PathResolvingUtil {
     }
 
     public static String[] convertToPathList(String path) {
-        return path.split(PATH_REGEX);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public static String joinPath(String... pathList) {
-        return String.join(PATH_SEPARATOR, pathList);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public static String joinPath(List<String> pathList, String currentPath) {
-        List<String> fullPathList = new ArrayList<>(pathList);
-
-        fullPathList.add(currentPath);
-
-        return String.join(PATH_SEPARATOR, fullPathList);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public static String removeFirstPathElement(String[] path) {
-        return String.join(PATH_SEPARATOR, Arrays.copyOfRange(path, 1, path.length));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public static Path<?> calculateFullPath(Path<?> rootPath, JoinType defaultJoinType, String[] pathList) {
-        JoinType calculatedJoinPath = Optional.ofNullable(defaultJoinType).orElse(JoinType.INNER);
-        Path<?> calculatedPath = rootPath;
-
-        for (String currentPathSegment : pathList) {
-            if (shouldJoinPath(calculatedPath, currentPathSegment)) {
-                From<?, ?> from = (From<?, ?>) calculatedPath;
-
-                calculatedPath = from.getJoins().stream()
-                    .filter(join -> currentPathSegment.equals(join.getAttribute().getName()))
-                    .findFirst()
-                    .orElseGet(() -> from.join(currentPathSegment, calculatedJoinPath));
-            }
-            else {
-                calculatedPath = calculatedPath.get(currentPathSegment);
-            }
-        }
-
-        return calculatedPath;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private static boolean shouldJoinPath(Path<?> calculatedPath, String currentPathSegment) {
         if (CLASS_ATTRIBUTE_NAME.equals(currentPathSegment)) {
             return false;
         }
-
         if (calculatedPath.getModel() instanceof EntityType<?> entityType) {
             Attribute<?, ?> attribute = AttributeResolvingUtil.resolveAttributeByName(entityType, currentPathSegment);
-
             if (attribute != null) {
                 return attribute.isCollection() || attribute.isAssociation();
             }
         }
-
         return false;
     }
 }

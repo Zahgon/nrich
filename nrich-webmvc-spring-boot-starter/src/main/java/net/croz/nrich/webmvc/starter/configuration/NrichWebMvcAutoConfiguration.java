@@ -14,7 +14,6 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.webmvc.starter.configuration;
 
 import net.croz.nrich.logging.api.service.LoggingService;
@@ -45,43 +44,38 @@ public class NrichWebMvcAutoConfiguration {
     @ConditionalOnMissingBean
     @Bean
     public TransientPropertyResolverService transientPropertyResolverService() {
-        return new DefaultTransientPropertyResolverService();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @ConditionalOnProperty(name = "nrich.webmvc.exception-auxiliary-data-resolving-enabled", havingValue = "true", matchIfMissing = true)
     @ConditionalOnMissingBean
     @Bean
     public ExceptionAuxiliaryDataResolverService exceptionAuxiliaryDataResolverService() {
-        return new DefaultExceptionAuxiliaryDataResolverService();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @ConditionalOnMissingBean
     @Bean
     public ControllerEditorRegistrationAdvice controllerEditorRegistrationAdvice(NrichWebMvcProperties webMvcProperties, TransientPropertyResolverService transientPropertyResolverService) {
-        return new ControllerEditorRegistrationAdvice(webMvcProperties.convertEmptyStringsToNull(), webMvcProperties.ignoreTransientFields(), transientPropertyResolverService);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @ConditionalOnMissingBean
     @Bean
     public ExceptionHttpStatusResolverService exceptionHttpStatusResolverService(MessageSource messageSource) {
-        return new MessageSourceExceptionHttpStatusResolverService(messageSource);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @ConditionalOnProperty(name = "nrich.webmvc.controller-advice-enabled", havingValue = "true", matchIfMissing = true)
     @Bean
-    public NotificationErrorHandlingRestControllerAdvice notificationRestControllerAdvice(NrichWebMvcProperties webMvcProperties, BaseNotificationResponseService<?> notificationResponseService,
-                                                                                          LoggingService loggingService, ExceptionHttpStatusResolverService exceptionHttpStatusResolverService,
-                                                                                          @Autowired(required = false) ExceptionAuxiliaryDataResolverService exceptionAuxiliaryDataResolverService) {
-        return new NotificationErrorHandlingRestControllerAdvice(
-            webMvcProperties.exceptionToUnwrapList(), webMvcProperties.exceptionAuxiliaryDataToIncludeInNotification(), notificationResponseService, loggingService,
-            exceptionAuxiliaryDataResolverService, exceptionHttpStatusResolverService
-        );
+    public NotificationErrorHandlingRestControllerAdvice notificationRestControllerAdvice(NrichWebMvcProperties webMvcProperties, BaseNotificationResponseService<?> notificationResponseService, LoggingService loggingService, ExceptionHttpStatusResolverService exceptionHttpStatusResolverService, @Autowired(required = false) ExceptionAuxiliaryDataResolverService exceptionAuxiliaryDataResolverService) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @ConditionalOnPropertyNotEmpty("nrich.webmvc.allowed-locale-list")
     @ConditionalOnMissingBean
     @Bean
     public ConstrainedSessionLocaleResolver constrainedSessionLocaleResolver(NrichWebMvcProperties webMvcProperties) {
-        return new ConstrainedSessionLocaleResolver(webMvcProperties.defaultLocale(), webMvcProperties.allowedLocaleList());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

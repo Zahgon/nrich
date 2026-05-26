@@ -14,7 +14,6 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.encrypt.aspect;
 
 import lombok.RequiredArgsConstructor;
@@ -28,7 +27,6 @@ import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
-
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
 import java.util.List;
@@ -42,68 +40,27 @@ public class EncryptDataAspect extends BaseEncryptDataAdvice {
 
     @Around("execution(* *(.., @net.croz.nrich.encrypt.api.annotation.DecryptArgument (*), ..)))")
     public Object aroundDecryptAnnotatedMethods(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
-        Signature signature = proceedingJoinPoint.getSignature();
-        Object[] arguments = proceedingJoinPoint.getArgs();
-
-        if (signature instanceof MethodSignature methodSignature && arguments.length > 0) {
-            String methodName = methodSignature.getMethod().getName();
-            Class<?>[] parameterTypes = methodSignature.getMethod().getParameterTypes();
-            Annotation[][] parameterAnnotationList = proceedingJoinPoint.getTarget().getClass().getMethod(methodName, parameterTypes).getParameterAnnotations();
-
-            EncryptionContext context = createEncryptionContext(methodSignature, arguments);
-
-            Object[] decryptedArguments = IntStream.range(0, arguments.length).mapToObj(index -> {
-                DecryptArgument argumentAnnotation = decryptArgumentAnnotation(parameterAnnotationList[index]);
-
-                if (argumentAnnotation == null) {
-                    return arguments[index];
-                }
-
-                return decryptArgument(context, arguments[index], List.of(argumentAnnotation.argumentPathList()));
-
-            }).toArray();
-
-            return proceedingJoinPoint.proceed(decryptedArguments);
-        }
-
-        return proceedingJoinPoint.proceed(arguments);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Around("@annotation(annotation)")
     public Object aroundEncryptAnnotatedMethods(ProceedingJoinPoint proceedingJoinPoint, EncryptResult annotation) throws Throwable {
-        Signature signature = proceedingJoinPoint.getSignature();
-        Object[] arguments = proceedingJoinPoint.getArgs();
-        EncryptionContext context = createEncryptionContext(signature, arguments);
-
-        Object result = proceedingJoinPoint.proceed(arguments);
-
-        result = encryptResult(context, result, List.of(annotation.resultPathList()));
-
-        return result;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     protected DataEncryptionService getDataEncryptionService() {
-        return dataEncryptionService;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private DecryptArgument decryptArgumentAnnotation(Annotation[] annotationList) {
-        return (DecryptArgument) Arrays.stream(annotationList)
-            .filter(DecryptArgument.class::isInstance)
-            .findFirst()
-            .orElse(null);
+        return (DecryptArgument) Arrays.stream(annotationList).filter(DecryptArgument.class::isInstance).findFirst().orElse(null);
     }
 
     private EncryptionContext createEncryptionContext(Signature signature, Object[] arguments) {
         List<Object> argumentList = List.of(arguments);
         String methodName = String.format(EncryptConstants.METHOD_NAME_FORMAT, signature.getDeclaringType().getName(), signature.getName());
         String currentUsername = currentUsername();
-
-        return EncryptionContext.builder()
-            .fullyQualifiedMethodName(methodName)
-            .methodArguments(argumentList)
-            .methodDecryptedArguments(argumentList)
-            .currentUsername(currentUsername)
-            .build();
+        return EncryptionContext.builder().fullyQualifiedMethodName(methodName).methodArguments(argumentList).methodDecryptedArguments(argumentList).currentUsername(currentUsername).build();
     }
 }

@@ -14,11 +14,9 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.validation.constraint.validator;
 
 import net.croz.nrich.validation.api.constraint.MinDate;
-
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import java.time.Instant;
@@ -26,7 +24,6 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.ChronoField;
-
 import static net.croz.nrich.validation.constraint.util.DateConverterUtil.convertToInstant;
 
 public class MinDateValidator implements ConstraintValidator<MinDate, Object> {
@@ -35,20 +32,11 @@ public class MinDateValidator implements ConstraintValidator<MinDate, Object> {
 
     @Override
     public void initialize(MinDate constraintAnnotation) {
-        DateTimeFormatter dateFormatter = new DateTimeFormatterBuilder()
-            .appendPattern(constraintAnnotation.format())
-            .parseDefaulting(ChronoField.NANO_OF_DAY, 0)
-            .toFormatter()
-            .withZone(ZoneId.systemDefault());
-        minDate = dateFormatter.parse(constraintAnnotation.value(), Instant::from);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public boolean isValid(Object value, ConstraintValidatorContext context) {
-        if (value == null) {
-            return true;
-        }
-
-        return convertToInstant(value).isAfter(minDate);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

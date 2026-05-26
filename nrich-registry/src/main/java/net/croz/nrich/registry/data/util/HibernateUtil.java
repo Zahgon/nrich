@@ -14,14 +14,12 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.registry.data.util;
 
 import lombok.SneakyThrows;
 import org.hibernate.Hibernate;
 import org.hibernate.proxy.HibernateProxy;
 import org.springframework.beans.BeanUtils;
-
 import jakarta.persistence.Entity;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;
@@ -40,42 +38,33 @@ public final class HibernateUtil {
     }
 
     public static void initialize(Object entity) {
-        initializeInternal(entity, null, new ArrayList<>());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private static void initializeInternal(Object entity, String propertyPath, List<String> alreadyInitializedProperties) {
         if (entity == null || alreadyInitializedProperties.contains(propertyPath)) {
             return;
         }
-
         Class<?> entityType = resolveEntityType(entity);
-
         if (!isManagedType(entityType)) {
             return;
         }
-
         if (!Hibernate.isInitialized(entity)) {
             Hibernate.initialize(entity);
         }
-
         alreadyInitializedProperties.add(propertyPath);
-
         Arrays.stream(BeanUtils.getPropertyDescriptors(entityType)).forEach(propertyDescriptor -> {
             String propertyName = propertyDescriptor.getName();
             Object propertyValue = getPropertyValue(entity, propertyDescriptor);
-
             if (propertyValue instanceof Collection<?> collection) {
                 int index = 0;
                 for (Object collectionElementValue : collection) {
                     String collectionElementPropertyName = String.format(COLLECTION_ELEMENT_NAME_FORMAT, propertyName, index++);
                     String calculatedPropertyPath = calculatePropertyPath(propertyPath, collectionElementPropertyName);
-
                     initializeInternal(collectionElementValue, calculatedPropertyPath, alreadyInitializedProperties);
                 }
-            }
-            else {
+            } else {
                 String calculatedPropertyPath = calculatePropertyPath(propertyPath, propertyName);
-
                 initializeInternal(propertyValue, calculatedPropertyPath, alreadyInitializedProperties);
             }
         });
@@ -84,21 +73,17 @@ public final class HibernateUtil {
     @SneakyThrows
     private static Object getPropertyValue(Object entity, PropertyDescriptor propertyDescriptor) {
         Method method = propertyDescriptor.getReadMethod();
-
         if (method == null) {
             return null;
         }
-
         return method.invoke(entity);
     }
 
     private static Class<?> resolveEntityType(Object entity) {
         Class<?> type = entity.getClass();
-
         if (entity instanceof HibernateProxy hibernateProxy) {
             type = hibernateProxy.getHibernateLazyInitializer().getPersistentClass();
         }
-
         return type;
     }
 

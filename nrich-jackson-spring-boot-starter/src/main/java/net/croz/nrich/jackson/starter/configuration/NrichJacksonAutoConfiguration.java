@@ -14,7 +14,6 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.jackson.starter.configuration;
 
 import com.fasterxml.jackson.databind.Module;
@@ -38,14 +37,12 @@ public class NrichJacksonAutoConfiguration {
     @ConditionalOnProperty(name = "nrich.jackson.convert-empty-strings-to-null", havingValue = "true", matchIfMissing = true)
     @Bean
     public Module convertEmptyStringsToNullModule() {
-        return JacksonModuleUtil.convertEmptyStringToNullModule();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @ConditionalOnProperty(name = "nrich.jackson.serialize-class-name", havingValue = "true", matchIfMissing = true)
     @Bean
     public Module classNameSerializerModule(NrichJacksonProperties nrichJacksonProperties) {
-        return JacksonModuleUtil.classNameSerializerModule(
-            nrichJacksonProperties.serializeClassNameForEntityAnnotatedClasses(), nrichJacksonProperties.additionalPackageListForClassNameSerialization()
-        );
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

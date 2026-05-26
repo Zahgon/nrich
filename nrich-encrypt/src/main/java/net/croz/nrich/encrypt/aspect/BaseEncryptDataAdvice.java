@@ -14,7 +14,6 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.encrypt.aspect;
 
 import net.croz.nrich.encrypt.api.model.EncryptionContext;
@@ -24,7 +23,6 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -35,37 +33,21 @@ public abstract class BaseEncryptDataAdvice {
     private static final String REACTOR_PACKAGE_NAME = "reactor.core.publisher";
 
     public <T> T encryptResult(EncryptionContext encryptionContext, T result, List<String> pathToEncryptList) {
-        T encryptedResult;
-        if (isCompletableFutureResult(result)) {
-            encryptedResult = encryptCompletableFuture(encryptionContext, pathToEncryptList, result);
-        }
-        else if (Boolean.TRUE.equals(isReactorResult(result))) {
-            encryptedResult = new ReactorEncryptor(getDataEncryptionService()).encryptReactorResult(encryptionContext, pathToEncryptList, result);
-        }
-        else {
-            encryptedResult = getDataEncryptionService().encryptData(result, pathToEncryptList, encryptionContext);
-        }
-
-        return encryptedResult;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public Object[] decryptArguments(EncryptionContext encryptionContext, Object[] argumentList, List<String> pathToDecryptList) {
-        return Arrays.stream(argumentList)
-            .map(argument -> decryptArgument(encryptionContext, argument, pathToDecryptList))
-            .toArray();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public Object decryptArgument(EncryptionContext encryptionContext, Object argument, List<String> pathToDecryptList) {
-        return getDataEncryptionService().decryptData(argument, pathToDecryptList, encryptionContext);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected abstract DataEncryptionService getDataEncryptionService();
 
     protected String currentUsername() {
-        return Optional.ofNullable(SecurityContextHolder.getContext())
-            .map(SecurityContext::getAuthentication)
-            .map(Authentication::getName)
-            .orElse(null);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private boolean isCompletableFutureResult(Object forEncryption) {
@@ -79,25 +61,13 @@ public abstract class BaseEncryptDataAdvice {
     private <T> T encryptCompletableFuture(EncryptionContext encryptionContext, List<String> pathToEncryptList, T forEncryption) {
         @SuppressWarnings("unchecked")
         T encryptedFuture = (T) ((CompletableFuture<?>) forEncryption).thenApply(completedResult -> getDataEncryptionService().encryptData(completedResult, pathToEncryptList, encryptionContext));
-
         return encryptedFuture;
     }
 
     private record ReactorEncryptor(DataEncryptionService dataEncryptionService) {
 
         <T> T encryptReactorResult(EncryptionContext encryptionContext, List<String> pathToEncryptList, T forEncryption) {
-            if (forEncryption instanceof Mono<?> mono) {
-                @SuppressWarnings("unchecked") T encryptedMono = (T) mono.map(completedResult -> dataEncryptionService.encryptData(completedResult, pathToEncryptList, encryptionContext));
-
-                return encryptedMono;
-            }
-            else if (forEncryption instanceof Flux<?> flux) {
-                @SuppressWarnings("unchecked") T encryptedFlux = (T) flux.map(completedResult -> dataEncryptionService.encryptData(completedResult, pathToEncryptList, encryptionContext));
-
-                return encryptedFlux;
-            }
-
-            return forEncryption;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 }

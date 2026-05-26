@@ -14,7 +14,6 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.validation.constraint.support.disableconstraints;
 
 import org.springframework.util.StringUtils;
@@ -27,18 +26,10 @@ public final class PathUtil {
     }
 
     public static String getPath(Class<?> type, String propertyName) {
-        if (type == null) {
-            return propertyName;
-        }
-
-        return getPath(type.getName(), propertyName);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public static String getPath(String typePath, String propertyName) {
-        if (StringUtils.hasText(propertyName)) {
-            return String.format(PATH_FORMAT, typePath, propertyName);
-        }
-
-        return typePath;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

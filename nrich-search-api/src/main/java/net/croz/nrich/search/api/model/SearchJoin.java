@@ -14,14 +14,12 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.search.api.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-
 import jakarta.persistence.criteria.JoinType;
 import java.util.function.Predicate;
 
@@ -62,18 +60,18 @@ public class SearchJoin<R> {
     private boolean fetch;
 
     public static <R> SearchJoin<R> innerJoin(String path) {
-        return new SearchJoin<>(path, path, JoinType.INNER, null, false);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public static <R> SearchJoin<R> leftJoin(String path) {
-        return new SearchJoin<>(path, path, JoinType.LEFT, null, false);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public static <R> SearchJoin<R> innerJoinFetch(String path) {
-        return new SearchJoin<>(path, path, JoinType.INNER, null, true);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public static <R> SearchJoin<R> leftJoinFetch(String path) {
-        return new SearchJoin<>(path, path, JoinType.LEFT, null, true);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

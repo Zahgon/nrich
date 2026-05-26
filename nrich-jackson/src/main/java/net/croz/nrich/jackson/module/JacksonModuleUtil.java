@@ -14,14 +14,12 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.jackson.module;
 
 import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import net.croz.nrich.jackson.deserializer.ConvertEmptyStringToNullDeserializer;
 import net.croz.nrich.jackson.serializer.EntityClassSerializerModifier;
-
 import java.util.List;
 
 public final class JacksonModuleUtil {
@@ -34,18 +32,10 @@ public final class JacksonModuleUtil {
     }
 
     public static Module convertEmptyStringToNullModule() {
-        SimpleModule simpleModule = new SimpleModule(JacksonModuleUtil.CONVERT_EMPTY_STRING_TO_NULL_MODULE_NAME);
-
-        simpleModule.addDeserializer(String.class, new ConvertEmptyStringToNullDeserializer());
-
-        return simpleModule;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public static Module classNameSerializerModule(boolean serializeEntityAnnotatedClasses, List<String> packageList) {
-        SimpleModule simpleModule = new SimpleModule(JacksonModuleUtil.CLASS_NAME_SERIALIZER_MODULE);
-
-        simpleModule.setSerializerModifier(new EntityClassSerializerModifier(serializeEntityAnnotatedClasses, packageList));
-
-        return simpleModule;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

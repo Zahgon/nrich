@@ -14,11 +14,9 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.validation.constraint.support.disableconstraints;
 
 import lombok.RequiredArgsConstructor;
-
 import jakarta.validation.metadata.ConstraintDescriptor;
 import jakarta.validation.metadata.ContainerElementTypeDescriptor;
 import jakarta.validation.metadata.GroupConversionDescriptor;
@@ -37,46 +35,41 @@ public class PropertyDescriptorAdapter implements PropertyDescriptor {
 
     @Override
     public Set<ConstraintDescriptor<?>> getConstraintDescriptors() {
-        Set<ConstraintDescriptor<?>> constraintDescriptors = target.getConstraintDescriptors();
-
-        return constraintDescriptors.stream().filter(constraintDescriptor -> !disabledConstraintTypes.contains(constraintDescriptor.getAnnotation().annotationType()))
-            .collect(Collectors.toSet());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public ConstraintFinder findConstraints() {
-        ConstraintFinder finder = target.findConstraints();
-
-        return new ConstraintFinderAdapter(finder, disabledConstraintTypes);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public String getPropertyName() {
-        return target.getPropertyName();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public boolean isCascaded() {
-        return target.isCascaded();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Set<GroupConversionDescriptor> getGroupConversions() {
-        return target.getGroupConversions();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Set<ContainerElementTypeDescriptor> getConstrainedContainerElementTypes() {
-        return target.getConstrainedContainerElementTypes();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public boolean hasConstraints() {
-        return target.hasConstraints();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Class<?> getElementClass() {
-        return target.getElementClass();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

@@ -14,7 +14,6 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.search.api.util;
 
 import net.croz.nrich.search.api.model.sort.SortDirection;
@@ -24,12 +23,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.util.CollectionUtils;
-
 import java.util.ArrayList;
 import java.util.List;
 
 // TODO maybe another project? search-util?
-
 /**
  * Util class for converting paging and sort properties to Pageable instances.
  * Unique sort property is here since some databases do not guarantee consistent paging if sorting by non unique properties,
@@ -41,55 +38,27 @@ public final class PageableUtil {
     }
 
     public static Pageable convertToPageable(SortablePageableRequest request, SortProperty uniqueSortProperty) {
-        return convertToPageable(request.getPageNumber(), request.getPageSize(), uniqueSortProperty, request.getSortPropertyList());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public static Pageable convertToPageable(SortablePageableRequest request) {
-        return convertToPageable(request.getPageNumber(), request.getPageSize(), request.getSortPropertyList());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public static Pageable convertToPageable(Integer pageNumber, Integer pageSize) {
-        return convertToPageable(pageNumber, pageSize, null, null);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public static Pageable convertToPageable(Integer pageNumber, Integer pageSize, SortProperty uniqueSortProperty) {
-        return convertToPageable(pageNumber, pageSize, uniqueSortProperty, null);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public static Pageable convertToPageable(Integer pageNumber, Integer pageSize, List<SortProperty> sortPropertyList) {
-        return convertToPageable(pageNumber, pageSize, null, sortPropertyList);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public static Pageable convertToPageable(Integer pageNumber, Integer pageSize, SortProperty uniqueSortProperty, List<SortProperty> sortPropertyList) {
-        Sort.Order uniqueSortOrder = null;
-        if (uniqueSortProperty != null) {
-            uniqueSortOrder = convertToSortOrder(uniqueSortProperty);
-        }
-
-        Sort sort;
-        if (CollectionUtils.isEmpty(sortPropertyList)) {
-            if (uniqueSortOrder == null) {
-                sort = Sort.unsorted();
-            }
-            else {
-                sort = Sort.by(uniqueSortOrder);
-            }
-        }
-        else {
-            List<Sort.Order> sortPropertyOrderList = sortPropertyList.stream()
-                .map(PageableUtil::convertToSortOrder)
-                .toList();
-
-            List<Sort.Order> orderList = new ArrayList<>(sortPropertyOrderList);
-
-            if (uniqueSortOrder != null && sortPropertyList.stream().map(SortProperty::getProperty).noneMatch(value -> value.equals(uniqueSortProperty.getProperty()))) {
-                orderList.add(uniqueSortOrder);
-            }
-
-            sort = Sort.by(orderList);
-        }
-
-        return PageRequest.of(pageNumber, pageSize, sort);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private static Sort.Order convertToSortOrder(SortProperty sortProperty) {

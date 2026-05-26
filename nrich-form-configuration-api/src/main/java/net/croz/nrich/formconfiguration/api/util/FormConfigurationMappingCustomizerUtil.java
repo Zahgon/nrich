@@ -14,11 +14,9 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.formconfiguration.api.util;
 
 import net.croz.nrich.formconfiguration.api.customizer.FormConfigurationMappingCustomizer;
-
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -31,11 +29,6 @@ public final class FormConfigurationMappingCustomizerUtil {
     }
 
     public static Map<String, Class<?>> applyCustomizerList(Map<String, Class<?>> formConfiguration, List<FormConfigurationMappingCustomizer> formConfigurationCustomizerList) {
-        List<FormConfigurationMappingCustomizer> resolvedCustomizerList = Optional.ofNullable(formConfigurationCustomizerList).orElse(Collections.emptyList());
-        Map<String, Class<?>> formConfigurationMapping = new LinkedHashMap<>(Optional.ofNullable(formConfiguration).orElse(new LinkedHashMap<>()));
-
-        resolvedCustomizerList.forEach(formConfigurationMappingCustomizer -> formConfigurationMappingCustomizer.customizeConfigurationMapping(formConfigurationMapping));
-
-        return formConfigurationMapping;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

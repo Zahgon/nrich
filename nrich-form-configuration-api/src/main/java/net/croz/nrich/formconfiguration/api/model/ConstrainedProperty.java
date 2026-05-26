@@ -14,12 +14,10 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.formconfiguration.api.model;
 
 import lombok.Builder;
 import lombok.Getter;
-
 import jakarta.validation.metadata.ConstraintDescriptor;
 import java.util.List;
 import java.util.Map;
@@ -63,7 +61,7 @@ public class ConstrainedProperty {
      * @return constraint name
      */
     public String getConstraintName() {
-        return constraintDescriptor.getAnnotation().annotationType().getSimpleName();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -72,11 +70,7 @@ public class ConstrainedProperty {
      * @return containing argument map
      */
     public Map<String, Object> getConstraintArgumentMap() {
-        List<String> ignoredKeyList = List.of("groups", "message", "payload");
-
-        return constraintDescriptor.getAttributes().entrySet().stream()
-            .filter(entry -> !ignoredKeyList.contains(entry.getKey()))
-            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -85,7 +79,7 @@ public class ConstrainedProperty {
      * @return constraint arguments as a list
      */
     public Object[] getConstraintArgumentList() {
-        return getConstraintArgumentMap().values().toArray();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -94,6 +88,6 @@ public class ConstrainedProperty {
      * @return default constraint message
      */
     public String getConstraintMessage() {
-        return constraintDescriptor.getMessageTemplate();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

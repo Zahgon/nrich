@@ -14,11 +14,9 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.webmvc.service;
 
 import org.springframework.cache.annotation.Cacheable;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -30,28 +28,13 @@ public class DefaultTransientPropertyResolverService implements TransientPropert
     @Cacheable("nrich.transientPropertyResolver.cache")
     @Override
     public List<String> resolveTransientPropertyList(Class<?> type) {
-        List<String> transientPropertyList = new ArrayList<>();
-        Class<?> currentType = type;
-
-        while (currentType != null && currentType != Object.class) {
-            List<String> currentTransientPropertyList = Arrays.stream(currentType.getDeclaredFields())
-                .filter(this::includeField)
-                .map(Field::getName)
-                .toList();
-
-            transientPropertyList.addAll(currentTransientPropertyList);
-
-            currentType = currentType.getSuperclass();
-        }
-
-        return transientPropertyList;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private boolean includeField(Field field) {
         if (field.isSynthetic()) {
             return false;
         }
-
         return Modifier.isTransient(field.getModifiers());
     }
 }

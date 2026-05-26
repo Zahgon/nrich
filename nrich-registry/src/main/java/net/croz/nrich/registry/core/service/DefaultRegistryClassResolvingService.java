@@ -14,7 +14,6 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.registry.core.service;
 
 import net.croz.nrich.registry.api.core.service.RegistryClassResolvingService;
@@ -23,7 +22,6 @@ import net.croz.nrich.registry.core.constants.RegistryCoreConstants;
 import net.croz.nrich.registry.core.model.RegistryDataConfigurationHolder;
 import net.croz.nrich.registry.data.util.ClassLoadingUtil;
 import org.springframework.cache.annotation.Cacheable;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -47,51 +45,28 @@ public class DefaultRegistryClassResolvingService implements RegistryClassResolv
     @Cacheable("nrich.classResolvingCreate.cache")
     @Override
     public Class<?> resolveCreateClass(String registryClassName) {
-        registryDataConfigurationHolder.verifyConfigurationExists(registryClassName);
-
-        if (createClassMapping.containsKey(registryClassName)) {
-            return createClassMapping.get(registryClassName);
-        }
-
-        return resolveClassByPackage(registryClassName, RegistryClassResolvingConstants.CREATE_REQUEST_CLASS_NAME_FORMAT);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Cacheable("nrich.classResolvingUpdate.cache")
     @Override
     public Class<?> resolveUpdateClass(String registryClassName) {
-        registryDataConfigurationHolder.verifyConfigurationExists(registryClassName);
-
-        if (updateClassMapping.containsKey(registryClassName)) {
-            return updateClassMapping.get(registryClassName);
-        }
-
-        return resolveClassByPackage(registryClassName, RegistryClassResolvingConstants.UPDATE_REQUEST_CLASS_NAME_FORMAT);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private Class<?> resolveClassByPackage(String registryFullClassName, String requestClassNameFormat) {
         List<String> registryClassNameList = new ArrayList<>(List.of(registryFullClassName.split(RegistryClassResolvingConstants.PACKAGE_SEPARATOR)));
-
         int indexOfLastPackage = registryClassNameList.size() - 2;
         if (RegistryClassResolvingConstants.CLASS_NAME_SUFFIX_LIST_TO_REPLACE.contains(registryClassNameList.get(indexOfLastPackage))) {
             registryClassNameList.remove(registryClassNameList.get(indexOfLastPackage));
         }
-
         registryClassNameList.add(registryClassNameList.size() - 1, RegistryClassResolvingConstants.REQUEST_CLASS_PACKAGE_NAME);
-
         String fullClassNameWithRequestPackage = String.join(RegistryCoreConstants.DOT, registryClassNameList);
-
         return resolveClass(registryFullClassName, fullClassNameWithRequestPackage, requestClassNameFormat);
     }
 
     private Class<?> resolveClass(String fullClassName, String fullClassNameWithRequestPackage, String requestClassNameFormat) {
-        List<String> classNameList = List.of(
-            String.format(requestClassNameFormat, fullClassNameWithRequestPackage),
-            String.format(RegistryClassResolvingConstants.REQUEST_CLASS_NAME_FORMAT, fullClassNameWithRequestPackage),
-            String.format(requestClassNameFormat, fullClassName),
-            String.format(RegistryClassResolvingConstants.REQUEST_CLASS_NAME_FORMAT, fullClassName),
-            fullClassName
-        );
-
+        List<String> classNameList = List.of(String.format(requestClassNameFormat, fullClassNameWithRequestPackage), String.format(RegistryClassResolvingConstants.REQUEST_CLASS_NAME_FORMAT, fullClassNameWithRequestPackage), String.format(requestClassNameFormat, fullClassName), String.format(RegistryClassResolvingConstants.REQUEST_CLASS_NAME_FORMAT, fullClassName), fullClassName);
         return ClassLoadingUtil.loadClassFromList(classNameList);
     }
 }

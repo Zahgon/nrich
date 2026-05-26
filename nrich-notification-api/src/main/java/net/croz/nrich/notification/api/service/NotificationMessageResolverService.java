@@ -14,11 +14,9 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.notification.api.service;
 
 import org.springframework.validation.ObjectError;
-
 import java.util.List;
 
 /**
@@ -47,10 +45,10 @@ public interface NotificationMessageResolverService {
     String resolveMessageForObjectError(Class<?> validationFailedOwningType, ObjectError objectError);
 
     default String resolveMessage(List<String> messageCodeList, String defaultMessage) {
-        return resolveMessage(messageCodeList, null, defaultMessage);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     default String resolveMessage(List<String> messageCodeList) {
-        return resolveMessage(messageCodeList, null, null);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

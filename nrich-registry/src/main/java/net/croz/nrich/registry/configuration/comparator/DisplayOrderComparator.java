@@ -14,12 +14,10 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.registry.configuration.comparator;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
@@ -34,17 +32,6 @@ public class DisplayOrderComparator implements Serializable {
     private final List<String> propertyDisplayOrderList;
 
     public int comparePropertiesByDisplayList(String firstPropertyName, String secondPropertyName) {
-        if (!propertyDisplayOrderList.contains(firstPropertyName)) {
-            return 1;
-        }
-
-        if (!propertyDisplayOrderList.contains(secondPropertyName)) {
-            return -1;
-        }
-
-        Integer firstPropertyIndex = propertyDisplayOrderList.indexOf(firstPropertyName);
-        Integer secondPropertyIndex = propertyDisplayOrderList.indexOf(secondPropertyName);
-
-        return firstPropertyIndex.compareTo(secondPropertyIndex);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

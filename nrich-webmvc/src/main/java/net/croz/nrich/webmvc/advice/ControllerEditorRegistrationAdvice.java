@@ -14,7 +14,6 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.webmvc.advice;
 
 import lombok.RequiredArgsConstructor;
@@ -23,7 +22,6 @@ import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.InitBinder;
-
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -38,26 +36,6 @@ public class ControllerEditorRegistrationAdvice {
 
     @InitBinder
     public void initBinder(WebDataBinder binder) {
-        if (convertEmptyStringsToNull) {
-            binder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
-        }
-
-        if (ignoreTransientFields) {
-            Class<?> targetType = null;
-            if (binder.getTarget() != null) {
-                targetType = binder.getTarget().getClass();
-            }
-            else if (binder.getTargetType() != null) {
-                targetType = binder.getTargetType().resolve();
-            }
-
-            if (targetType == null) {
-                return;
-            }
-
-            List<String> transientPropertyList = transientPropertyResolverService.resolveTransientPropertyList(targetType);
-
-            binder.setDisallowedFields(transientPropertyList.toArray(new String[0]));
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

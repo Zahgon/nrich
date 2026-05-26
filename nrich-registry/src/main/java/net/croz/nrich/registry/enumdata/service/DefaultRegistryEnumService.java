@@ -14,7 +14,6 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.registry.enumdata.service;
 
 import lombok.RequiredArgsConstructor;
@@ -28,7 +27,6 @@ import org.springframework.context.NoSuchMessageException;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -52,53 +50,35 @@ public class DefaultRegistryEnumService implements RegistryEnumService {
 
     @Override
     public Map<String, List<EnumResult>> listBulk(ListBulkRegistryEnumRequest request) {
-        return request.registryRequestList().stream().collect(Collectors.toMap(ListRegistryEnumRequest::classFullName, this::list));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public List<EnumResult> list(ListRegistryEnumRequest request) {
-        boolean isEmptyQuery = !StringUtils.hasText(request.query());
-        List<EnumResult> enumResults = loadEnumRegistry(request.classFullName(), LocaleContextHolder.getLocale());
-
-        List<EnumResult> foundEnums = new ArrayList<>();
-        enumResults.forEach(enumResult -> {
-            if (isEmptyQuery || enumResult.description().toLowerCase().contains(request.query().toLowerCase())) {
-                foundEnums.add(enumResult);
-            }
-        });
-
-        return foundEnums;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private List<EnumResult> loadEnumRegistry(String enumClassName, Locale locale) {
         Class<? extends Enum<?>> enumType = loadEnumClass(enumClassName);
-
         if (enumType == null || !Enum.class.isAssignableFrom(enumType)) {
             return Collections.emptyList();
         }
-
         List<String> additionalRegistryMethodsForSerialization = findAdditionalMethodsForSerialization(enumType);
-
-        return Arrays.stream(enumType.getEnumConstants())
-            .map(enumValue -> {
-                String description = resolveMessage(String.format(ENUM_DESCRIPTION_MESSAGE_FORMAT, enumClassName, enumValue.name()), enumValue.name(), locale);
-                Map<String, Object> additionalEnumData = serializeAdditionalEnumData(enumType, enumValue, additionalRegistryMethodsForSerialization);
-
-                return new EnumResult(enumClassName, description, enumValue, additionalEnumData);
-            })
-            .toList();
+        return Arrays.stream(enumType.getEnumConstants()).map(enumValue -> {
+            String description = resolveMessage(String.format(ENUM_DESCRIPTION_MESSAGE_FORMAT, enumClassName, enumValue.name()), enumValue.name(), locale);
+            Map<String, Object> additionalEnumData = serializeAdditionalEnumData(enumType, enumValue, additionalRegistryMethodsForSerialization);
+            return new EnumResult(enumClassName, description, enumValue, additionalEnumData);
+        }).toList();
     }
 
     private String resolveMessage(String code, String defaultValue, Locale locale) {
         String message;
         try {
             message = messageSource.getMessage(code, null, locale);
-        }
-        catch (NoSuchMessageException exception) {
+        } catch (NoSuchMessageException exception) {
             log.debug("Message not found for enum under code: {}, returning default value: {}", code, defaultValue);
             message = defaultValue;
         }
-
         return message;
     }
 
@@ -106,8 +86,7 @@ public class DefaultRegistryEnumService implements RegistryEnumService {
     private Class<? extends Enum<?>> loadEnumClass(String enumClassName) {
         try {
             return (Class<? extends Enum<?>>) Class.forName(enumClassName, true, Thread.currentThread().getContextClassLoader());
-        }
-        catch (ClassNotFoundException ignored) {
+        } catch (ClassNotFoundException ignored) {
             return null;
         }
     }
@@ -115,11 +94,9 @@ public class DefaultRegistryEnumService implements RegistryEnumService {
     @SuppressWarnings("unchecked")
     private List<String> findAdditionalMethodsForSerialization(Class<? extends Enum<?>> enumType) {
         Field field = ReflectionUtils.findField(enumType, ADDITIONAL_METHODS_FOR_SERIALIZATION_PROPERTY_NAME);
-
         if (field == null) {
             return Collections.emptyList();
         }
-
         return (List<String>) ReflectionUtils.getField(field, null);
     }
 
@@ -130,10 +107,8 @@ public class DefaultRegistryEnumService implements RegistryEnumService {
             if (methodResult == null) {
                 return;
             }
-
             result.put(methodName, methodResult);
         });
-
         return result;
     }
 
@@ -142,7 +117,6 @@ public class DefaultRegistryEnumService implements RegistryEnumService {
         if (method == null) {
             return null;
         }
-
         return ReflectionUtils.invokeMethod(method, target);
     }
 }

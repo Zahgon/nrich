@@ -14,11 +14,9 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.validation.constraint.validator;
 
 import net.croz.nrich.validation.api.constraint.InList;
-
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import java.util.List;
@@ -29,15 +27,11 @@ public class InListValidator implements ConstraintValidator<InList, Object> {
 
     @Override
     public void initialize(InList constraintAnnotation) {
-        stringList = constraintAnnotation.value();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public boolean isValid(Object value, ConstraintValidatorContext context) {
-        if (value == null) {
-            return true;
-        }
-
-        return List.of(stringList).contains(value.toString());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

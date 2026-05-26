@@ -14,7 +14,6 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.validation.starter.configuration;
 
 import lombok.RequiredArgsConstructor;
@@ -31,7 +30,6 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.AbstractResourceBasedMessageSource;
-
 import jakarta.validation.Validator;
 
 @EnableConfigurationProperties(NrichValidationProperties.class)
@@ -43,7 +41,7 @@ public class NrichValidationAutoConfiguration {
     @ConditionalOnProperty(name = "nrich.validation.register-messages", havingValue = "true", matchIfMissing = true)
     @Bean
     public ValidationMessageSourceRegistrar validationMessageSourceRegistrar(MessageSource messageSource) {
-        return new ValidationMessageSourceRegistrar(messageSource);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @RequiredArgsConstructor
@@ -53,28 +51,26 @@ public class NrichValidationAutoConfiguration {
 
         @Override
         public void afterPropertiesSet() {
-            if (messageSource instanceof AbstractResourceBasedMessageSource resourceBasedMessageSource) {
-                resourceBasedMessageSource.addBasenames(VALIDATION_MESSAGES_NAME);
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
     @ConditionalOnProperty(name = "nrich.validation.register-constraint-validators", havingValue = "true", matchIfMissing = true)
     @Bean
     ConstraintValidatorRegistrar constraintMappingRegistrar(NrichValidationProperties validationProperties) {
-        return new DefaultConstraintValidatorRegistrar(validationProperties.validatorPackageList());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @ConditionalOnProperty(name = "nrich.validation.register-constraint-validators", havingValue = "true", matchIfMissing = true)
     @Bean
     ValidationConfigurationCustomizer validationConfigurationCustomizer(ConstraintValidatorRegistrar constraintValidatorRegistrar) {
-        return constraintValidatorRegistrar::registerConstraintValidators;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @ConditionalOnBean(Validator.class)
     @ConditionalOnProperty(name = "nrich.validation.register-constraint-validators", havingValue = "true", matchIfMissing = true)
     @Bean
     HibernatePropertiesCustomizer validationHibernatePropertiesCustomizer(Validator validator) {
-        return hibernateProperties -> hibernateProperties.put("jakarta.persistence.validation.factory", validator);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

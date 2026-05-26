@@ -14,7 +14,6 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.formconfiguration.service;
 
 import lombok.SneakyThrows;
@@ -23,7 +22,6 @@ import net.croz.nrich.formconfiguration.api.service.FormConfigurationAnnotationR
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
 import org.springframework.util.StringUtils;
-
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -36,27 +34,11 @@ public class DefaultFormConfigurationAnnotationResolvingService implements FormC
 
     @Override
     public Map<String, Class<?>> resolveFormConfigurations(List<String> packageList) {
-        ClassPathScanningCandidateComponentProvider scanner = new ClassPathScanningCandidateComponentProvider(false);
-
-        scanner.addIncludeFilter(new AnnotationTypeFilter(FormValidationConfiguration.class));
-
-        List<String> resolvedPackageList = Optional.ofNullable(packageList).orElse(Collections.emptyList());
-        Map<String, Class<?>> result = new HashMap<>();
-
-        resolvedPackageList.forEach(basePackage -> {
-            Map<String, Class<?>> packageResult = findAnnotatedClassesInPackage(scanner, basePackage);
-
-            packageResult.forEach(result::putIfAbsent);
-        });
-
-        return result;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private Map<String, Class<?>> findAnnotatedClassesInPackage(ClassPathScanningCandidateComponentProvider scanner, String basePackage) {
-        return scanner.findCandidateComponents(basePackage).stream()
-            .filter(beanDefinition -> StringUtils.hasText(beanDefinition.getBeanClassName()))
-            .map(beanDefinition -> toClass(beanDefinition.getBeanClassName()))
-            .collect(Collectors.toMap(type -> type.getAnnotation(FormValidationConfiguration.class).value(), Function.identity()));
+        return scanner.findCandidateComponents(basePackage).stream().filter(beanDefinition -> StringUtils.hasText(beanDefinition.getBeanClassName())).map(beanDefinition -> toClass(beanDefinition.getBeanClassName())).collect(Collectors.toMap(type -> type.getAnnotation(FormValidationConfiguration.class).value(), Function.identity()));
     }
 
     @SneakyThrows

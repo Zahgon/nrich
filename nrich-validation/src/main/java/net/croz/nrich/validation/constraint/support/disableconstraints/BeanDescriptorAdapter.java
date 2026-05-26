@@ -14,11 +14,9 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.validation.constraint.support.disableconstraints;
 
 import lombok.RequiredArgsConstructor;
-
 import jakarta.validation.metadata.BeanDescriptor;
 import jakarta.validation.metadata.ConstraintDescriptor;
 import jakarta.validation.metadata.ConstructorDescriptor;
@@ -41,63 +39,56 @@ public class BeanDescriptorAdapter implements BeanDescriptor {
 
     @Override
     public PropertyDescriptor getConstraintsForProperty(String propertyName) {
-        String path = PathUtil.getPath(target.getElementClass(), propertyName);
-
-        return new PropertyDescriptorAdapter(target.getConstraintsForProperty(propertyName), disabledConstraintsPathMap.getOrDefault(path, Collections.emptyList()));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Set<PropertyDescriptor> getConstrainedProperties() {
-        return target.getConstrainedProperties().stream()
-            .map(propertyDescriptor -> getConstraintsForProperty(propertyDescriptor.getPropertyName()))
-            .collect(Collectors.toSet());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public ConstraintFinder findConstraints() {
-        ConstraintFinder finder = target.findConstraints();
-        String path = PathUtil.getPath(target.getElementClass(), null);
-
-        return new ConstraintFinderAdapter(finder, disabledConstraintsPathMap.getOrDefault(path, Collections.emptyList()));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public boolean isBeanConstrained() {
-        return target.isBeanConstrained();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public MethodDescriptor getConstraintsForMethod(String methodName, Class<?>... parameterTypes) {
-        return target.getConstraintsForMethod(methodName, parameterTypes);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Set<MethodDescriptor> getConstrainedMethods(MethodType methodType, MethodType... methodTypes) {
-        return target.getConstrainedMethods(methodType, methodTypes);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public ConstructorDescriptor getConstraintsForConstructor(Class<?>... parameterTypes) {
-        return target.getConstraintsForConstructor(parameterTypes);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Set<ConstructorDescriptor> getConstrainedConstructors() {
-        return target.getConstrainedConstructors();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public boolean hasConstraints() {
-        return target.hasConstraints();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Class<?> getElementClass() {
-        return target.getElementClass();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Set<ConstraintDescriptor<?>> getConstraintDescriptors() {
-        return target.getConstraintDescriptors();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

@@ -13,7 +13,6 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.search.util;
 
 import java.lang.reflect.Field;
@@ -26,14 +25,6 @@ public final class FieldExtractionUtil {
     }
 
     public static List<Field> getAllFields(Class<?> type) {
-        List<Field> fieldList = new ArrayList<>();
-        Class<?> currentType = type;
-
-        while (currentType.getSuperclass() != null) {
-            fieldList.addAll(List.of(currentType.getDeclaredFields()));
-            currentType = currentType.getSuperclass();
-        }
-
-        return fieldList;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

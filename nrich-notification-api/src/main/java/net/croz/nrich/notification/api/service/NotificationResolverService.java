@@ -14,14 +14,12 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.notification.api.service;
 
 import net.croz.nrich.notification.api.model.AdditionalNotificationData;
 import net.croz.nrich.notification.api.model.Notification;
 import net.croz.nrich.notification.api.model.ValidationFailureNotification;
 import org.springframework.validation.Errors;
-
 import jakarta.validation.ConstraintViolationException;
 
 /**
@@ -71,18 +69,18 @@ public interface NotificationResolverService {
     Notification createNotificationForAction(String actionName, AdditionalNotificationData additionalNotificationData);
 
     default ValidationFailureNotification createNotificationForValidationFailure(Errors errors, Class<?> validationFailedOwningType) {
-        return createNotificationForValidationFailure(errors, validationFailedOwningType, AdditionalNotificationData.empty());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     default ValidationFailureNotification createNotificationForValidationFailure(ConstraintViolationException exception) {
-        return createNotificationForValidationFailure(exception, AdditionalNotificationData.empty());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     default Notification createNotificationForException(Throwable throwable) {
-        return createNotificationForException(throwable, AdditionalNotificationData.empty());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     default Notification createNotificationForAction(String actionName) {
-        return createNotificationForAction(actionName, AdditionalNotificationData.empty());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

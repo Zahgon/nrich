@@ -14,7 +14,6 @@
  *  limitations under the License.
  *
  */
-
 package net.croz.nrich.spring.propertysource;
 
 import lombok.SneakyThrows;
@@ -26,7 +25,6 @@ import org.springframework.core.io.support.EncodedResource;
 import org.springframework.core.io.support.PropertySourceFactory;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
-
 import java.util.Properties;
 
 public class YamlPropertySourceFactory implements PropertySourceFactory {
@@ -35,25 +33,14 @@ public class YamlPropertySourceFactory implements PropertySourceFactory {
 
     @Override
     public PropertySource<?> createPropertySource(String name, EncodedResource encodedResource) {
-        YamlPropertiesFactoryBean yamlPropertiesFactoryBean = new YamlPropertiesFactoryBean();
-        Resource resource = encodedResource.getResource();
-
-        yamlPropertiesFactoryBean.setResources(resource);
-
-        Properties properties = loadProperties(yamlPropertiesFactoryBean);
-        String resourceName = getNameForResource(name, resource);
-
-        Assert.notNull(properties, "Specified properties are null!");
-
-        return new PropertiesPropertySource(resourceName, properties);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @SneakyThrows
     private Properties loadProperties(YamlPropertiesFactoryBean yamlPropertiesFactoryBean) {
         try {
             return yamlPropertiesFactoryBean.getObject();
-        }
-        catch (IllegalStateException exception) {
+        } catch (IllegalStateException exception) {
             // YamlProcessor wraps exceptions in IllegalStateException while processPropertySource method in ConfigurationClassParser expects original exception when using ignoreResourceNotFound
             throw exception.getCause();
         }
@@ -61,15 +48,12 @@ public class YamlPropertySourceFactory implements PropertySourceFactory {
 
     private String getNameForResource(String name, Resource resource) {
         String resourceName = name;
-
         if (!StringUtils.hasText(resourceName)) {
             resourceName = resource.getDescription();
         }
-
         if (!StringUtils.hasText(resourceName)) {
             resourceName = String.format(RESOURCE_NAME_FORMAT, resource.getClass().getSimpleName(), System.identityHashCode(resource));
         }
-
         return resourceName;
     }
 }
